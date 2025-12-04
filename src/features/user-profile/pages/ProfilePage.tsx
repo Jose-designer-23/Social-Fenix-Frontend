@@ -843,7 +843,7 @@ const ProfilePage: React.FC = () => {
             <span className="count font-bold">
               {ProfileData.followingsCount}
             </span>{" "}
-            <span className="label text-gray-500">Siguiendo</span>
+            <span className="label text-gray-500 cursor-pointer">Siguiendo</span>
           </button>
           <button
             onClick={() => setIsFollowersModalOpen(true)}
@@ -852,7 +852,7 @@ const ProfilePage: React.FC = () => {
             <span className="count font-bold">
               {ProfileData.followersCount}
             </span>{" "}
-            <span className="label text-gray-500">Seguidores</span>
+            <span className="label text-gray-500 cursor-pointer">Seguidores</span>
           </button>
         </div>
       </section>
@@ -866,7 +866,7 @@ const ProfilePage: React.FC = () => {
               {/* Contenedor scrollable */}
               <div
                 ref={tabsContainerRef}
-                className="overflow-x-auto overflow-y-hidden whitespace-nowrap px-2"
+                className="overflow-x-auto overflow-y-hidden whitespace-nowrap px-2 "
                 style={{
                   WebkitOverflowScrolling: "touch",
                 }}
@@ -875,10 +875,10 @@ const ProfilePage: React.FC = () => {
                   <button
                     key={tab}
                     onClick={() => handleTabChange(tab)}
-                    className={`inline-block mr-2 mb-0 py-4 px-3 font-semibold text-sm rounded-md transition duration-200 ${
+                    className={`inline-block mr-2 mb-0 py-4 px-3 font-semibold text-sm rounded-md transition duration-200  ${
                       activeTab === tab
-                        ? "text-indigo-600 border-b-2 border-indigo-600"
-                        : "text-gray-500 hover:bg-gray-100"
+                        ? "text-indigo-600 border-b-2 border-indigo-600 cursor-pointer"
+                        : "text-gray-500 hover:bg-gray-100 cursor-pointer"
                     }`}
                   >
                     {tab === "posts"
@@ -955,8 +955,8 @@ const ProfilePage: React.FC = () => {
                   onClick={() => handleTabChange(tab)}
                   className={`tab p-4 font-semibold text-sm transition duration-200 ${
                     activeTab === tab
-                      ? "active text-indigo-600 border-b-2 border-indigo-600"
-                      : "text-gray-500 hover:bg-gray-100"
+                      ? "active text-indigo-600 border-b-2 border-indigo-600 cursor-pointer"
+                      : "text-gray-500 hover:bg-gray-100 cursor-pointer"
                   }`}
                 >
                   {tab === "posts"

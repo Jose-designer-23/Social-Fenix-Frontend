@@ -234,8 +234,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] [&>button]:hidden p-0 overflow-hidden rounded-xl">
-        <DialogHeader className="p-4 border-b border-gray-100 flex items-center justify-between">
-            
+        <DialogHeader className="p-4 border-b border-gray-100 flex items-center justify-between ">
           <div className="flex items-center space-x-3">
             <Avatar
               src={avatarUrl ?? undefined}
@@ -252,16 +251,16 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
               </p>
             </div>
             <button
-            onClick={closeModal}
-            className="p-1 rounded-full hover:bg-gray-100 transition-colors"
-            aria-label="Cerrar"
-          >
-            <X className="h-5 w-5 text-gray-600" />
-          </button>
+              onClick={closeModal}
+              className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="h-5 w-5 text-gray-600" />
+            </button>
           </div>
         </DialogHeader>
 
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 ">
           {/* Apodo */}
           <div>
             <label className="text-sm text-gray-700 font-medium">Apodo</label>
@@ -286,7 +285,11 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
               <div>
                 <Button
-                  variant={editApodo ? "destructive" : "outline"}
+                  className={
+                    editApodo
+                      ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-2"
+                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                  }
                   onClick={() => {
                     setEditApodo((s) => !s);
                     setServerError(null);
@@ -325,7 +328,11 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
               <div>
                 <Button
-                  variant={editCorreo ? "destructive" : "outline"}
+                  className={
+                    editCorreo
+                      ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-7"
+                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                  }
                   onClick={() => {
                     setEditCorreo((s) => !s);
                     setServerError(null);
@@ -373,7 +380,11 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
               <div>
                 <Button
-                  variant={editPassword ? "destructive" : "outline"}
+                  className={
+                    editPassword
+                      ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-8"
+                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                  }
                   onClick={() => {
                     setEditPassword((s) => !s);
                     setServerError(null);
@@ -395,13 +406,18 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
         </div>
 
         <div className="p-4 border-t border-gray-100 flex justify-end gap-2">
-          <Button variant="ghost" onClick={closeModal} disabled={loading}>
+          <Button
+            variant="outline"
+            className="bg-gray-200 hover:bg-gray-300 cursor-pointer"
+            onClick={closeModal}
+            disabled={loading}
+          >
             Cancelar
           </Button>
           <Button
             onClick={handleSave}
             disabled={!hasChanges || loading}
-            className="font-bold"
+            className="font-bold cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
           >
             {loading ? "Guardando..." : "Guardar cambios"}
           </Button>

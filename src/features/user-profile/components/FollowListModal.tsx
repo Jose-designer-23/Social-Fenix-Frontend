@@ -37,15 +37,21 @@ interface FollowListModalProps {
   scrollThreshold?: number;
 }
 
-const API_BASE = (import.meta.env.VITE_API_URL ?? "http://localhost:3000").replace(
-  /\/+$/,
-  ""
-);
+const API_BASE = (
+  import.meta.env.VITE_API_URL ?? "http://localhost:3000"
+).replace(/\/+$/, "");
 
 /** Helpers para avatar / iniciales (mismos que ReactionListModal) */
 function extractAvatarFromAuthor(author?: any): string | null {
   if (!author || typeof author !== "object") return null;
-  const keys = ["avatar", "avatar_url", "profile_picture", "picture", "image", "url"];
+  const keys = [
+    "avatar",
+    "avatar_url",
+    "profile_picture",
+    "picture",
+    "image",
+    "url",
+  ];
   for (const k of keys) {
     const v = author[k];
     if (typeof v === "string" && v.trim() !== "") return v.trim();
@@ -55,8 +61,14 @@ function extractAvatarFromAuthor(author?: any): string | null {
 
 function initialFromAuthor(author?: any): string {
   if (!author || typeof author !== "object") return "U";
-  const apodo = typeof author.apodo === "string" && author.apodo.trim() ? author.apodo.trim()[0] : undefined;
-  const nombre = typeof author.nombre === "string" && author.nombre.trim() ? author.nombre.trim()[0] : undefined;
+  const apodo =
+    typeof author.apodo === "string" && author.apodo.trim()
+      ? author.apodo.trim()[0]
+      : undefined;
+  const nombre =
+    typeof author.nombre === "string" && author.nombre.trim()
+      ? author.nombre.trim()[0]
+      : undefined;
   const ch = apodo ?? nombre ?? "U";
   return String(ch).toUpperCase();
 }
@@ -73,7 +85,9 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
 
   const [items, setItems] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [myFollowingsSet, setMyFollowingsSet] = useState<Set<string>>(new Set());
+  const [myFollowingsSet, setMyFollowingsSet] = useState<Set<string>>(
+    new Set()
+  );
   const [savingApodo, setSavingApodo] = useState<string | null>(null);
 
   const mountedRef = useRef(true);
@@ -85,13 +99,15 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
     };
   }, []);
 
-  // Carga inicial 
+  // Carga inicial
   useEffect(() => {
     if (!isOpen) return;
     const fetchList = async () => {
       setLoading(true);
       try {
-        const url = `${API_BASE}/follows/${type === "following" ? "following" : "followers"}/${userId}`;
+        const url = `${API_BASE}/follows/${
+          type === "following" ? "following" : "followers"
+        }/${userId}`;
         const res = await axios.get<UserItem[]>(url);
         const data = res.data || [];
         if (mountedRef.current) setItems(data);
@@ -114,27 +130,29 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
     }
     let cancelled = false;
     const fetchMyFollowings = async () => {
-  try {
-    // Pedimos como UserItem[] (o el tipo correspondiente en tu proyecto)
-    const res = await axios.get<UserItem[]>(
-      `${API_BASE}/follows/following/${currentUser.id}`
-    );
+      try {
+        // Pedimos como UserItem[] (o el tipo correspondiente en tu proyecto)
+        const res = await axios.get<UserItem[]>(
+          `${API_BASE}/follows/following/${currentUser.id}`
+        );
 
-    // Si res.data es array lo usamos, si no usamos vacío
-    const array: UserItem[] = Array.isArray(res.data) ? res.data : [];
+        // Si res.data es array lo usamos, si no usamos vacío
+        const array: UserItem[] = Array.isArray(res.data) ? res.data : [];
 
-    const apodos = new Set<string>(
-      array
-        .map((u) => u?.apodo)
-        .filter((v): v is string => typeof v === "string" && v.trim().length > 0)
-    );
+        const apodos = new Set<string>(
+          array
+            .map((u) => u?.apodo)
+            .filter(
+              (v): v is string => typeof v === "string" && v.trim().length > 0
+            )
+        );
 
-    if (!cancelled) setMyFollowingsSet(apodos);
-  } catch (err) {
-    console.error("Error cargando mis followings:", err);
-    if (!cancelled) setMyFollowingsSet(new Set());
-  }
-};
+        if (!cancelled) setMyFollowingsSet(apodos);
+      } catch (err) {
+        console.error("Error cargando mis followings:", err);
+        if (!cancelled) setMyFollowingsSet(new Set());
+      }
+    };
     fetchMyFollowings();
     return () => {
       cancelled = true;
@@ -178,19 +196,25 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
 
   const title = type === "following" ? "Siguiendo" : "Seguidores";
 
-  const listWrapperClass = items.length > scrollThreshold
-    ? "overflow-auto max-h-[50vh] px-4"
-    : "px-4";
+  const listWrapperClass =
+    items.length > scrollThreshold ? "overflow-auto max-h-[50vh] px-4" : "px-4";
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       {/* Usamos [&>button]:hidden para que Radix/Shadcn no muestre su botón automático */}
       <DialogContent className="sm:max-w-md w-full max-h-[80vh] overflow-hidden [&>button]:hidden">
         {/* Header sticky: queda visible al hacer scroll en la lista */}
         <DialogHeader className="sticky top-0 z-20 bg-white border-b">
           <div className="flex items-center justify-between w-full px-4 py-3">
             <div className="flex items-center gap-3">
-              <DialogTitle className="text-lg font-semibold">{title}</DialogTitle>
+              <DialogTitle className="text-lg font-semibold">
+                {title}
+              </DialogTitle>
               <Badge variant="secondary" className="text-sm">
                 {items.length}
               </Badge>
@@ -210,17 +234,22 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
         {/* Zona de lista: si items.length > threshold será scrollable */}
         <div className={listWrapperClass} role="list" aria-label={title}>
           {loading ? (
-            <div className="text-center text-gray-500 py-8">Cargando {title.toLowerCase()}...</div>
+            <div className="text-center text-gray-500 py-8">
+              Cargando {title.toLowerCase()}...
+            </div>
           ) : items.length === 0 ? (
             <div className="text-center text-gray-500 py-6">
-              {type === "following" ? "No sigues a nadie todavía." : "Aún no tienes seguidores."}
+              {type === "following"
+                ? "No sigues a nadie todavía."
+                : "Aún no tienes seguidores."}
             </div>
           ) : (
             <ul className="space-y-2 py-3">
               {items.map((u) => {
                 const imFollowing = myFollowingsSet.has(u.apodo);
                 // avatar puede venir en distintos campos
-                const avatarUrl = extractAvatarFromAuthor(u) ?? u.avatar ?? null;
+                const avatarUrl =
+                  extractAvatarFromAuthor(u) ?? u.avatar ?? null;
 
                 return (
                   <li
@@ -239,19 +268,31 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                         />
                       </div>
                       <div className="min-w-0">
-                        <div className="font-medium text-gray-900 truncate">{u.nombre}</div>
-                        <div className="text-sm text-gray-500 truncate">@{u.apodo}</div>
+                        <div className="font-medium text-gray-900 truncate">
+                          {u.nombre}
+                        </div>
+                        <div className="text-sm text-gray-500 truncate">
+                          @{u.apodo}
+                        </div>
                       </div>
                     </div>
 
                     <div className="flex items-center ml-4">
                       <Button
                         size="sm"
-                        className={imFollowing ? "bg-linear-to-br from-[#fa8f3d] to-[#f13e0d] text-white font-bold cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]" : "border-2 bg-transparent border-orange-500 cursor-pointer text-orange-500 font-bold active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"}
+                        className={
+                          imFollowing
+                            ? "bg-linear-to-br from-[#fa8f3d] to-[#f13e0d] text-white font-bold cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]"
+                            : "border-2 bg-transparent border-orange-500 cursor-pointer text-orange-500 font-bold active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
+                        }
                         onClick={(e) => handleToggleFollow(e, u.apodo)}
                         disabled={savingApodo === u.apodo}
                       >
-                        {savingApodo === u.apodo ? "..." : imFollowing ? "Siguiendo" : "Seguir"}
+                        {savingApodo === u.apodo
+                          ? "..."
+                          : imFollowing
+                          ? "Siguiendo"
+                          : "Seguir"}
                       </Button>
                     </div>
                   </li>
@@ -264,7 +305,9 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
         <DialogFooter className="sticky bottom-0 z-20 bg-white border-t p-4">
           <div className="w-full flex justify-end">
             <DialogClose asChild>
-              <Button className="cursor-pointer" variant="ghost">Cerrar</Button>
+              <Button className="cursor-pointer" variant="ghost">
+                Cerrar
+              </Button>
             </DialogClose>
           </div>
         </DialogFooter>
