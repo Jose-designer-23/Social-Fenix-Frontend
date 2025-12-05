@@ -4,6 +4,15 @@
 
 Este repositorio contiene la aplicación cliente (Frontend) del proyecto Social Fénix, **liberada bajo la Licencia MIT** para fomentar el estudio, la contribución y la innovación en el desarrollo de redes sociales. En versión móvil, funciona en todos los navegadores, menos en google chrome, en el perfil se queda en la pantalla en blanco, pero en navegación privada no.
 
+---
+
+> **⚠️ NOTA IMPORTANTE SOBRE EL BACKEND:**
+> Dado que el backend está alojado en un **servidor gratuito (de desarrollo)**, este se suspende automáticamente tras **15 minutos de inactividad**.
+> 
+> Si la aplicación no carga o ves errores de conexión al principio, por favor, **espera uno o dos minutos**. Es el tiempo que tarda el servidor en *despertar* y arrancar de nuevo.
+
+---
+
 ## 🚀 Stack Tecnológico
 
 El frontend está construido sobre un stack moderno y escalable, con un fuerte enfoque en el tipado y la robustez:
