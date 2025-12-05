@@ -87,6 +87,8 @@ function insertCommentIntoTree(tree: CommentFromApi[], parentId: number, newComm
   return false;
 }
 
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
 const PostPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -106,8 +108,8 @@ const PostPage: React.FC = () => {
 
       // Peticiones con headers para que el backend calcule liked/likesCount por usuario
       const [postRes, commentsRes] = await Promise.all([
-        axios.get(`http://localhost:3000/posts/${id}`, { headers }),
-        axios.get(`http://localhost:3000/comments/post/${id}`, { headers }),
+        axios.get(`${API_BASE}/posts/${id}`, { headers }),
+        axios.get(`${API_BASE}/comments/post/${id}`, { headers }),
       ]);
 
       const apiPost: ApiPostResponse =

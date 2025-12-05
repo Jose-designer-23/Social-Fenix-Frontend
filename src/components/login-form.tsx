@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
 export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   const [identificador, setIdentificador] = useState("");
   const [contrasena, setContrasena] = useState("");
@@ -24,7 +26,7 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
     setIsLoading(true);
 
     try {
-      const response = await axios.post("https://social-fenix-backend.onrender.com/user/login", { //http://localhost:3000 para desarrollo
+      const response = await axios.post(`${API_BASE}/user/login`, { //http://localhost:3000 para desarrollo
         identificador,
         contrasena,
       });

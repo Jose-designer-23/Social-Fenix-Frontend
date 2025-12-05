@@ -16,6 +16,8 @@ const APODO_REGEX = /^[a-zA-Z0-9_]+$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
 
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
 // Creamos los estados y funciones necesarias para el formulario de registro
 export function SignupForm({
   className,
@@ -97,7 +99,7 @@ export function SignupForm({
       };
 
       const response = await axios.post(
-        "https://social-fenix-backend.onrender.com/user/register", //http://localhost:3000 para desarrollo
+        `${API_BASE}/user/register`, //http://localhost:3000 para desarrollo
         payload
       );
 

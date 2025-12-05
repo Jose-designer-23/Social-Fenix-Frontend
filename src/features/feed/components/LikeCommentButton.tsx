@@ -5,6 +5,8 @@ import { useAuth } from "@/features/auth/services/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
 interface LikeCommentButtonProps {
   commentId: number;
   initialCount: number;
@@ -45,7 +47,7 @@ const LikeCommentButton: React.FC<LikeCommentButtonProps> = ({ commentId, initia
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const res = await axios.post(
-        `https://social-fenix-backend.onrender.com/like-comment/likes/${commentId}`, //http://localhost:3000/ Para desarrollo
+        `${API_BASE}/like-comment/likes/${commentId}`, //http://localhost:3000/ Para desarrollo
         {},
         { headers }
       );

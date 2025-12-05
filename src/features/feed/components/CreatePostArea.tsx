@@ -11,7 +11,7 @@ import axios from "axios";
 import { useAuth, User } from "../../auth/services/AuthContext.tsx";
 
 // URL base de tu backend NestJS
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://social-fenix-backend.onrender.com";
 
 // Tipo máximo de archivo y tipos pertimidos
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
