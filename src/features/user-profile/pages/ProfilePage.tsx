@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/features/auth/services/AuthContext";
 import toast from "react-hot-toast";
+import { Mail } from "lucide-react";
 
 // Tipos
 import { FeedItem } from "../../feed/types/feed";
@@ -10,7 +11,7 @@ import { CommentFromApi } from "../../feed/types/comment";
 import PostCard from "../../feed/components/PostCard";
 import EditProfileModal from "../components/EditProfileModal";
 import FollowListModal from "../components/FollowListModal";
-import ChatModal from "../../feed/chat/components/ChatModal"; 
+import ChatModal from "../../feed/chat/components/ChatModal";
 
 // --- Tipado del ProfileDto (responde /user/by-apodo/:apodo) ---
 interface ProfileDto {
@@ -356,7 +357,7 @@ const ProfilePage: React.FC = () => {
     }
     const maxScrollLeft = el.scrollWidth - el.clientWidth;
     setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft < maxScrollLeft - 1); 
+    setCanScrollRight(el.scrollLeft < maxScrollLeft - 1);
   };
 
   useEffect(() => {
@@ -378,7 +379,7 @@ const ProfilePage: React.FC = () => {
     const el = tabsContainerRef.current;
     if (!el) return;
     el.scrollBy({ left: distance, behavior: "smooth" });
-  // Actualizamos los botones después de un pequeño retraso (luego de un progreso de desplazamiento suave)
+    // Actualizamos los botones después de un pequeño retraso (luego de un progreso de desplazamiento suave)
     setTimeout(updateScrollButtons, 300);
   };
 
@@ -800,7 +801,12 @@ const ProfilePage: React.FC = () => {
                 onClick={handleOpenMessage}
                 className="px-4 py-2 cursor-pointer rounded-full  font-bold bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] text-white hover:opacity-95 active:opacity-90 active:shadow-inner active:scale-95 transition transform duration-150"
               >
-                Enviar mensaje
+                <span className="inline-flex items-center gap-2">
+                  <Mail className="w-4 h-4 sm:hidden" />{" "}
+                  {/* icono solo en móvil */}
+                  <span className="hidden sm:inline">Enviar mensaje</span>{" "}
+                  {/* texto solo en >= sm */}
+                </span>
               </button>
             </>
           )}
@@ -843,7 +849,9 @@ const ProfilePage: React.FC = () => {
             <span className="count font-bold">
               {ProfileData.followingsCount}
             </span>{" "}
-            <span className="label text-gray-500 cursor-pointer">Siguiendo</span>
+            <span className="label text-gray-500 cursor-pointer">
+              Siguiendo
+            </span>
           </button>
           <button
             onClick={() => setIsFollowersModalOpen(true)}
@@ -852,7 +860,9 @@ const ProfilePage: React.FC = () => {
             <span className="count font-bold">
               {ProfileData.followersCount}
             </span>{" "}
-            <span className="label text-gray-500 cursor-pointer">Seguidores</span>
+            <span className="label text-gray-500 cursor-pointer">
+              Seguidores
+            </span>
           </button>
         </div>
       </section>

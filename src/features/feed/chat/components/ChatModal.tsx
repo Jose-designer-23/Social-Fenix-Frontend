@@ -389,7 +389,11 @@ export default function ChatModal({
                       }`}
                     >
                       <div className="text-sm">{m.content}</div>
-                      <div className="text-xs text-gray-400 mt-1 text-right">
+                      <div
+                        className={`text-xs mt-1 text-right ${
+                          mine ? "text-white" : "text-gray-800"
+                        }`}
+                      >
                         {renderTime(m.created_at)}
                       </div>
                     </div>

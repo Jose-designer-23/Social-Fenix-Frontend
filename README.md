@@ -2,7 +2,7 @@
 
 > **Rise. Connect. Ignite.** Social Fénix es una red social moderna que permite a los usuarios **publicar sus recuerdos en el presente y revivirlos en el futuro**.
 
-Este repositorio contiene la aplicación cliente (Frontend) del proyecto Social Fénix, **liberada bajo la Licencia MIT** para fomentar el estudio, la contribución y la innovación en el desarrollo de redes sociales.
+Este repositorio contiene la aplicación cliente (Frontend) del proyecto Social Fénix, **liberada bajo la Licencia MIT** para fomentar el estudio, la contribución y la innovación en el desarrollo de redes sociales. En versión móvil, funciona en todos los navegadores, menos en google chrome, en el perfil se queda en la pantalla en blanco, pero en navegación privada no.
 
 ## 🚀 Stack Tecnológico
 
