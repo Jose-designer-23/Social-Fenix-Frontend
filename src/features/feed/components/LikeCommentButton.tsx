@@ -45,7 +45,7 @@ const LikeCommentButton: React.FC<LikeCommentButtonProps> = ({ commentId, initia
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const res = await axios.post(
-        `http://localhost:3000/like-comment/likes/${commentId}`,
+        `https://social-fenix-backend.onrender.com/like-comment/likes/${commentId}`, //http://localhost:3000/ Para desarrollo
         {},
         { headers }
       );

@@ -24,7 +24,7 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/user/login", {
+      const response = await axios.post("https://social-fenix-backend.onrender.com/user/login", { //http://localhost:3000 para desarrollo
         identificador,
         contrasena,
       });

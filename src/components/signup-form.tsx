@@ -97,7 +97,7 @@ export function SignupForm({
       };
 
       const response = await axios.post(
-        "http://localhost:3000/user/register",
+        "https://social-fenix-backend.onrender.com/user/register", //http://localhost:3000 para desarrollo
         payload
       );
 
