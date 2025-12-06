@@ -9,7 +9,7 @@ Este repositorio contiene la aplicación cliente (Frontend) del proyecto Social 
 > **⚠️ NOTA IMPORTANTE SOBRE EL BACKEND:**
 > Dado que el backend está alojado en un **servidor gratuito (de desarrollo)**, este se suspende automáticamente tras **15 minutos de inactividad**.
 > 
-> Si la aplicación no carga o ves errores de conexión al principio, por favor, **espera uno o dos minutos**. Es el tiempo que tarda el servidor en *despertar* y arrancar de nuevo.
+> Si la aplicación no carga o ves errores de conexión al principio, por favor, **espera 5 minutos**. Es el tiempo que tarda el servidor en *despertar* y arrancar de nuevo.
 
 ---
 
