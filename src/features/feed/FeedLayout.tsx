@@ -31,20 +31,20 @@ import DeleteAccountModal from "./components/DeleteAccountModal.tsx";
 const FeedLayout: React.FC = () => {
   const { user, isLoading, logout, getToken } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [dropdownActive, setDropdownActive] = useState(false); // <- nuevo
   const navigate = useNavigate();
 
   // Estado para el modal de "Datos de la cuenta"
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Conectamos el socket globalmente y propagar eventos de conversación ---
+  // ... (socket useEffect igual que antes) ...
   useEffect(() => {
     if (!user) return;
 
     const token = getToken?.();
     const s = getChatSocket(token);
 
-    // Join user room cuando el socket connecta (o si ya está conectado)
     const joinUserRoom = () => {
       try {
         if (user && user.id) s.emit("joinUser", { userId: Number(user.id) });
@@ -54,7 +54,6 @@ const FeedLayout: React.FC = () => {
     s.on("connect", joinUserRoom);
     if (s.connected) joinUserRoom();
 
-    // Cuando recibimos 'conversationUpdated' del servidor, despachamos evento global
     const convHandler = (payload: any) => {
       try {
         window.dispatchEvent(new CustomEvent("chat:conversationUpdated", { detail: payload }));
@@ -63,7 +62,6 @@ const FeedLayout: React.FC = () => {
 
     s.on("conversationUpdated", convHandler);
 
-    // Limpieza
     return () => {
       try {
         s.off("conversationUpdated", convHandler);
@@ -72,6 +70,7 @@ const FeedLayout: React.FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
+
 
   const handleViewProfile = () => {
     setMobileOpen(false);
@@ -95,7 +94,6 @@ const FeedLayout: React.FC = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // Buscamos la url del avatar en propiedades conocidas del tipo User
   const getAvatarUrl = (u: User | null): string | null => {
     if (!u) return null;
     return u.avatar ?? u.url ?? null;
@@ -143,15 +141,20 @@ const FeedLayout: React.FC = () => {
             </div>
           </header>
 
-          {/* Panel móvil */}
+          {/* Panel móvil: overlay */}
           <div
             className={`fixed inset-0 z-40 transition-opacity duration-300 ${ mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none" }`}
             aria-hidden={!mobileOpen}
-            onClick={() => setMobileOpen(false)}
+            onClick={() => {
+              // Si hay un dropdown activo, no cerramos el menú aún
+              if (dropdownActive) return;
+              setMobileOpen(false);
+            }}
           >
             <div className="absolute inset-0 bg-black/40" />
           </div>
 
+          {/* Aside lateral (menú) */}
           <aside className={`fixed inset-y-0 left-0 w-72 bg-white z-50 p-4 overflow-y-auto transform transition-transform duration-300 ease-in-out ${ mobileOpen ? "translate-x-0" : "-translate-x-full" }`} aria-hidden={!mobileOpen}>
             <div className="flex items-center justify-between mb-4">
               <div className="text-lg font-bold">Menú</div>
@@ -177,26 +180,76 @@ const FeedLayout: React.FC = () => {
             </Button>
 
             <div className="w-full mt-4">
-              <DmDropdown/>
+              {/*
+                Pasamos onOpenChange y onSelectConversation a DmDropdown
+                para que notifique al layout si el dropdown está abierto o
+                si el usuario ha elegido una conversación.
+              */}
+              <DmDropdown
+                onOpenChange={(open: boolean) => setDropdownActive(open)}
+                onSelectConversation={() => {
+                  // Cuando selecciona una conversación, cerramos el menú móvil
+                  setMobileOpen(false);
+                }}
+              />
             </div>
 
             <div className="mt-4">
-              <DropdownMenu>
+              {/* Mobile settings dropdown: controlamos su estado con onOpenChange y evitamos
+                  que los clicks en trigger/content lleguen al overlay con stopPropagation */}
+              <DropdownMenu onOpenChange={(open) => setDropdownActive(open)}>
+   
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start bg-gray-50 hover:bg-gray-100 cursor-pointer">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                    onClick={(e) => {
+                      // Evitamos que el click del trigger burbuje al overlay que cierra el menú
+                      e.stopPropagation();
+                    }}
+                  >
                     <Settings className="mr-2 h-4 w-4" />
                     Configuración
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-64">
-                  <DropdownMenuItem className="cursor-pointer" onClick={() => setIsAccountModalOpen(true)}>Datos de la cuenta</DropdownMenuItem>
+
+
+                <DropdownMenuContent
+                  className="w-64"
+                  onPointerEnter={() => setDropdownActive(true)}
+                  onPointerLeave={() => setDropdownActive(false)}
+                  onClick={(e) => e.stopPropagation()} // que los clicks dentro del content no cierren el overlay
+                >
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setIsAccountModalOpen(true);
+                      setMobileOpen(false); // cerramos menú solo cuando el usuario elige la opción
+                    }}
+                  >
+                    Datos de la cuenta
+                  </DropdownMenuItem>
+
                   <DropdownMenuSeparator />
-                 <DropdownMenuItem className="cursor-pointer text-red-600" onClick={() => setIsDeleteModalOpen(true)}>
+                  <DropdownMenuItem
+                    className="cursor-pointer text-red-600"
+                    onClick={() => {
+                      setIsDeleteModalOpen(true);
+                      setMobileOpen(false);
+                    }}
+                  >
                     <Trash className="mr-2 h-4 w-4" />
                     Eliminar cuenta
                   </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-slate-400/50" />
-                  <DropdownMenuItem onClick={logout} className="text-red-600 cursor-pointer">
+
+                  <DropdownMenuSeparator className="bg-slate-400/50" />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      logout();
+                      setMobileOpen(false);
+                    }}
+                    className="text-red-600 cursor-pointer"
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Cerrar Sesión
                   </DropdownMenuItem>
@@ -205,7 +258,9 @@ const FeedLayout: React.FC = () => {
             </div>
           </aside>
 
+          {/* El resto del layout queda igual */}
           <aside className="hidden lg:block bg-white border-r border-gray-200 p-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+            {/* ... (contenido de sidebar grande) */}
             <Card className="mb-6 p-4 shadow-sm border-gray-100">
               <div className="flex items-center space-x-3">
                 <Avatar src={avatarUrl} alt={user.nombre || user.apodo} size={40} className="shrink-0 rounded-full" initials={fallbackInitial} />

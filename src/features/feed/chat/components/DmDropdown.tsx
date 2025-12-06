@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { getChatSocket } from "./ChatSocket"; 
+import { getChatSocket } from "./ChatSocket";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -30,7 +30,12 @@ type Conversation = {
   lastAt?: string | null;
 };
 
-export default function DmDropdown() {
+type Props = {
+  onOpenChange?: (open: boolean) => void;
+  onSelectConversation?: () => void;
+};
+
+export default function DmDropdown({ onOpenChange, onSelectConversation }: Props) {
   const { user, getToken } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -50,7 +55,7 @@ export default function DmDropdown() {
       setConversations(res.data ?? []);
     } catch (err) {
       console.warn("Error loading conversations:", err);
-      setConversations([]); 
+      setConversations([]);
     } finally {
       setLoading(false);
     }
@@ -63,12 +68,10 @@ export default function DmDropdown() {
     const s = getChatSocket(token);
 
     const onConversationUpdated = (payload: any) => {
-      // La carga útil debe contener otherId/lastMessage/lastAt
-      // Actualizamos la lista de conversaciones (simple y robusta)
+      // Simplemente refrescamos la lista
       fetchConversations();
     };
 
-    // Nos seguramos de que los usuarios se unen a la sala
     const joinUserRoom = () => {
       try {
         if (user && user.id) s.emit("joinUser", { userId: user.id });
@@ -80,7 +83,6 @@ export default function DmDropdown() {
 
     s.on("conversationUpdated", onConversationUpdated);
 
-    //También escucha el evento de ventana de ChatModal
     const winHandler = () => fetchConversations();
     window.addEventListener("chat:conversationUpdated", winHandler as any);
 
@@ -97,6 +99,11 @@ export default function DmDropdown() {
   const unreadSenders = conversations.filter((c) => c.unreadCount > 0).length;
 
   const handleOpenChat = (c: Conversation) => {
+    // notify parent that a conversation was selected so it can close the mobile menu
+    onSelectConversation?.();
+    // ensure dropdown is considered closed by parent
+    onOpenChange?.(false);
+
     setSelected(c);
     setOpenChat(true);
   };
@@ -113,7 +120,7 @@ export default function DmDropdown() {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu onOpenChange={(open: boolean) => onOpenChange?.(open)}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="default"
@@ -128,7 +135,12 @@ export default function DmDropdown() {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-80">
+        <DropdownMenuContent
+          className="w-80"
+          
+          onPointerEnter={() => onOpenChange?.(true)}
+          onPointerLeave={() => onOpenChange?.(false)}
+        >
           <div className="p-3 border-b">
             <div className="font-semibold">Mensajes</div>
             <div className="text-xs text-gray-500">Conversaciones recientes</div>

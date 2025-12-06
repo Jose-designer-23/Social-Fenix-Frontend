@@ -331,7 +331,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                   className={
                     editCorreo
                       ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-7"
-                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                      : "bg-blue-600 max-[434px]:pb-7 max-[434px]:pt-7 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
                   }
                   onClick={() => {
                     setEditCorreo((s) => !s);
