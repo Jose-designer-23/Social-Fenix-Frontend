@@ -169,6 +169,12 @@
   @apply text-sm;
 }
 
+/* Diseño formulario de olvidar contraseña */
+
+.estilo_etiqueta_contraseña_olvidada{
+  @apply text-sm font-bold text-black text-left;
+}
+
 /* Las caracteristicas del logo de registro son las mismas que del login */
 
 @theme inline {

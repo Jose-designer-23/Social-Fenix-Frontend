@@ -5,6 +5,8 @@ import PostPage from './features/feed/pages/PostPage.tsx';
 import CommentThreadPage from './features/feed/pages/CommentThreadPage.tsx'; 
 import LoginPage from './features/auth/pages/LoginPage.tsx';
 import RegisterPage from './features/auth/pages/RegisterPage.tsx';
+import ForgotPasswordPage from './features/auth/pages/ForgotPasswordPage.tsx';
+import ResetPasswordPage from './features/auth/pages/ResetPasswordPage.tsx';
 import ProfilePage from './features/user-profile/pages/ProfilePage.tsx';
 import { AuthProvider } from './features/auth/services/AuthContext.tsx';
 import { Toaster } from 'react-hot-toast';
@@ -23,6 +25,8 @@ function App() {
                 {/* Rutas Públicas */}
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
 
                 {/* Ruta de Módulo Protegido: El FeedLayout protege todas sus rutas hijas */}
                 <Route path="/" element={<FeedLayout />}>
