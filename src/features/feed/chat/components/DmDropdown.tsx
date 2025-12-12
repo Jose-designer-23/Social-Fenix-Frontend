@@ -136,7 +136,7 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="w-80"
+          className="w-75"
           
           onPointerEnter={() => onOpenChange?.(true)}
           onPointerLeave={() => onOpenChange?.(false)}

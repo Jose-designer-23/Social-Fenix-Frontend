@@ -288,7 +288,7 @@ const FeedLayout: React.FC = () => {
                   Configuración
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-64">
+              <DropdownMenuContent className="w-59">
                  <DropdownMenuItem className="cursor-pointer" onClick={() => setIsAccountModalOpen(true)}> <Contact className="mr-2 h-4 w-4" /> Datos de la cuenta</DropdownMenuItem>
                  <DropdownMenuSeparator />
                  <DropdownMenuItem className="cursor-pointer text-red-600" onClick={() => setIsDeleteModalOpen(true)}>
