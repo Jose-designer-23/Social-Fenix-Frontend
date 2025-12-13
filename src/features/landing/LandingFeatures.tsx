@@ -26,6 +26,8 @@ const slides: Slide[] = [
       "Interacciones Dinámicas - Alto engagement en cada publicación.",
       "Notificaciones Inteligentes - Alertas que se adaptan a ti",
       "Mensajería Integrada - Comunicación instantánea y fluida.",
+      "Transparencia Social – Visualiza la lista completa de usuarios que dieron like o republicaron.",
+      "Búsqueda Instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
     ],
     img: "/img/Feed.png",
   },
