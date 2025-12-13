@@ -46,6 +46,65 @@
   @apply right-0 top-1/2 -translate-y-1/2 p-10 flex justify-center mr-5;
 }
 
+/* Botón de scroll hacia abajo (bottom center) */
+.scroll_down_button{
+  @apply fixed left-1/2 -translate-x-1/2 bottom-6 w-12 h-12 rounded-full flex items-center justify-center bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95 z-50;
+}
+
+/* Variante ubicada dentro de cada diapositiva (no fija en viewport) */
+.scroll_down_button_in{
+  @apply absolute left-1/2 -translate-x-1/2 bottom-6 w-12 h-12 rounded-full flex items-center justify-center bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95 z-20;
+}
+
+/* Slider vertical con snap en el interior del section */
+/* Contenedor de imágenes (ahora en la IZQUIERDA) */
+/* No queremos que el slider tenga su propio scrollbar -> el body hará el scroll */
+.image-slider {
+  @apply w-full;
+}
+
+/* Cada slide ocupa al menos la altura de la ventana (scroll por página) */
+.landing_slide {
+  @apply w-full min-h-screen snap-start relative flex items-center justify-center;
+}
+
+/* Imagen ocupa todo el contenedor de la slide */
+.landing_slide img {
+  @apply w-full h-full object-cover;
+}
+
+/* Imagen: no ocupar h-full ciego; limitar tamaño máximo y mantener aspecto */
+.landing-img {
+  @apply block max-w-[90%] max-h-[80vh] object-contain rounded-lg shadow-lg;
+}
+
+/* Si quieres forzar que la imagen ocupe toda la columna en ancho desktop (pero sin zoom) */
+@media (min-width: 768px) {
+  .landing-img {
+    @apply max-w-full; /* permite que ocupe toda la columna, pero object-contain evita estirado */
+  }
+}
+
+/* Contenedor derecho: slider de imágenes (root del observer) */
+.right-slider {
+  @apply h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth;
+}
+
+/* Variante ubicada dentro de cada diapositiva (no fija en viewport) */
+.scroll_down_button_in{
+  @apply absolute left-1/2 -translate-x-1/2 bottom-6 w-12 h-12 rounded-full flex items-center justify-center bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95 z-20;
+}
+
+/* Asegurar que el contenedor de la imagen no expanda fuera del slide */
+.landing_slide .right{
+  @apply w-full overflow-hidden;
+}
+
+/* Imagen que ocupa la columna completa (ya usamos clases en el JSX, esto es por seguridad) */
+.landing_slide .right img{
+  @apply w-full h-full object-cover;
+}
+
 /* Diseño estructura formulario login */
 .estructura_diseño_formulario{
   @apply w-full max-w-md mx-auto px-4;
