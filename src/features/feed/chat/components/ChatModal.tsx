@@ -340,7 +340,7 @@ export default function ChatModal({
           <button
             onClick={() => onOpenChange(false)}
             aria-label="Cerrar"
-            className="p-1 rounded-full hover:bg-gray-100"
+            className="p-1 rounded-full Dark-boton-mensajes cursor-pointer hover:bg-gray-100"
           >
             <X className="h-5 w-5" />
           </button>

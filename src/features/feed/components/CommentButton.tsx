@@ -17,7 +17,7 @@ const CommentCountButton: React.FC<CommentCountButtonProps> = ({
 
   return (
     <div 
-      className="flex items-center text-gray-500 hover:text-blue-500 transition-colors cursor-pointer"
+      className="flex items-center Dark-texto-blanco text-gray-500 hover:text-blue-500 transition-colors cursor-pointer"
       onClick={onOpenModal} // Llamamos a la función de apertura del modal
       role="button"
       aria-label={`Comentarios: ${count}`}

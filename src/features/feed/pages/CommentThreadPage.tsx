@@ -293,7 +293,7 @@ const CommentThreadPage: React.FC = () => {
       <div className="mb-4">
         <Button
           variant="outline"
-          className="bg-white"
+          className="bg-white Dark-boton"
           size="sm"
           onClick={() => navigate(-1)}
         >

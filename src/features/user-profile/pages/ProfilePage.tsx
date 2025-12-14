@@ -710,7 +710,7 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="profile-container bg-white min-h-screen rounded-2xl">
+    <div className="profile-container Dark-Card bg-white min-h-screen rounded-2xl">
       <header className="profile-header relative mb-16">
         {/* COVER: Overlay hover + click */}
         <div
@@ -777,7 +777,7 @@ const ProfilePage: React.FC = () => {
           {isOwner ? (
             <button
               onClick={() => setIsEditModalOpen(true)}
-              className="btn btn-edit bg-indigo-600 text-white px-4 py-2 
+              className="btn btn-edit Dark-Editar-Perfil bg-indigo-600 text-white px-4 py-2 
               rounded-full font-bold active:scale-95 active:shadow-inner active:opacity-90 transition transform duration-150
               hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] cursor-pointer"
             >
@@ -814,12 +814,12 @@ const ProfilePage: React.FC = () => {
       </header>
 
       <section className="profile-info px-4 -mt-10">
-        <h1 className="name text-2xl font-bold text-gray-900">
+        <h1 className="name text-2xl font-bold Dark-texto-blanco text-gray-900">
           {ProfileData.nombre}
         </h1>
-        <p className="username text-gray-500 mb-2">@{ProfileData.apodo}</p>
-        <p className="bio text-gray-800 mb-3">{ProfileData.biografia}</p>
-        <div className="profile-meta text-sm text-gray-500 flex items-center space-x-4 mb-4">
+        <p className="username Dark-apodo-perfil text-gray-500 mb-2">@{ProfileData.apodo}</p>
+        <p className="bio Dark-texto-blanco text-gray-800 mb-3">{ProfileData.biografia}</p>
+        <div className="profile-meta text-sm  text-gray-500 flex items-center space-x-4 mb-4">
           {ProfileData.url && (
             <span className="meta-item link">
               🔗{" "}
@@ -827,13 +827,13 @@ const ProfilePage: React.FC = () => {
                 href={ProfileData.url}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-500 hover:underline"
+                className="text-blue-500 Dark-Enlace-Perfil hover:underline"
               >
                 {ProfileData.url}
               </a>
             </span>
           )}
-          <span className="meta-item joined">
+          <span className="meta-item joined Dark-fecha-union">
             📅 Se unió en{" "}
             {new Date(ProfileData.fecha_creacion).toLocaleDateString("es-ES", {
               year: "numeric",
@@ -844,23 +844,23 @@ const ProfilePage: React.FC = () => {
         <div className="follow-stats flex space-x-4 mb-6">
           <button
             onClick={() => setIsFollowingModalOpen(true)}
-            className="stat-item text-gray-900 hover:underline"
+            className="stat-item Dark-texto-blanco text-gray-900 hover:underline"
           >
             <span className="count font-bold">
               {ProfileData.followingsCount}
             </span>{" "}
-            <span className="label text-gray-500 cursor-pointer">
+            <span className="label Dark-Seguidores text-gray-500 cursor-pointer">
               Siguiendo
             </span>
           </button>
           <button
             onClick={() => setIsFollowersModalOpen(true)}
-            className="stat-item text-gray-900 hover:underline"
+            className="stat-item Dark-texto-blanco text-gray-900 hover:underline"
           >
             <span className="count font-bold">
               {ProfileData.followersCount}
             </span>{" "}
-            <span className="label text-gray-500 cursor-pointer">
+            <span className="label Dark-Seguidores text-gray-500 cursor-pointer">
               Seguidores
             </span>
           </button>
@@ -868,7 +868,7 @@ const ProfilePage: React.FC = () => {
       </section>
 
       {/* NAV: pestañas. En pantallas pequeñas se hace deslizable horizontalmente */}
-      <nav className="profile-tabs border-b border-gray-200 sticky top-0 bg-white z-10">
+      <nav className="profile-tabs Dark-Card border-b border-gray-200 sticky top-0 bg-white z-10">
         {/* Wrapper relative para poder posicionar flechas */}
         <div className="relative group">
           {isSmallScreen ? (
@@ -887,8 +887,8 @@ const ProfilePage: React.FC = () => {
                     onClick={() => handleTabChange(tab)}
                     className={`inline-block mr-2 mb-0 py-4 px-3 font-semibold text-sm rounded-md transition duration-200  ${
                       activeTab === tab
-                        ? "text-indigo-600 border-b-2 border-indigo-600 cursor-pointer"
-                        : "text-gray-500 hover:bg-gray-100 cursor-pointer"
+                        ? "text-indigo-600 Dark-Enlace-Perfil Dark-borde-Perfil border-b-2 border-indigo-600 cursor-pointer"
+                        : "text-gray-500 Dark-Hover-perfil Dark-pestañas-perfil hover:bg-gray-100 cursor-pointer"
                     }`}
                   >
                     {tab === "posts"
@@ -965,8 +965,8 @@ const ProfilePage: React.FC = () => {
                   onClick={() => handleTabChange(tab)}
                   className={`tab p-4 font-semibold text-sm transition duration-200 ${
                     activeTab === tab
-                      ? "active text-indigo-600 border-b-2 border-indigo-600 cursor-pointer"
-                      : "text-gray-500 hover:bg-gray-100 cursor-pointer"
+                      ? "active text-indigo-600 Dark-Enlace-Perfil Dark-borde-Perfil border-b-2 border-indigo-600 cursor-pointer"
+                      : "text-gray-500 Dark-Hover-perfil Dark-pestañas-perfil hover:bg-gray-100 cursor-pointer"
                   }`}
                 >
                   {tab === "posts"

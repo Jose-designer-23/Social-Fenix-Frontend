@@ -156,26 +156,26 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-1">
-              <span className="font-bold text-gray-900 truncate">
+              <span className="font-bold Dark-texto-blanco text-gray-900 truncate">
                 {post.apodo.nombre}
               </span>
-              <span className="text-sm text-gray-500 truncate">
+              <span className="text-sm Dark-apodo text-gray-500 truncate">
                 @{post.apodo.apodo}
               </span>
-              <span className="text-sm text-gray-500">•</span>
-              <span className="text-sm text-gray-500 flex-none">
+              <span className="text-sm Dark-punto-fecha text-gray-500">•</span>
+              <span className="text-sm Dark-punto-fecha text-gray-500 flex-none">
                 {/* fecha */}
               </span>
             </div>
 
-            <div className="mt-1 text-gray-800 wrap-break-words">
+            <div className="mt-1 Dark-texto-blanco text-gray-800 wrap-break-words">
               <p>{post.contenido}</p>
               {renderMedia(post.url_imagen)}
             </div>
 
-            <div className="mt-3 text-sm text-gray-500">
+            <div className="mt-3 text-sm Dark-respondiendo-a text-gray-500">
               Respondiendo a{" "}
-              <span className="text-indigo-600 hover:underline cursor-pointer">
+              <span className="text-indigo-600 Dark-Enlace hover:underline cursor-pointer">
                 @{post.apodo.apodo}
               </span>
             </div>
@@ -198,7 +198,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
               className="p-1 rounded-full hover:bg-gray-100 transition-colors active:scale-95 active:shadow-inner active:opacity-90 transform duration-300"
               aria-label="Cerrar"
             >
-              <X className="h-5 w-5 text-gray-600" />
+              <X className="h-5 w-5 text-gray-600 cursor-pointer" />
             </button>
           </DialogHeader>
 

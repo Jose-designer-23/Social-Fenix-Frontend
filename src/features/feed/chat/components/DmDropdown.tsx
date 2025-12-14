@@ -143,7 +143,7 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
         >
           <div className="p-3 border-b">
             <div className="font-semibold">Mensajes</div>
-            <div className="text-xs text-gray-500">Conversaciones recientes</div>
+            <div className="text-xs Dark-titulos-dm text-gray-500">Conversaciones recientes</div>
           </div>
 
           <div className="max-h-64 overflow-y-auto">
@@ -158,7 +158,7 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
                 <DropdownMenuItem
                   key={c.user.id}
                   onSelect={() => handleOpenChat(c)}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-3 border-b last:border-b-0 cursor-pointer"
+                  className="w-full px-3 py-2 text-left Dark-hover-mensajes hover:bg-gray-50 flex items-center gap-3 border-b last:border-b-0 cursor-pointer"
                 >
                   <div className="w-10 h-10 shrink-0">
                     <Avatar
@@ -169,8 +169,8 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{c.user.nombre ?? c.user.apodo}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="font-medium Dark-texto-blanco truncate">{c.user.nombre ?? c.user.apodo}</div>
+                    <div className="text-xs Dark-titulos-dm text-gray-500">
                       {c.unreadCount} {c.unreadCount === 1 ? "mensaje nuevo" : "mensajes nuevos"}
                     </div>
                   </div>

@@ -11,6 +11,7 @@ import ProfilePage from './features/user-profile/pages/ProfilePage.tsx';
 import { AuthProvider } from './features/auth/services/AuthContext.tsx';
 import { Toaster } from 'react-hot-toast';
 import { NotificationsProvider } from './features/feed/components/NotificationsProvider.tsx';
+// import Toggle from "./components/NightToggle.tsx";
 
 import './App.css';
 

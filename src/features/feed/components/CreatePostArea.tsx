@@ -270,7 +270,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
             placeholder={`¿Qué recuerdo vas a renacer hoy?`}
             minRows={3}
             maxRows={10}
-            className="flex w-full resize-none rounded-md bg-gray-50/70 px-3 py-2 text-lg placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-none p-2 focus-visible:ring-0"
+            className="flex w-full resize-none rounded-md Dark-text-area bg-gray-50/70 px-3 py-2 text-lg placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-none p-2 focus-visible:ring-0"
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
             onClick={handleCaretUpdate}
@@ -290,23 +290,23 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                className="text-indigo-600 Dark-emotifotos-hover cursor-pointer hover:text-indigo-700 hover:bg-indigo-50"
                 aria-label="Añadir emoji"
                 disabled={loading}
                 onClick={() => setEmojiOpen((v) => !v)}
               >
-                <Smile className="h-5 w-5" />
+                <Smile className="h-5 Dark-emoticonos-fotos w-5" />
               </Button>
 
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                className="text-indigo-600 Dark-emotifotos-hover hover:text-indigo-700 hover:bg-indigo-50"
                 aria-label="Añadir foto o video"
                 disabled={loading}
                 onClick={openFilePicker}
               >
-                <ImageIcon className="h-5 w-5" />
+                <ImageIcon className="h-5 Dark-emoticonos-fotos w-5" />
               </Button>
             </div>
 
@@ -351,7 +351,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
           {emojiOpen && (
             <div
               ref={pickerRef}
-              className="mt-2 p-2 bg-white border rounded shadow-md max-w-xs w-full"
+              className="mt-2 p-2 Dark-BG bg-white border rounded shadow-md max-w-xs w-full"
               style={{ position: "relative", zIndex: 50 }}
             >
               <div className="grid grid-cols-8 gap-2">

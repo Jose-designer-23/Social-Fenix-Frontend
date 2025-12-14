@@ -316,8 +316,8 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="sm:max-w-md w-full max-h-[80vh] overflow-hidden [&>button]:hidden">
-        <DialogHeader className="sticky top-0 z-20 bg-white border-b">
+      <DialogContent className="sm:max-w-md  w-full max-h-[80vh] overflow-hidden [&>button]:hidden">
+        <DialogHeader className="sticky Dark-BG-reacciones top-0 z-20 bg-white border-b">
           <div className="flex items-center justify-between w-full px-4 py-3">
             <div className="flex items-center gap-3">
               <DialogTitle className="text-lg font-semibold">{title}</DialogTitle>
@@ -328,7 +328,7 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
 
             <button
               onClick={() => onClose()}
-              className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-1 rounded-full hover:bg-gray-100 active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
               aria-label="Cerrar"
             >
               <X className="h-5 w-5 text-gray-600 cursor-pointer" />
@@ -368,7 +368,7 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
                 return (
                   <li
                     key={key}
-                    className="flex items-center justify-between p-2 rounded hover:bg-gray-50 cursor-pointer"
+                    className="flex Dark-Hover items-center justify-between p-2 rounded hover:bg-gray-50 cursor-pointer"
                     onClick={() => handleUserClick(apodoReal ?? undefined)}
                   >
                     <div className="flex items-center space-x-3 min-w-0">
@@ -383,8 +383,8 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
                       </div>
 
                       <div className="min-w-0">
-                        <div className="font-medium text-gray-900 truncate">{displayName}</div>
-                        <div className="text-sm text-gray-500 truncate">@{apodoReal ?? displayName}</div>
+                        <div className="font-medium Dark-texto-blanco text-gray-900 truncate">{displayName}</div>
+                        <div className="text-sm Dark-apodo text-gray-500 truncate">@{apodoReal ?? displayName}</div>
                       </div>
                     </div>
 
@@ -417,10 +417,10 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
           )}
         </div>
 
-        <DialogFooter className="sticky bottom-0 z-20 bg-white border-t p-4">
+        <DialogFooter className="sticky Dark-BG-reacciones bottom-0 z-20 bg-white border-t p-4">
           <div className="w-full flex justify-end">
             <DialogClose asChild>
-              <Button className="cursor-pointer" variant="ghost">Cerrar</Button>
+              <Button className="cursor-pointer Dark-Hover" variant="ghost">Cerrar</Button>
             </DialogClose>
           </div>
         </DialogFooter>

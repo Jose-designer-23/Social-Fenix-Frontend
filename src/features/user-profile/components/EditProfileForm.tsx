@@ -108,17 +108,17 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <h1 className="text-3xl font-extrabold mb-6 text-gray-900">
+      <h1 className="text-3xl font-extrabold mb-6 Dark-texto-blanco text-gray-900">
         🐦‍🔥 Editar Perfil
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 shadow-xl rounded-lg space-y-4"
+        className="bg-white Dark-Card p-6 shadow-xl rounded-lg space-y-4"
       >
         <div>
           <label
             htmlFor="nombre"
-            className="block text-sm font-semibold text-gray-700 mb-1"
+            className="block text-sm font-semibold Dark-texto-blanco text-gray-700 mb-1"
           >
             Nombre
           </label>
@@ -137,7 +137,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
         <div>
           <label
             htmlFor="biografia"
-            className="block text-sm font-semibold text-gray-700 mb-1"
+            className="block Dark-texto-blanco text-sm font-semibold text-gray-700 mb-1"
           >
             Biografía
           </label>
@@ -154,7 +154,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
         <div>
           <label
             htmlFor="url"
-            className="block text-sm font-semibold text-gray-700 mb-1"
+            className="block Dark-texto-blanco text-sm font-semibold text-gray-700 mb-1"
           >
             URL (Enlace)
           </label>
@@ -173,7 +173,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
         <button
           type="submit"
           disabled={isSaving}
-          className="w-full bg-indigo-600 cursor-pointer text-white py-3 rounded-full text-lg font-bold disabled:bg-gray-400 active:scale-95 active:shadow-inner active:opacity-90 transition transform duration-150
+          className="w-full Dark-Editar-Perfil bg-indigo-600 cursor-pointer text-white py-3 rounded-full text-lg font-bold disabled:bg-gray-400 active:scale-95 active:shadow-inner active:opacity-90 transition transform duration-150
               hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]"
         >
           {isSaving ? "Guardando cambios..." : "Guardar Perfil"}

@@ -23,13 +23,13 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ onClose, onSuccess 
             {/* Contenedor del Modal */}
             {/* Detenemos la propagación para que hacer clic dentro no cierre el modal */}
             <div 
-                className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+                className="bg-white Dark-Card rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()} 
             >
                 {/* Cabecera del Modal */}
-                <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
+                <div className="p-4 border-b Dark-borde-EDPerfil Dark-Card flex justify-between items-center sticky top-0 bg-white z-10">
                     <h2 className="text-xl font-bold">Editar Perfil</h2>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-900 text-2xl">
+                    <button onClick={onClose} className="text-gray-500 dark:hover:text-white cursor-pointer hover:text-gray-900 text-2xl">
                         &times;
                     </button>
                 </div>

@@ -5,9 +5,33 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SocialFénix</title>
+
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('theme'); // 'light' | 'dark' | null
+          if (stored === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else if (stored === 'light') {
+            document.documentElement.classList.remove('dark');
+          } else {
+            // preferencia del sistema
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              document.documentElement.classList.add('dark');
+            }
+          }
+        } catch (e) {
+          // en caso de error no hacer nada
+        }
+      })();
+    </script>
+
+     <!-- tu CSS (vite inyectará el build-css) -->
+    <link rel="stylesheet" href="/src/app.css" />
+
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

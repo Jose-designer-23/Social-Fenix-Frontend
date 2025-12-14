@@ -64,13 +64,17 @@ El diseño de Social Fénix se centra en la usabilidad y la respuesta en tiempo 
 
 * Restauración de Contraseña (Frontend): Implementación de la interfaz de usuario completa para el proceso de "He olvidado mi contraseña" (enlace, formulario de email, y verificación).
 
+### 🌙 Modo Noche
+
+* Implementación del Modo Oscuro (Dark Mode): Opción para cambiar el tema visual de la aplicación para una mejor experiencia nocturna y ahorro de batería.
+
 ## 🎯 Próximas Actualizaciones y Hoja de Ruta
 
 La hoja de ruta de Social Fénix se centra en mejorar la experiencia de usuario, la accesibilidad y la robustez de la aplicación:
 
 ### 🌐 Mejoras en Usabilidad
 
-* Implementación del Modo Oscuro (Dark Mode): Opción para cambiar el tema visual de la aplicación para una mejor experiencia nocturna y ahorro de batería. * Internalización (i18n): Soporte inicial para el idioma Inglés como primer paso para hacer la aplicación accesible a una audiencia global.
+* Internalización (i18n): Soporte inicial para el idioma Inglés como primer paso para hacer la aplicación accesible a una audiencia global.
 
 ### 🔔 Estética y Experiencia
 

@@ -95,7 +95,7 @@ export default function SearchUsers({
 
   return (
     <div ref={wrapperRef} className={`relative ${className}`}>
-      <div className="relative">
+      <div className="relative ">
         <input
           type="text"
           value={query}
@@ -106,7 +106,7 @@ export default function SearchUsers({
             if (results.length > 0) setShowDropdown(true);
           }}
           placeholder={placeholder}
-          className="w-full py-2 px-3 rounded-md border max-w-xs md:w-48 max-[450px]:w-30 bg-white focus:outline-none"
+          className="w-full py-2 px-3 rounded-md Dark-texto-blanco Dark-input border max-w-xs md:w-48 max-[450px]:w-30 bg-white focus:outline-none"
           aria-label="Buscar usuarios"
         />
         <div className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
@@ -130,7 +130,7 @@ export default function SearchUsers({
                 <button
                   key={u.id}
                   onClick={() => handleSelect(u.apodo)}
-                  className="w-full text-left px-3 py-2 hover:bg-gray-50 flex items-center gap-3 border-b last:border-b-0"
+                  className="w-full Dark-boton text-left px-3 py-2 hover:bg-gray-50 flex items-center gap-3 border-b last:border-b-0"
                   role="option"
                 >
                   <div className="w-9 h-9 shrink-0">
@@ -143,7 +143,7 @@ export default function SearchUsers({
                   </div>
                   <div className="flex-1 min-w-0 cursor-pointer">
                     <div className="font-medium text-sm truncate">{u.nombre ?? u.apodo}</div>
-                    <div className="text-xs text-gray-500 truncate">@{u.apodo}</div>
+                    <div className="text-xs Dark-apodo text-gray-500 truncate">@{u.apodo}</div>
                   </div>
                 </button>
               ))

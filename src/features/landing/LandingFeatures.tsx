@@ -28,6 +28,7 @@ const slides: Slide[] = [
       "Mensajería Integrada - Comunicación instantánea y fluida.",
       "Transparencia Social – Visualiza la lista completa de usuarios que dieron like o republicaron.",
       "Búsqueda Instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
+      "Cuidado Visual – Modo Oscuro para proteger tus ojos y disfrutar con el máximo confort.",
     ],
     img: "/img/Feed.png",
   },

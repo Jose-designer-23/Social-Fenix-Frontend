@@ -263,10 +263,10 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
         <div className="p-4 space-y-4 ">
           {/* Apodo */}
           <div>
-            <label className="text-sm text-gray-700 font-medium">Apodo</label>
+            <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">Apodo</label>
             <div className="mt-2 flex items-center justify-between gap-3">
               <div className="flex-1">
-                <div className="text-sm text-gray-900">{user?.apodo}</div>
+                <div className="text-sm Dark-texto-blanco text-gray-900">{user?.apodo}</div>
                 {editApodo && (
                   <div className="mt-2">
                     <Input
@@ -287,8 +287,8 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                 <Button
                   className={
                     editApodo
-                      ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-2"
-                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                      ? "bg-red-600 Dark-peligro-cuenta hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-2"
+                      : "bg-blue-600 Dark-boton-cuenta hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
                   }
                   onClick={() => {
                     setEditApodo((s) => !s);
@@ -304,12 +304,12 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
           {/* Correo */}
           <div>
-            <label className="text-sm text-gray-700 font-medium">
+            <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">
               Correo electrónico
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
               <div className="flex-1">
-                <div className="text-sm text-gray-900">
+                <div className="text-sm Dark-texto-blanco text-gray-900">
                   {user?.correo_electronico}
                 </div>
                 {editCorreo && (
@@ -330,8 +330,8 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                 <Button
                   className={
                     editCorreo
-                      ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-7"
-                      : "bg-blue-600 max-[434px]:pb-7 max-[434px]:pt-7 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                      ? "bg-red-600 Dark-peligro-cuenta hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-7"
+                      : "bg-blue-600 Dark-boton-cuenta max-[434px]:pb-7 max-[434px]:pt-7 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
                   }
                   onClick={() => {
                     setEditCorreo((s) => !s);
@@ -346,12 +346,12 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
           {/* Contraseña */}
           <div>
-            <label className="text-sm text-gray-700 font-medium">
+            <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">
               Contraseña
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
               <div className="flex-1">
-                <div className="text-sm text-gray-900">********</div>
+                <div className="text-sm Dark-texto-blanco text-gray-900">********</div>
                 {editPassword && (
                   <div className="mt-2 space-y-2">
                     <Input
@@ -361,6 +361,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                         setCurrentPassword((e.target as HTMLInputElement).value)
                       }
                       placeholder="Contraseña actual"
+                      className="Dark-input"
                     />
                     <Input
                       type="password"
@@ -370,7 +371,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                       }
                       placeholder="Nueva contraseña"
                     />
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs Dark-actualizar-cuenta text-gray-500">
                       La nueva contraseña debe tener al menos 8 caracteres,
                       incluir mayúscula, minúscula, número y carácter especial.
                     </p>
@@ -382,8 +383,8 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                 <Button
                   className={
                     editPassword
-                      ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-8"
-                      : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
+                      ? "bg-red-600 Dark-peligro-cuenta hover:bg-red-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 mt-8"
+                      : "bg-blue-600 Dark-boton-cuenta hover:bg-blue-700 text-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
                   }
                   onClick={() => {
                     setEditPassword((s) => !s);
@@ -408,7 +409,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
         <div className="p-4 border-t border-gray-100 flex justify-end gap-2">
           <Button
             variant="outline"
-            className="bg-gray-200 hover:bg-gray-300 cursor-pointer"
+            className="bg-gray-200 Dark-boton Dark-outline hover:bg-gray-300 cursor-pointer"
             onClick={closeModal}
             disabled={loading}
           >

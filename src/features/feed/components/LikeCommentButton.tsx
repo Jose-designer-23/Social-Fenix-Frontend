@@ -74,7 +74,7 @@ const LikeCommentButton: React.FC<LikeCommentButtonProps> = ({ commentId, initia
         variant="ghost"
         size="icon"
         onClick={handleToggle}
-        className={`h-8 w-8 ${liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'} hover:scale-110 transition-transform`}
+        className={`h-8 w-8 Dark-Hover-Interacciones cursor-pointer  ${liked ? 'text-red-500' : 'text-gray-500 Dark-like-comentario hover:text-red-500'} hover:scale-110 transition-transform`}
         aria-pressed={liked}
         disabled={loading}
         title={liked ? 'Quitar like' : 'Dar like'}
@@ -82,7 +82,7 @@ const LikeCommentButton: React.FC<LikeCommentButtonProps> = ({ commentId, initia
         <Heart className="h-4 w-4" />
       </Button>
 
-      <span className="text-sm select-none ml-2">{count}</span>
+      <span className="text-sm Dark-texto-blanco select-none ml-2">{count}</span>
     </div>
   );
 };

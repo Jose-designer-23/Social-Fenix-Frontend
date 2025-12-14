@@ -209,10 +209,10 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
       {/* Usamos [&>button]:hidden para que Radix/Shadcn no muestre su botón automático */}
       <DialogContent className="sm:max-w-md w-full max-h-[80vh] overflow-hidden [&>button]:hidden">
         {/* Header sticky: queda visible al hacer scroll en la lista */}
-        <DialogHeader className="sticky top-0 z-20 bg-white border-b">
+        <DialogHeader className="sticky Dark-BG-reacciones top-0 z-20 bg-white border-b">
           <div className="flex items-center justify-between w-full px-4 py-3">
             <div className="flex items-center gap-3">
-              <DialogTitle className="text-lg font-semibold">
+              <DialogTitle className="text-lg  font-semibold">
                 {title}
               </DialogTitle>
               <Badge variant="secondary" className="text-sm">
@@ -244,7 +244,7 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                 : "Aún no tienes seguidores."}
             </div>
           ) : (
-            <ul className="space-y-2 py-3">
+            <ul className="space-y-2  py-3">
               {items.map((u) => {
                 const imFollowing = myFollowingsSet.has(u.apodo);
                 // avatar puede venir en distintos campos
@@ -254,7 +254,7 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                 return (
                   <li
                     key={u.id}
-                    className="flex items-center justify-between p-2 rounded hover:bg-gray-50 cursor-pointer"
+                    className="flex  items-center justify-between p-2 rounded Dark-lista-seguidores hover:bg-gray-50 cursor-pointer"
                     onClick={() => handleUserClick(u.apodo)}
                   >
                     <div className="flex items-center space-x-3 min-w-0">
@@ -268,10 +268,10 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                         />
                       </div>
                       <div className="min-w-0">
-                        <div className="font-medium text-gray-900 truncate">
+                        <div className="font-medium Dark-texto-blanco text-gray-900 truncate">
                           {u.nombre}
                         </div>
-                        <div className="text-sm text-gray-500 truncate">
+                        <div className="text-sm Dark-apodo-perfil text-gray-500 truncate">
                           @{u.apodo}
                         </div>
                       </div>
@@ -302,10 +302,10 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
           )}
         </div>
 
-        <DialogFooter className="sticky bottom-0 z-20 bg-white border-t p-4">
+        <DialogFooter className="sticky Dark-BG-reacciones bottom-0 z-20 bg-white border-t p-4">
           <div className="w-full flex justify-end">
             <DialogClose asChild>
-              <Button className="cursor-pointer" variant="ghost">
+              <Button className="cursor-pointer Dark-Hover-seguidores" variant="ghost">
                 Cerrar
               </Button>
             </DialogClose>

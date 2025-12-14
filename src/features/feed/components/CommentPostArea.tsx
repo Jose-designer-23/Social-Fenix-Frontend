@@ -358,23 +358,23 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                className="text-indigo-600 Dark-emotifotos-hover hover:text-indigo-700 hover:bg-indigo-50"
                 aria-label="Añadir emoji"
                 disabled={loading}
                 onClick={() => setEmojiOpen((v) => !v)}
               >
-                <Smile className="h-5 w-5" />
+                <Smile className="h-5 Dark-emoticonos-fotos w-5" />
               </Button>
 
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                className="text-indigo-600 Dark-emotifotos-hover hover:text-indigo-700 hover:bg-indigo-50"
                 aria-label="Añadir foto o video"
                 disabled={loading}
                 onClick={openFilePicker}
               >
-                <ImageIcon className="h-5 w-5" />
+                <ImageIcon className="h-5 Dark-emoticonos-fotos w-5" />
               </Button>
 
               {uploadProgress != null && (
@@ -403,7 +403,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
           {emojiOpen && (
             <div
               ref={pickerRef}
-              className="mt-2 p-2 bg-white border rounded shadow-md max-w-xs w-full"
+              className="mt-2 p-2 Dark-BG-emoticonos bg-white border rounded shadow-md max-w-xs w-full"
               style={{ position: "relative", zIndex: 50 }}
             >
               <div className="grid grid-cols-8 gap-2">

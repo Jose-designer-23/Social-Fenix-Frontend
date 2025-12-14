@@ -119,7 +119,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   };
 
   return (
-    <div className="flex items-center transition-colors">
+    <div className="flex items-center transition-colors ">
       <Button
         variant="ghost"
         size="icon"
@@ -127,7 +127,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
           e.stopPropagation();
           handleToggle();
         }}
-        className={`h-9 w-9 z-10 ${liked ? "text-red-500" : "text-gray-500 hover:text-red-500"} hover:scale-110 transition-transform`}
+        className={`h-9 w-9 Dark-Hover-Interacciones cursor-pointer z-10 ${liked ? "text-red-500" : "text-gray-500  hover:text-red-500"} hover:scale-110 transition-transform`}
         aria-pressed={liked}
         disabled={loading}
         title={liked ? "Quitar like" : "Dar like"}
@@ -142,7 +142,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
             e.stopPropagation();
             onOpenReactions();
           }}
-          className="text-sm select-none ml-1 cursor-pointer text-gray-600 hover:underline"
+          className="text-sm select-none ml-1 cursor-pointer Dark-texto-blanco text-gray-600 hover:underline"
           aria-label="Ver quien dio like"
           type="button"
         >

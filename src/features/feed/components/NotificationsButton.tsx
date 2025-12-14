@@ -413,7 +413,7 @@ const NotificationsButton: React.FC = () => {
   }, [postsMap, globalCounts]);
 
   const buttonBgClass = useMemo(() => {
-    if (!hasUnread) return "bg-white text-gray-600 border border-gray-200";
+    if (!hasUnread) return "bg-white  text-gray-600 border border-gray-200";
     if (hasLike && !hasRepost && !hasComment) return "bg-red-600 text-white";
     if (!hasLike && hasRepost && !hasComment) return "bg-green-600 text-white";
     if (!hasLike && !hasRepost && hasComment) return "bg-blue-600 text-white";
@@ -494,7 +494,7 @@ const NotificationsButton: React.FC = () => {
         <Button
           variant="ghost"
           onClick={() => setOpen(true)}
-          className={`relative ${buttonBgClass} hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white flex items-center gap-2 max-[531px]:w-16 cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-10`}
+          className={`relative ${buttonBgClass} Dark-boton-notificación hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white flex items-center gap-2 max-[531px]:w-16 cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-10`}
           aria-label="Notificaciones"
         >
           {unreadTotal > 0 && (
@@ -505,7 +505,7 @@ const NotificationsButton: React.FC = () => {
 
           <div className="flex items-center gap-1 px-2 py-1">
             {unreadTotal === 0 ? (
-              <Bell className="h-5 w-5 text-gray-600 hover:text-white" />
+              <Bell className="h-5 w-5 Dark-texto-blanco  text-gray-600 hover:text-white" />
             ) : (
               <>
                 {hasComment && <MessageCircle className="h-5 w-5 text-white" />}
@@ -522,16 +522,16 @@ const NotificationsButton: React.FC = () => {
               Notificaciones
             </DialogTitle>
             <div className="flex items-center gap-2 ">
-              <Button variant="outline" className="text-sm">
+              <Button variant="outline" className="text-sm Dark-boton cursor-pointer active:scale-95 active:shadow-inner active:opacity-90">
                 Limpiar
               </Button>
-              <Button variant="outline" onClick={() => setOpen(false)}>
+              <Button variant="outline" className="Dark-boton cursor-pointer active:scale-95 active:shadow-inner active:opacity-90" onClick={() => setOpen(false)}>
                 Cerrar
               </Button>
             </div>
           </DialogHeader>
 
-          <div className="p-4 max-h-[70vh] overflow-y-auto bg-linear-to-br from-[#faea3d]/80 to-[#d0522f]/80">
+          <div className="p-4 max-h-[70vh] Dark-gradient overflow-y-auto bg-linear-to-br from-[#faea3d]/80 to-[#d0522f]/80">
             {postsList.length === 0 ? (
               <div className="text-gray-500">No hay notificaciones aún.</div>
             ) : (
@@ -543,7 +543,7 @@ const NotificationsButton: React.FC = () => {
                 return (
                   <div
                     key={p.postId}
-                    className="mb-4 bg-white border-2 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
+                    className="mb-4 Dark-Card bg-white border-2 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
                     onClick={() => gotoPost(p.postId)}
                     role="button"
                   >
@@ -603,7 +603,7 @@ const NotificationsButton: React.FC = () => {
                                         )
                                       )}
                                   </div>
-                                  <div className="truncate">
+                                  <div className="truncate Dark-texto-blanco">
                                     {p.comments.length === 1
                                       ? `${
                                           lastComment?.nombre ??
@@ -660,7 +660,7 @@ const NotificationsButton: React.FC = () => {
                                         )
                                       )}
                                   </div>
-                                  <div className="truncate">
+                                  <div className="truncate Dark-texto-blanco">
                                     {p.reposts.length === 1
                                       ? `${
                                           lastRepost?.nombre ??
@@ -717,7 +717,7 @@ const NotificationsButton: React.FC = () => {
                                         )
                                       )}
                                   </div>
-                                  <div className="truncate">
+                                  <div className="truncate Dark-texto-blanco">
                                     {p.likes.length === 1
                                       ? `${
                                           lastLike?.nombre ?? lastLike?.apodo

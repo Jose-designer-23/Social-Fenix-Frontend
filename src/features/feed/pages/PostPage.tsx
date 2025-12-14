@@ -251,7 +251,7 @@ const PostPage: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 ">
       <div className="mb-4">
-        <Button variant="outline" className="bg-white cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 font-bold" size="sm" onClick={() => navigate(-1)}>
+        <Button variant="outline" className="bg-white Dark-boton cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 font-bold" size="sm" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2" />
           <p className="font-bold">Volver</p>
         </Button>

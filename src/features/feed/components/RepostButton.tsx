@@ -118,7 +118,7 @@ const RepostButton: React.FC<RepostButtonProps> = ({
           e.stopPropagation();
           handleToggle();
         }}
-        className={`h-9 w-9 ${reposted ? "text-green-500" : "text-gray-500 hover:text-green-500"} hover:scale-110 transition-transform`}
+        className={`h-9 w-9 Dark-Hover-Interacciones cursor-pointer ${reposted ? "text-green-500" : "text-gray-500 hover:text-green-500"} hover:scale-110 transition-transform`}
         aria-pressed={reposted}
         disabled={loading}
         title={reposted ? "Quitar repost" : "Repostear"}
@@ -132,7 +132,7 @@ const RepostButton: React.FC<RepostButtonProps> = ({
             e.stopPropagation();
             onOpenReactions();
           }}
-          className="text-sm select-none ml-1 cursor-pointer text-gray-600 hover:underline"
+          className="text-sm select-none ml-1 cursor-pointer Dark-texto-blanco text-gray-600 hover:underline"
           aria-label="Ver quien republicó"
           type="button"
         >

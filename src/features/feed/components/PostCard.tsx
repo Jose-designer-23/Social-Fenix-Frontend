@@ -440,7 +440,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       isProcessingDelete={isProcessing}
     >
       <Card
-        className="rounded-xl md:space-x-3 md:p-3 lg:space-x-3 lg:p-3 xl:space-x-3 xl:p-3 space-x-1 p-1 shadow-md transition-all duration-300 hover:shadow-lg border-gray-200 cursor-pointer hover:bg-green-50"
+        className="rounded-xl md:space-x-3 md:p-3 lg:space-x-3 lg:p-3 xl:space-x-3 xl:p-3 space-x-1 p-1 shadow-md transition-all duration-300 hover:shadow-lg border-gray-200 cursor-pointer Dark-Hover-Card hover:bg-green-50"
         onClick={() => {
           if (clickable) {
             let url; // Si es un 'comment' Y tiene el post original (uso seguro de originalPostId)
@@ -459,7 +459,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
         role={clickable ? "link" : undefined} 
       >
         {isRepost && (
-          <div className="flex items-center text-sm text-gray-500 p-4 pb-0 pl-12">
+          <div className="flex items-center text-sm Dark-republicacion text-gray-500 p-4 pb-0 pl-12">
             <Repeat2 className="h-4 w-4 mr-2" />
             <span>
               {reposterDisplayName ? `${reposterDisplayName} reposteó` : "Reposteó"}
@@ -481,7 +481,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <div className="flex z-10 items-center space-x-1">
-                <span className="font-bold text-gray-900 hover:underline cursor-pointer">
+                <span className="font-bold Dark-texto-blanco text-gray-900 hover:underline cursor-pointer">
                   <a
                     href={`/profile/${author.apodo}`}
                     onClick={(e) => {
@@ -493,11 +493,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                   </a>
                 </span>
 
-                <span className="text-sm text-gray-500">@{author?.apodo}</span>
+                <span className="text-sm Dark-apodo text-gray-500">@{author?.apodo}</span>
 
-                <span className="text-sm text-gray-500">•</span>
+                <span className="text-sm Dark-punto-separador text-gray-500">•</span>
 
-                <span className="text-sm text-gray-500 max-[535px]:hidden">
+                <span className="text-sm Dark-punto-fecha text-gray-500 max-[535px]:hidden">
                   <time
                     dateTime={new Date(displayDate).toISOString()}
                     title={formatExactSpain(displayDate)}
@@ -513,11 +513,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-gray-500"
+                      className="h-8 w-8 text-gray-500 Dark-hover-hamburguesa cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                       aria-label="Más opciones"
                     >
-                      <MoreHorizontal className="h-5 w-5" />
+                      <MoreHorizontal className="h-5 Dark-texto-blanco  w-5" />
                     </Button>
                   </DropdownMenuTrigger>
 
@@ -525,6 +525,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                     <DropdownMenuItem
                       onClick={openEditModal}
                       disabled={isProcessing || isSubmitting}
+                      className="cursor-pointer"
                     >
                       Actualizar publicación
                     </DropdownMenuItem>
@@ -534,6 +535,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                     <DropdownMenuItem
                       onClick={handleDeletePost}
                       disabled={isProcessing || isSubmitting}
+                      className="cursor-pointer"
                     >
                       Borrar publicación
                     </DropdownMenuItem>
@@ -551,12 +553,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
               )}
             </div>
 
-            <div className="hidden max-[535px]:block text-sm text-gray-500 mt-1">
+            <div className="hidden max-[535px]:block Dark-punto-fecha text-sm text-gray-500 mt-1">
               {shortFormatted}
             </div>
 
             <CardContent className="p-0 pt-2 text-gray-800 wrap-break-words">
-              <p>{localContent}</p>
+              <p className="Dark-texto-blanco">{localContent}</p>
 
               {localImageUrl && (
                 <div className="mt-3 mr-6 flex justify-start">
@@ -659,7 +661,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
             onOpenReactions={() => openReactions("likes")}
           />
 
-          <div className="flex items-center text-gray-500 hover:text-indigo-500 transition-colors cursor-pointer">
+          <div className="flex items-center text-gray-500 Dark-texto-blanco hover:text-indigo-500 transition-colors cursor-pointer">
             <Share2 className="h-5 w-5 mr-2" />
           </div>
         </CardFooter>
@@ -671,14 +673,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
           >
             <div className="absolute inset-0 bg-black/50" />
             <div
-              className="relative z-60 w-full max-w-xl rounded-lg bg-white p-6 shadow-lg"
+              className="relative z-60 w-full max-w-xl rounded-lg Dark-BG bg-white p-6 shadow-lg"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
             >
               <h3 className="text-lg font-semibold mb-3">Editar publicación</h3>
 
-              <label className="block text-sm text-gray-700 mb-1">
+              <label className="block text-sm Dark-actualizar-post text-gray-700 mb-1">
                 Contenido
               </label>
               <textarea
@@ -690,11 +692,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                 placeholder="Escribe algo..."
               />
 
-              <div className="text-xs text-gray-500 mb-3">
+              <div className="text-xs Dark-actualizar-post text-gray-500 mb-3">
                 {editContent.length}/{MAX_CONTENT_LENGTH}
               </div>
 
-              <label className="block text-sm text-gray-700 mb-1">
+              <label className="block text-sm Dark-actualizar-post text-gray-700 mb-1">
                 URL de imagen (opcional)
               </label>
               <input
@@ -714,7 +716,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                   variant="ghost"
                   onClick={closeEditModal}
                   disabled={isSubmitting}
-                  className="cursor-pointer hover:border-2 hover:border-black"
+                  className="cursor-pointer hover:border-2 Dark-boton dark:border-none dark:hover:outline-amber-100 dark:hover:outline-1 hover:border-black"
                 >
                   Cancelar
                 </Button>

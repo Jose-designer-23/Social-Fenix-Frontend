@@ -5,54 +5,54 @@
 
 /* Diseño estructura página login */
 /* Columna izquierda */
-.estructura_login{
-  @apply w-full min-h-screen grid grid-cols-1 lg:grid-cols-2
+.estructura_login {
+  @apply w-full min-h-screen grid grid-cols-1 lg:grid-cols-2;
 }
 
-.estructura_columna_formulario{
+.estructura_columna_formulario {
   @apply flex flex-col gap-4 p-6 md:p-10 justify-center bg-[#130c2b];
 }
 
-.estructura_slogan{
+.estructura_slogan {
   @apply flex flex-1 items-center justify-center;
 }
 
-.diseño_slogan{
+.diseño_slogan {
   @apply h-88 w-auto dark:brightness-[0.2] dark:grayscale;
 }
 
-.estructura_caja_formulario{
+.estructura_caja_formulario {
   @apply flex flex-1 items-center justify-center;
 }
 
-.estilo_caja_formulario{
+.estilo_caja_formulario {
   @apply w-full max-w-md mx-auto  bg-white/75  pb-8 pt-8 rounded-2xl shadow-lg border-4 border-amber-600;
 }
 
 /* Columna derecha */
-.estructura_columna_logo{
+.estructura_columna_logo {
   @apply relative hidden lg:block bg-[#130c2b];
 }
 
-.estilo_logo{
-  @apply  absolute right-0 top-1/2 -translate-y-1/2 max-h-screen w-auto dark:brightness-[0.2] dark:grayscale
+.estilo_logo {
+  @apply absolute right-0 top-1/2 -translate-y-1/2 max-h-screen w-auto dark:brightness-[0.2] dark:grayscale;
 }
 
-.tamaño_logo{
+.tamaño_logo {
   @apply w-200 h-200;
 }
 
-.centrar_logo{
+.centrar_logo {
   @apply right-0 top-1/2 -translate-y-1/2 p-10 flex justify-center mr-5;
 }
 
 /* Botón de scroll hacia abajo (bottom center) */
-.scroll_down_button{
+.scroll_down_button {
   @apply fixed left-1/2 -translate-x-1/2 bottom-6 w-12 h-12 rounded-full flex items-center justify-center bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95 z-50;
 }
 
 /* Variante ubicada dentro de cada diapositiva (no fija en viewport) */
-.scroll_down_button_in{
+.scroll_down_button_in {
   @apply absolute left-1/2 -translate-x-1/2 bottom-6 w-12 h-12 rounded-full flex items-center justify-center bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95 z-20;
 }
 
@@ -91,146 +91,146 @@
 }
 
 /* Variante ubicada dentro de cada diapositiva (no fija en viewport) */
-.scroll_down_button_in{
+.scroll_down_button_in {
   @apply absolute left-1/2 -translate-x-1/2 bottom-6 w-12 h-12 rounded-full flex items-center justify-center bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95 z-20;
 }
 
 /* Asegurar que el contenedor de la imagen no expanda fuera del slide */
-.landing_slide .right{
+.landing_slide .right {
   @apply w-full overflow-hidden;
 }
 
 /* Imagen que ocupa la columna completa (ya usamos clases en el JSX, esto es por seguridad) */
-.landing_slide .right img{
+.landing_slide .right img {
   @apply w-full h-full object-cover;
 }
 
 /* Diseño estructura formulario login */
-.estructura_diseño_formulario{
+.estructura_diseño_formulario {
   @apply w-full max-w-md mx-auto px-4;
 }
 
-.margenes_estructura_formulario{
+.margenes_estructura_formulario {
   @apply flex flex-col gap-6;
 }
 
-.estructura_titulo_fromulario{
+.estructura_titulo_fromulario {
   @apply flex flex-col items-center gap-1 text-center;
 }
 
-.diseño_titulo_formulario{
+.diseño_titulo_formulario {
   @apply text-2xl font-bold;
 }
 
-.diseño_subtitulo_formulario{
+.diseño_subtitulo_formulario {
   @apply text-slate-800 text-sm;
 }
 
-.error_formulario{
+.error_formulario {
   @apply bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-sm;
 }
 
-.estructura_campo_usuario_formulario{
+.estructura_campo_usuario_formulario {
   @apply lg:w-90 lg:ml-7 md:w-90 md:ml-7 sm:w-90 sm:ml-7 flex flex-col items-center;
 }
 
-.estilo_etiqueta_usuario_formulario{
+.estilo_etiqueta_usuario_formulario {
   @apply block text-sm font-bold text-white text-left;
 }
 
-.negrita{
+.negrita {
   @apply text-black;
 }
 
-.relleno_input_formulario{
+.relleno_input_formulario {
   @apply w-full bg-white;
 }
 
-.estructura_campo_contraseña_formulario{
+.estructura_campo_contraseña_formulario {
   @apply lg:w-90 lg:ml-7 md:w-90 md:ml-7 sm:w-90 sm:ml-7 flex flex-col items-center;
 }
 
-.diseño_campo_contraseña_formulario{
+.diseño_campo_contraseña_formulario {
   @apply flex items-center justify-between;
 }
 
-.estilo_etiqueta_contraseña_formulario{
+.estilo_etiqueta_contraseña_formulario {
   @apply text-sm font-bold text-black text-left;
 }
 
-.estilo_enlace_contraseña_olvidada{
+.estilo_enlace_contraseña_olvidada {
   @apply text-sm underline-offset-4 hover:underline text-slate-800 hover:text-slate-900;
 }
 
-.estructura_boton_inicio_sesion{
+.estructura_boton_inicio_sesion {
   @apply lg:w-90 lg:ml-7 md:w-90 md:ml-7 sm:w-90 sm:ml-7 flex flex-col items-center;
 }
 
-.estilo_boton_inicio_sesion{
+.estilo_boton_inicio_sesion {
   @apply w-full bg-orange-500 hover:bg-orange-600 cursor-pointer text-white font-bold;
 }
 
-.diseño_pregunta_registro{
+.diseño_pregunta_registro {
   @apply text-center text-sm text-slate-800 pt-4;
 }
 
-.diseño_enlace_registro{
+.diseño_enlace_registro {
   @apply underline underline-offset-4 text-indigo-600  hover:text-indigo-800 hover:font-semibold;
 }
 
 /* Diseño estructura página registro */
 /* Columna izquierda */
-.estructura_registro{
+.estructura_registro {
   @apply grid min-h-svh lg:grid-cols-2 bg-[#130c2b];
 }
 
-.estructura_caja_formulario_registro{
+.estructura_caja_formulario_registro {
   @apply flex flex-col gap-4 p-6 md:p-10;
 }
 
-.estructura_formulario_registro{
+.estructura_formulario_registro {
   @apply flex flex-1 items-center justify-center;
 }
 
-.diseño_caja_formulario_registro{
+.diseño_caja_formulario_registro {
   @apply w-full max-w-xs bg-white/75 rounded-2xl shadow-lg border-4 border-amber-600 p-6 md:p-8;
 }
 
-.estructura_campos_formulario_registro{
+.estructura_campos_formulario_registro {
   @apply max-w-md mx-auto;
 }
 
-.espacio_campos_registro{
+.espacio_campos_registro {
   @apply space-y-4;
 }
 
-.diseño_titulo_registro{
+.diseño_titulo_registro {
   @apply text-2xl font-semibold;
 }
 
-.diseño_subtitulo_registro{
+.diseño_subtitulo_registro {
   @apply text-sm text-muted-foreground;
 }
 
-.estilo_error_registro{
+.estilo_error_registro {
   @apply text-destructive text-sm;
 }
 
-.estilo_inputs_registro{
+.estilo_inputs_registro {
   @apply bg-white;
 }
 
-.estilo_boton_registro{
+.estilo_boton_registro {
   @apply bg-orange-500 hover:bg-orange-600 cursor-pointer text-white font-bold;
 }
 
-.pregunta_tienes_cuenta{
+.pregunta_tienes_cuenta {
   @apply text-sm;
 }
 
 /* Diseño formulario de olvidar contraseña */
 
-.estilo_etiqueta_contraseña_olvidada{
+.estilo_etiqueta_contraseña_olvidada {
   @apply text-sm font-bold text-black text-left;
 }
 
@@ -310,37 +310,311 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  /* Fondo general = bg-gray-800 */
+  --background: #1f2630; /* tailwind bg-gray-800 */
+
+  /* Texto y foreground en blanco para buena legibilidad */
+  --foreground: #ffffff;
+
+  /* Cards, popovers y botones = bg-gray-700 */
+  --card: #323f55; /* tailwind bg-gray-700 */
+  --card-foreground: #ffffff;
+  --popover: #374151;
+  --popover-foreground: #ffffff;
+
+  /* Primary lo usamos como color de botones/acciones: bg-gray-700 + texto blanco */
+  --primary: #374151;
+  --primary-foreground: #ffffff;
+
+  /* Secondary / accent: mantengo un contraste razonable (puedes ajustarlo) */
+  --secondary: #4b5563; /* gray-600 */
+  --secondary-foreground: #ffffff;
+
+  /* Muted / labels menos prominentes (tonos más suaves sobre el fondo oscuro) */
+  --muted: #6b7280; /* gray-500 */
+  --muted-foreground: #d1d5db; /* gray-300 */
+
+  /* Destructive (mantén rojo o ajusta según tu diseño) */
+  --destructive: #ef4444; /* rojo 500 */
+  --destructive-foreground: #ffffff;
+
+  /* Bordes e inputs: sutiles sobre el fondo oscuro */
+  --border: rgba(75, 85, 99, 0.25); /* gray-600 a baja opacidad */
+  --input: rgba(255, 255, 255, 0.06); /* input fondo sutil */
+  --ring: rgba(99, 102, 241, 0.12); /* azul suave para focus */
+
+  /* Charts: opcionales, dejo valores legibles */
+  --color-chart-1: #f97316;
+  --color-chart-2: #60a5fa;
+  --color-chart-3: #a78bfa;
+  --color-chart-4: #fbbf24;
+  --color-chart-5: #34d399;
+
+  /* Sidebar (si aplicable) */
+  --sidebar: #111827; /* un poco más oscuro que el fondo si quieres contraste */
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #374151;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #4b5563;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-ring: rgba(99, 102, 241, 0.06);
+}
+
+/* Modo oscuro */
+.Dark-texto-blanco{
+  @apply dark:text-white;
+}
+
+.Dark-apodo{
+  @apply dark:text-gray-400;
+}
+
+.Dark-apodo-comentario{
+  @apply dark:text-gray-300;
+}
+
+.Dark-apodo-perfil{
+  @apply dark:text-gray-300;
+}
+
+.Dark-pestañas-perfil{
+  @apply dark:text-gray-300;
+}
+
+.Dark-fecha-union{
+  @apply dark:text-gray-300;
+}
+
+.Dark-respondiendo-comentario{
+  @apply dark:text-gray-300;
+}
+
+.Dark-republicacion{
+  @apply dark:text-gray-400;
+}
+
+.Dark-punto-separador{
+  @apply dark:text-gray-400;
+}
+
+.Dark-punto-comentario{
+  @apply dark:text-gray-300;
+}
+
+.Dark-punto-fecha{
+  @apply dark:text-gray-400;
+}
+
+.Dark-previsual-post{
+  @apply dark:text-gray-400;
+}
+
+.Dark-respondiendo-a{
+  @apply dark:text-gray-300;
+}
+
+.Dark-actualizar-post{
+  @apply dark:text-gray-400;
+}
+
+.Dark-actualizar-cuenta{
+  @apply dark:text-gray-400;
+}
+
+.Dark-titulos-dm{
+  @apply dark:text-gray-300;
+}
+
+.Dark-Seguidores{
+  @apply dark:text-gray-300;
+}
+
+.Dark-like-comentario{
+  @apply dark:text-gray-400;
+}
+
+.Dark-hover-mensajes{
+  @apply dark:hover:bg-gray-600/50
+}
+
+.Dark-texto-negro{
+  @apply dark:text-black;
+}
+
+.Dark-boton{
+   @apply dark:bg-gray-700 dark:shadow dark:transition-colors dark:duration-200;
+}
+
+.Dark-boton-mensajes{
+   @apply dark:hover:bg-gray-700/50 dark:hover:shadow dark:hover:transition-colors dark:hover:duration-200;
+}
+
+.Dark-boton-comentario{
+   @apply dark:hover:bg-gray-600 dark:hover:shadow dark:hover:transition-colors dark:hover:duration-200;
+}
+
+.Dark-boton-cuenta{
+  @apply dark:bg-cyan-700 dark:hover:bg-cyan-800
+}
+
+.Dark-peligro{
+  @apply dark:text-red-400
+}
+
+.Dark-peligro-cuenta{
+  @apply dark:bg-red-800 dark:hover:bg-red-900
+}
+
+.Dark-Enlace{
+  @apply dark:text-sky-500;
+}
+
+.Dark-Editar-Perfil{
+  @apply dark:bg-sky-600;
+}
+
+.Dark-Enlace-Perfil{
+  @apply dark:text-sky-400;
+}
+
+.Dark-borde-Perfil{
+  @apply dark:border-b-2 dark:border-sky-400;
+}
+
+.Dark-borde-EDPerfil{
+  @apply dark:border-b-2 dark:border-white/20;
+}
+
+.Dark-input{
+  @apply dark:bg-gray-700;
+}
+
+.Dark-BG {
+  @apply dark:bg-gray-800;
+}
+
+.Dark-BG-emoticonos {
+  @apply dark:bg-gray-700/50;
+}
+
+.Dark-BG-reacciones {
+  @apply dark:bg-transparent;
+}
+
+.Dark-gradient{
+  @apply dark:bg-none dark:bg-gray-800
+}
+
+.Dark-Card{
+  @apply dark:bg-gray-700
+}
+
+.Dark-Hover{
+  @apply dark:hover:bg-gray-700 dark:rounded-lg
+}
+
+.Dark-Hover-seguidores{
+  @apply dark:hover:bg-gray-700 dark:rounded-lg active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300
+}
+
+.Dark-Hover-Interacciones{
+  @apply dark:hover:bg-gray-500 dark:rounded-lg
+}
+
+.Dark-lista-seguidores{
+  @apply dark:hover:bg-gray-600 dark:rounded-lg
+}
+
+.Dark-Hover-perfil{
+  @apply dark:hover:bg-gray-500 dark:hover:text-slate-200 dark:rounded-lg
+}
+
+.Dark-hover-hamburguesa{
+  @apply dark:hover:bg-slate-300/20
+}
+
+.Dark-Hover-Card{
+  @apply dark:hover:bg-gray-600/20 dark:hover:outline-3  dark:hover:outline-amber-100
+}
+
+.Dark-text-area{
+  @apply dark:bg-slate-600 
+}
+
+.Dark-emoticonos-fotos{
+  @apply dark:text-sky-400
+}
+
+.Dark-emotifotos-hover{
+  @apply dark:hover:bg-slate-500/50 cursor-pointer
+}
+
+.Dark-boton-notificación{
+  @apply dark:bg-gray-700 dark:text-white
+}
+
+.Dark-outline{
+  @apply dark:hover:outline-1  dark:hover:outline-amber-100
+}
+
+.Dark-hover-configuracion{
+  @apply  dark:hover:bg-slate-600
+}
+
+/* Estilos básicos para el toggle */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.toggle input {
+  /* ocultamos el checkbox real pero lo dejamos accesible */
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ccc;
+  transition: background 0.2s;
+  border-radius: 28px;
+}
+
+.toggle-slider:before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  transition: transform 0.2s;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Estado checked */
+.toggle input:checked + .toggle-slider {
+  background: #4ade80; /* verde */
+}
+
+.toggle input:checked + .toggle-slider:before {
+  transform: translateX(22px);
+}
+
+/* Foco para accesibilidad */
+.toggle input:focus-visible + .toggle-slider {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.25);
 }
 
 @layer base {

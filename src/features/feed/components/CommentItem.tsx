@@ -200,7 +200,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       style={{ marginLeft: indent }}
       className="mb-3"
     >
-      <div className="flex  items-start space-x-3 p-3 bg-white rounded-lg shadow-sm hover:bg-green-50">
+      <div className="flex items-start space-x-3 p-3 Dark-Card bg-white rounded-lg shadow-sm hover:bg-green-50">
         <Avatar
           src={avatarUrl}
           alt={author?.nombre ?? author?.apodo ?? "avatar"}
@@ -211,13 +211,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 min-w-0">
-              <span className="font-semibold text-gray-900 hover:underline cursor-pointer truncate">
+              <span className="font-semibold Dark-texto-blanco text-gray-900 hover:underline cursor-pointer truncate">
                 {comment.autor?.nombre ?? comment.autor?.apodo}
               </span>
-              <span className="text-gray-500 text-xs truncate">
+              <span className="text-gray-500 Dark-apodo-comentario text-xs truncate">
                 @{comment.autor?.apodo}
               </span>
-              <span className="text-gray-400 text-xs ml-2 max-[535px]:hidden">
+              <span className="text-gray-400 Dark-apodo-comentario text-xs ml-2 max-[535px]:hidden">
                 <time
                   dateTime={new Date(comment.fecha_creacion).toISOString()}
                   title={exactSpain}
@@ -235,11 +235,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-gray-500"
+                        className="h-8 w-8 cursor-pointer Dark-texto-blanco Dark-boton-comentario  text-gray-500"
                         onClick={(e) => e.stopPropagation()}
                         aria-label="Más opciones"
                       >
-                        <MoreHorizontal className="h-5 w-5" />
+                        <MoreHorizontal className="h-5 w-5 Dark-texto-blanco" />
                       </Button>
                     </DropdownMenuTrigger>
 
@@ -269,7 +269,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-gray-500"
+                  className="h-8 w-8 cursor-pointer Dark-texto-blanco Dark-boton-comentario text-gray-500"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <MoreHorizontal className="h-5 w-5" />
@@ -283,7 +283,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             {shortFormatted}
           </div>
 
-          <div className="mt-1 text-gray-800">
+          <div className="mt-1 Dark-texto-blanco text-gray-800">
             <p>{comment.contenido}</p>
 
             {/* Render de media (imagen o vídeo) si existe comment.url_imagen */}
@@ -329,7 +329,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
           <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
             <button
-              className="hover:text-blue-600 font-medium"
+              className="hover:text-blue-600 cursor-pointer Dark-respondiendo-comentario font-medium"
               onClick={(e) => {
                 e.stopPropagation();
                 handleReplyToggle();
@@ -344,12 +344,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
               className="hover:text-gray-700 text-sm flex items-center gap-2"
               title="Abrir hilo"
             >
-              <span className="text-gray-400">·</span>
-              <span className="text-sm text-gray-600">
+              <span className="text-gray-400 Dark-punto-comentario">·</span>
+              <span className="text-sm Dark-texto-blanco text-gray-600">
                 {" "}
                 {comment.repliesCount ?? childList.length ?? 0}{" "}
               </span>
-              <span className="text-gray-500 ml-1 hover:text-violet-600 font-semibold">
+              <span className="text-gray-500 Dark-respondiendo-comentario ml-1 hover:text-violet-600 font-semibold">
                 Abrir hilo
               </span>
             </Link>
