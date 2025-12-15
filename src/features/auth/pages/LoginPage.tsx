@@ -166,8 +166,8 @@ export default function LoginPage() {
             onClick={scrollToLanding}
             type="button"
             className="
-              w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center
-              bg-white/90 shadow-lg cursor-pointer text-slate-800 hover:bg-white/95
+              w-10 h-10 lg:w-12 lg:h-12 cursor-pointer rounded-full flex items-center justify-center
+              bg-white/90 shadow-lg  text-slate-800 hover:bg-white/95
             "
           >
             {currentSlide < 4 ? (

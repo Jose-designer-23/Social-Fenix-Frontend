@@ -282,7 +282,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
                     <button
                       aria-label="Anterior"
                       onClick={prevCarousel}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 cursor-pointer rounded-full bg-white/90 flex items-center justify-center shadow-md"
                       style={{ display: currentSlide === 0 ? "none" : undefined }}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -293,7 +293,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
                     <button
                       aria-label="Siguiente"
                       onClick={nextCarousel}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md"
+                      className="absolute right-2 top-1/2 cursor-pointer -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md"
                       style={{ display: currentSlide === LAST_INDEX ? "none" : undefined }}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -345,7 +345,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
                             else window.scrollTo({ top: 0, behavior: "smooth" });
                           }
                         }}
-                        className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg text-slate-800 hover:bg-white/95"
+                        className="w-12 h-12 cursor-pointer rounded-full bg-white/90 flex items-center justify-center shadow-lg text-slate-800 hover:bg-white/95"
                       >
                         {i < LAST_INDEX ? (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
