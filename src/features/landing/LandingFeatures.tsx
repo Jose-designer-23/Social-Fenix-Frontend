@@ -30,7 +30,7 @@ const slides: Slide[] = [
       "Búsqueda Instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
       "Cuidado Visual – Modo Oscuro para proteger tus ojos y disfrutar con el máximo confort.",
     ],
-    img: "/img/Feed.png",
+    img: "/img/Feed-2.png",
   },
   {
     title: "HILO DE COMENTARIOS",
@@ -39,7 +39,7 @@ const slides: Slide[] = [
       "Hilos Profundamente Anidados – Conversaciones organizadas hasta 4 niveles de respuesta.",
       "Reacciones Rápidas - Expresa tu opinión al instante con un like.",
     ],
-    img: "/img/Comentarios.png",
+    img: "/img/Comentarios-2.png",
   },
   {
     title: "NOTIFICACIONES EN TIEMPO REAL",
@@ -49,7 +49,7 @@ const slides: Slide[] = [
       "Diseño de Un Vistazo – Interfaz clara y fácil de escanear visualmente.",
       "Agrupación Inteligente – Compactamos eventos para eliminar el ruido y el spam de notificaciones.",
     ],
-    img: "/img/Notificaciones.png",
+    img: "/img/Notificaciones-2.png",
   },
   {
     title: "PERFIL DE USUARIO LLENO DE VIDA",
@@ -59,7 +59,7 @@ const slides: Slide[] = [
       "Tu Portafolio Social – Resalta toda tu actividad: multimedia, likes e interacciones.",
       "Gestión de Redes Clara – Visualiza y administra tus conexiones (seguidores y seguidos) de forma sencilla.",
     ],
-    img: "/img/Perfil.png",
+    img: "/img/Perfil-2.png",
   },
   {
     title: "CONVERSACIONES PRIVADAS",
@@ -70,7 +70,7 @@ const slides: Slide[] = [
         "Historial Completo – Accede y retoma tus conversaciones pasadas al instante.",
         "Contexto Temporal – Cada mensaje incluye la hora exacta para una mayor claridad",
     ],
-    img: "/img/Chat.png",
+    img: "/img/Chat-2.png",
   },
 ];
 
