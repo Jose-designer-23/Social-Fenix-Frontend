@@ -3,6 +3,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "re
 export type LandingFeaturesHandle = {
   openAndShowFirst: () => void;
   next: () => void;
+  show?: (index: number) => void;
 };
 
 type Props = {
@@ -64,11 +65,11 @@ const slides: Slide[] = [
   {
     title: "CONVERSACIONES PRIVADAS",
     desc: "Explicación breve del chat privado.",
-    features:[
-        "Chat en Vivo – Comunicación fluida e instantánea con todos tus contactos.",
-        "Alertas Fiables – Notificaciones instantáneas para que nunca pierdas el hilo.",
-        "Historial Completo – Accede y retoma tus conversaciones pasadas al instante.",
-        "Contexto Temporal – Cada mensaje incluye la hora exacta para una mayor claridad",
+    features: [
+      "Chat en Vivo – Comunicación fluida e instantánea con todos tus contactos.",
+      "Alertas Fiables – Notificaciones instantáneas para que nunca pierdas el hilo.",
+      "Historial Completo – Accede y retoma tus conversaciones pasadas al instante.",
+      "Contexto Temporal – Cada mensaje incluye la hora exacta para una mayor claridad",
     ],
     img: "/img/Chat-2.png",
   },
@@ -87,6 +88,10 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
       if (typeof window === "undefined") return false;
       return window.innerWidth <= MOBILE_BREAKPOINT;
     });
+
+    // Ref para ignorar updates por scroll cuando hacemos scroll programático
+    const programmaticScrollRef = useRef<boolean>(false);
+    const programmaticTimeoutRef = useRef<number | null>(null);
 
     // touch handling for carousel
     const touchStartX = useRef<number | null>(null);
@@ -116,6 +121,9 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
       let ticking = false;
 
       const updateActiveSlide = () => {
+        // ignorar si estamos en scroll programático
+        if (programmaticScrollRef.current) return;
+
         const els = slideElsRef.current.filter(Boolean);
         if (els.length === 0) return;
 
@@ -167,10 +175,26 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
       if (isCarousel) {
         // en carousel solo actualizamos índice (la UI renderará la imagen)
         setCurrentSlide(clamped);
+        currentSlideRef.current = clamped;
         return;
       }
       const el = document.getElementById(`landing-slide-${clamped}`);
       if (el) {
+        // Actualizamos el estado inmediatamente para que el panel derecho se sincronice
+        setCurrentSlide(clamped);
+        currentSlideRef.current = clamped;
+
+        // marcamos que vamos a hacer un scroll programático para que el detector ignore cambios momentáneos
+        programmaticScrollRef.current = true;
+        if (programmaticTimeoutRef.current) {
+          window.clearTimeout(programmaticTimeoutRef.current);
+        }
+        // tiempo suficiente para que el scroll smooth termine y el navegador estabilice layout (ajustable)
+        programmaticTimeoutRef.current = window.setTimeout(() => {
+          programmaticScrollRef.current = false;
+          programmaticTimeoutRef.current = null;
+        }, 800);
+
         el.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     };
@@ -183,7 +207,20 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
         const nextIdx = Math.min(currentSlideRef.current + 1, LAST_INDEX);
         scrollToSlide(nextIdx);
       },
+      show(index: number) {
+        scrollToSlide(index);
+      },
     }));
+
+    // limpia timeouts si desmonta el componente
+    useEffect(() => {
+      return () => {
+        if (programmaticTimeoutRef.current) {
+          window.clearTimeout(programmaticTimeoutRef.current);
+          programmaticTimeoutRef.current = null;
+        }
+      };
+    }, []);
 
     const setSlideRef = (index: number, el: HTMLElement | null) => {
       slideElsRef.current[index] = el as HTMLElement;
@@ -225,8 +262,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
           {/* LEFT: image slider / carousel */}
           <div className="image-slider w-full">
             {isCarousel ? (
-              // CAROUSEL MODE: SOLO cambia la parte del carrusel, el resto (desktop) NO se toca.
-              // Renderizamos una sola imagen centrada y con max-width para evitar mosaicos.
+              // CAROUSEL MODE (mobile) - intacto
               <div
                 className="relative w-full md:mt-60 lg:mt-60 flex items-center justify-center"
                 onTouchStart={onTouchStart}
@@ -281,7 +317,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
                 </div>
               </div>
             ) : (
-              // DESKTOP MODE: sección con todas las slides (scroll por página)
+              // DESKTOP MODE (scroll sections) - intacto
               <>
                 {slides.map((s, i) => (
                   <section
@@ -329,7 +365,6 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(
           </div>
 
           {/* RIGHT: panel textual */}
-          {/* En desktop md+ es sticky (fijo); en mobile queda debajo del carousel */}
           <aside className="flex flex-col justify-center items-center md:items-start text-center md:text-left text-white px-4 md:sticky md:top-0 md:h-screen">
             <div className="mx-auto md:mx-0">
               <h2 className="text-4xl md:text-4xl lg:text-5xl font-extrabold mb-6">
