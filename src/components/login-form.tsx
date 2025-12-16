@@ -7,10 +7,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div">) {
+  const { t } = useTranslation();
   const [identificador, setIdentificador] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +40,7 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
       const userData = data.user ?? data.userData ?? null;
 
       if (!token) {
-        setError("Respuesta inválida del servidor (sin token).");
+        setError(t("errors.NO_TOKEN"));
         setIsLoading(false);
         return;
       }
@@ -65,10 +67,10 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
       if (axios.isAxiosError(err)) {
         const msg =
           (err.response?.data as any)?.message ??
-          "Error desconocido de conexión. Inténtalo de nuevo.";
+          t("errors.CONNECTION");
         setError(String(msg));
       } else {
-        setError("Error desconocido. Inténtalo de nuevo.");
+        setError(t("errors.UNKNOWN"));
       }
       setContrasena("");
     } finally {
@@ -81,17 +83,17 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
       <form className={cn("margenes_estructura_formulario")} onSubmit={handleSubmit}>
         <FieldGroup>
           <div className="estructura_titulo_fromulario">
-            <h1 className="diseño_titulo_formulario">Inicia Sesión en SocialFénix</h1>
+            <h1 className="diseño_titulo_formulario">{t("login.title")}</h1>
             <p className="diseño_subtitulo_formulario">
-              Ingresa tu correo o nombre de usuario y contraseña.
+              {t("login.subtitle")}
             </p>
           </div>
 
-          {error && <div className="error_formulario">{error}</div>}
+          {error && <div className="error_formulario" role="alert" aria-live="polite">{error}</div>}
 
           <Field className="estructura_campo_usuario_formulario">
             <FieldLabel className="estilo_etiqueta_usuario_formulario" htmlFor="identificador">
-              <p className="negrita">Correo o Nombre de Usuario</p>
+              <p className="negrita">{t("login.emailOrUsername")}</p>
             </FieldLabel>
             <Input
               id="identificador"
@@ -101,16 +103,18 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
               onChange={(e: ChangeEvent<HTMLInputElement>) => setIdentificador(e.target.value)}
               disabled={isLoading}
               className="relleno_input_formulario"
+              placeholder={t("login.emailOrUsername") as string}
+              aria-label={t("login.emailOrUsername")}
             />
           </Field>
 
           <Field className="estructura_campo_contraseña_formulario">
             <div className="diseño_campo_contraseña_formulario">
               <FieldLabel className="estilo_etiqueta_contraseña_formulario" htmlFor="contrasena">
-                Contraseña
+                {t("login.password")}
               </FieldLabel>
               <a href="/forgot-password" className="estilo_enlace_contraseña_olvidada">
-                ¿Olvidaste tu contraseña?
+                {t("login.forgotPassword")}
               </a>
             </div>
             <Input
@@ -121,20 +125,21 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
               onChange={(e: ChangeEvent<HTMLInputElement>) => setContrasena(e.target.value)}
               disabled={isLoading}
               className="relleno_input_formulario"
+              aria-label={t("login.password")}
             />
           </Field>
 
           <Field className={"estructura_boton_inicio_sesion"}>
             <Button type="submit" disabled={isLoading} className="estilo_boton_inicio_sesion transition-colors-durantion-200">
-              {isLoading ? "Cargando..." : "Iniciar Sesión"}
+              {isLoading ? t("buttons.loading") : t("buttons.login")}
             </Button>
           </Field>
 
           <Field>
             <div className="diseño_pregunta_registro">
-              ¿No tienes cuenta?{" "}
+              {t("noAccount.text")}{" "}
               <a href="/register" className="diseño_enlace_registro transition-colors-duration-200">
-                Regístrate
+                {t("noAccount.register")}
               </a>
             </div>
           </Field>
@@ -143,3 +148,5 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<"div
     </div>
   );
 }
+
+export default LoginForm;
