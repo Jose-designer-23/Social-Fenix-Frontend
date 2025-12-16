@@ -18,11 +18,11 @@ type SlideMeta = {
 };
 
 const slidesMeta: SlideMeta[] = [
-  { key: "feed", img: "/img/Feed-2.png" },
-  { key: "comments", img: "/img/Comentarios-3.png" },
-  { key: "notifications", img: "/img/Notificaciones-2.png" },
-  { key: "profile", img: "/img/Perfil-2.png" },
-  { key: "chat", img: "/img/Chat-2.png" },
+  { key: "feed", img: "/img/Feed-4.png" },
+  { key: "comments", img: "/img/Comentarios-4.png" },
+  { key: "notifications", img: "/img/Notificaciones-4.png" },
+  { key: "profile", img: "/img/Perfil-4.png" },
+  { key: "chat", img: "/img/Chat-4.png" },
 ];
 
 const LAST_INDEX = slidesMeta.length - 1;
