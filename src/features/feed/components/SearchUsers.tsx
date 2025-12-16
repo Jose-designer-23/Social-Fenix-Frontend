@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../../user-profile/components/Avatar";
 import { Loader2, Search } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -14,16 +15,17 @@ type UserHit = {
 };
 
 interface SearchUsersProps {
-  className?: string; 
+  className?: string;
   placeholder?: string;
   minLength?: number;
 }
 
 export default function SearchUsers({
   className = "",
-  placeholder = "Usuarios...",
+  placeholder,
   minLength = 2,
 }: SearchUsersProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<UserHit[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,8 +36,9 @@ export default function SearchUsers({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const debounceRef = useRef<number | null>(null);
 
+  const ph = placeholder ?? t("SearchUsers.placeholder");
+
   useEffect(() => {
-    // close dropdown on outside click
     function onClick(e: MouseEvent) {
       if (!wrapperRef.current) return;
       if (!wrapperRef.current.contains(e.target as Node)) {
@@ -47,14 +50,13 @@ export default function SearchUsers({
   }, []);
 
   useEffect(() => {
-    // Clean debounce on unmount
     return () => {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
     };
   }, []);
 
   useEffect(() => {
-    if (query.trim().length < minLength) {
+    if (query.trim().length < (minLength ?? 2)) {
       setResults([]);
       setShowDropdown(false);
       setLoading(false);
@@ -77,14 +79,14 @@ export default function SearchUsers({
         setShowDropdown(true);
       } catch (err: any) {
         console.error("Search users error:", err);
-        setError("Error buscando usuarios");
+        setError(t("SearchUsers.searchError"));
         setResults([]);
         setShowDropdown(true);
       } finally {
         setLoading(false);
       }
     }, 250);
-  }, [query, minLength]);
+  }, [query, minLength, t]);
 
   const handleSelect = (apodo?: string) => {
     if (!apodo) return;
@@ -105,9 +107,9 @@ export default function SearchUsers({
           onFocus={() => {
             if (results.length > 0) setShowDropdown(true);
           }}
-          placeholder={placeholder}
+          placeholder={ph}
           className="w-full py-2 px-3 rounded-md Dark-texto-blanco Dark-input border max-w-xs md:w-48 max-[450px]:w-30 bg-white focus:outline-none"
-          aria-label="Buscar usuarios"
+          aria-label={t("SearchUsers.ariaLabel")}
         />
         <div className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
@@ -124,7 +126,7 @@ export default function SearchUsers({
             {error ? (
               <div className="p-3 text-sm text-red-600">{error}</div>
             ) : results.length === 0 ? (
-              <div className="p-3 text-sm text-gray-500">No hay resultados</div>
+              <div className="p-3 text-sm text-gray-500">{t("SearchUsers.noResults")}</div>
             ) : (
               results.map((u) => (
                 <button
@@ -136,7 +138,7 @@ export default function SearchUsers({
                   <div className="w-9 h-9 shrink-0">
                     <Avatar
                       src={u.avatar ?? undefined}
-                      alt={u.nombre ?? u.apodo ?? "avatar"}
+                      alt={t("SearchUsers.userAvatarAlt", { name: u.nombre ?? u.apodo ?? t("SearchUsers.userFallback") })}
                       size={36}
                       initials={(u.nombre ?? u.apodo ?? "U")[0]?.toUpperCase() ?? "U"}
                     />
@@ -152,7 +154,7 @@ export default function SearchUsers({
 
           {results.length > 5 && (
             <div className="p-2 text-xs text-gray-500 text-center border-t">
-              Mostrando {results.length} resultados
+              {t("SearchUsers.showingResults", { count: results.length })}
             </div>
           )}
         </div>

@@ -13,6 +13,7 @@ import { Heart, MessageCircle, Repeat2, Bell } from "lucide-react";
 import { useAuth } from "@/features/auth/services/AuthContext";
 import PostPreview from "./PostPreview";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 type Actor = {
   id: number;
@@ -90,6 +91,7 @@ function mergeActorList(list: Actor[], actor?: Actor | null): Actor[] {
 }
 
 const NotificationsButton: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const currentUserId = (user as any)?.id ?? (user as any)?.sub ?? null;
@@ -114,7 +116,6 @@ const NotificationsButton: React.FC = () => {
   const processNotificationItem = (detail: Interaction) => {
     if (!detail || !detail.action) return;
 
-    // Ignoramos eventos optimistas locales emitidos por el mismo usuario
     if (
       detail.source === "local" &&
       detail.actor &&
@@ -146,7 +147,6 @@ const NotificationsButton: React.FC = () => {
         post.unreadComments = (post.unreadComments ?? 0) + 1;
     };
 
-    // Si tenemos un postId, mantenemos la estructura por publicación
     if (
       pid &&
       (detail.action === "like" ||
@@ -211,7 +211,6 @@ const NotificationsButton: React.FC = () => {
       return;
     }
 
-    // Si no hay postId — evento del servidor y no leído => incrementamos contadores globales
     if (
       (detail.source === "server" || detail.persisted === true) &&
       detail.read !== true
@@ -241,7 +240,6 @@ const NotificationsButton: React.FC = () => {
     }
   };
 
-  // Fetch Inicial
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -293,7 +291,6 @@ const NotificationsButton: React.FC = () => {
     };
   }, []);
 
-  // Evento que escucha las notificaciones
   useEffect(() => {
     const handler = (ev: Event) => {
       const c = ev as CustomEvent<Interaction>;
@@ -306,7 +303,6 @@ const NotificationsButton: React.FC = () => {
       window.removeEventListener("post:interaction", handler as EventListener);
   }, [notificationIds, currentUserId]);
 
-  // marcar-leer en transición de cierre
   useEffect(() => {
     const wasOpen = prevOpenRef.current;
     if (wasOpen && !open) {
@@ -363,7 +359,6 @@ const NotificationsButton: React.FC = () => {
     prevOpenRef.current = open;
   }, [open, notificationIds]);
 
-  // recalculamos hasUnread
   useEffect(() => {
     const anyFromMap = Object.values(postsMap).some(
       (p) =>
@@ -382,7 +377,6 @@ const NotificationsButton: React.FC = () => {
     setHasUnread(anyFromMap || anyGlobal);
   }, [postsMap, globalCounts]);
 
-  // Iconos para mostrar
   const { hasLike, hasRepost, hasComment } = useMemo(() => {
     let like = false,
       repost = false,
@@ -428,7 +422,6 @@ const NotificationsButton: React.FC = () => {
     return "bg-white text-gray-600 border border-gray-200";
   }, [hasLike, hasRepost, hasComment, hasUnread]);
 
-  // Ordenamos la lista de publicaciones por lastTimestamp DESC (las más recientes arriba).
   const postsList = useMemo(() => {
     return Object.values(postsMap)
       .slice()
@@ -454,10 +447,8 @@ const NotificationsButton: React.FC = () => {
       });
   }, [postsMap]);
 
-  // Calcular el total de no leídos (badge)
   const unreadTotal = useMemo(() => {
     let total = 0;
-    // Actor por publicación no leído
     for (const p of Object.values(postsMap)) {
       total +=
         (p.unreadLikes ?? 0) + (p.unreadReposts ?? 0) + (p.unreadComments ?? 0);
@@ -465,7 +456,6 @@ const NotificationsButton: React.FC = () => {
       total += p.reposts.filter((a) => !!a.__unread).length;
       total += p.comments.filter((a) => !!a.__unread).length;
     }
-    // Recuentos globales (eventos sin postId)
     total +=
       (globalCounts.like || 0) +
       (globalCounts.repost || 0) +
@@ -495,7 +485,7 @@ const NotificationsButton: React.FC = () => {
           variant="ghost"
           onClick={() => setOpen(true)}
           className={`relative ${buttonBgClass} Dark-boton-notificación hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white flex items-center gap-2 max-[531px]:w-16 cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-10`}
-          aria-label="Notificaciones"
+          aria-label={t("NotificationsButton.ariaLabel")}
         >
           {unreadTotal > 0 && (
             <Badge className="absolute -top-2 -right-2 bg-white text-black border">
@@ -519,21 +509,21 @@ const NotificationsButton: React.FC = () => {
         <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden rounded-xl ">
           <DialogHeader className="p-4 border-b border-2 flex items-center justify-between ">
             <DialogTitle className="text-lg font-semibold">
-              Notificaciones
+              {t("NotificationsButton.title")}
             </DialogTitle>
             <div className="flex items-center gap-2 ">
               <Button variant="outline" className="text-sm Dark-boton cursor-pointer active:scale-95 active:shadow-inner active:opacity-90">
-                Limpiar
+                {t("NotificationsButton.clear")}
               </Button>
               <Button variant="outline" className="Dark-boton cursor-pointer active:scale-95 active:shadow-inner active:opacity-90" onClick={() => setOpen(false)}>
-                Cerrar
+                {t("NotificationsButton.close")}
               </Button>
             </div>
           </DialogHeader>
 
           <div className="p-4 max-h-[70vh] Dark-gradient overflow-y-auto bg-linear-to-br from-[#faea3d]/80 to-[#d0522f]/80">
             {postsList.length === 0 ? (
-              <div className="text-gray-500">No hay notificaciones aún.</div>
+              <div className="text-gray-500">{t("NotificationsButton.noNotifications")}</div>
             ) : (
               postsList.map((p) => {
                 const lastLike = p.likes[0];
@@ -576,7 +566,7 @@ const NotificationsButton: React.FC = () => {
                                             <img
                                               src={a.avatar ?? undefined}
                                               alt={
-                                                a.nombre ?? a.apodo ?? "Usuario"
+                                                a.nombre ?? a.apodo ?? t("NotificationsButton.userFallback")
                                               }
                                               className="w-full h-full object-cover rounded-full"
                                               onError={(e) => {
@@ -605,16 +595,19 @@ const NotificationsButton: React.FC = () => {
                                   </div>
                                   <div className="truncate Dark-texto-blanco">
                                     {p.comments.length === 1
-                                      ? `${
-                                          lastComment?.nombre ??
-                                          lastComment?.apodo
-                                        } ha comentado esta publicación`
-                                      : `${
-                                          lastComment?.nombre ??
-                                          lastComment?.apodo
-                                        }, y ${
-                                          p.comments.length - 1
-                                        } más han comentado esta publicación`}
+                                      ? t("NotificationsButton.commentSingle", {
+                                          name:
+                                            lastComment?.nombre ??
+                                            lastComment?.apodo ??
+                                            t("NotificationsButton.userFallback"),
+                                        })
+                                      : t("NotificationsButton.commentMultiple", {
+                                          name:
+                                            lastComment?.nombre ??
+                                            lastComment?.apodo ??
+                                            t("NotificationsButton.userFallback"),
+                                          count: p.comments.length - 1,
+                                        })}
                                   </div>
                                 </div>
                               )}
@@ -633,7 +626,7 @@ const NotificationsButton: React.FC = () => {
                                             <img
                                               src={a.avatar ?? undefined}
                                               alt={
-                                                a.nombre ?? a.apodo ?? "Usuario"
+                                                a.nombre ?? a.apodo ?? t("NotificationsButton.userFallback")
                                               }
                                               className="w-full h-full object-cover rounded-full"
                                               onError={(e) => {
@@ -662,16 +655,19 @@ const NotificationsButton: React.FC = () => {
                                   </div>
                                   <div className="truncate Dark-texto-blanco">
                                     {p.reposts.length === 1
-                                      ? `${
-                                          lastRepost?.nombre ??
-                                          lastRepost?.apodo
-                                        } ha republicado`
-                                      : `${
-                                          lastRepost?.nombre ??
-                                          lastRepost?.apodo
-                                        }, y ${
-                                          p.reposts.length - 1
-                                        } más han republicado`}
+                                      ? t("NotificationsButton.repostSingle", {
+                                          name:
+                                            lastRepost?.nombre ??
+                                            lastRepost?.apodo ??
+                                            t("NotificationsButton.userFallback"),
+                                        })
+                                      : t("NotificationsButton.repostMultiple", {
+                                          name:
+                                            lastRepost?.nombre ??
+                                            lastRepost?.apodo ??
+                                            t("NotificationsButton.userFallback"),
+                                          count: p.reposts.length - 1,
+                                        })}
                                   </div>
                                 </div>
                               )}
@@ -690,7 +686,7 @@ const NotificationsButton: React.FC = () => {
                                             <img
                                               src={a.avatar ?? undefined}
                                               alt={
-                                                a.nombre ?? a.apodo ?? "Usuario"
+                                                a.nombre ?? a.apodo ?? t("NotificationsButton.userFallback")
                                               }
                                               className="w-full h-full object-cover rounded-full"
                                               onError={(e) => {
@@ -719,14 +715,15 @@ const NotificationsButton: React.FC = () => {
                                   </div>
                                   <div className="truncate Dark-texto-blanco">
                                     {p.likes.length === 1
-                                      ? `${
-                                          lastLike?.nombre ?? lastLike?.apodo
-                                        } ha dado like`
-                                      : `${
-                                          lastLike?.nombre ?? lastLike?.apodo
-                                        }, y ${
-                                          p.likes.length - 1
-                                        } más han dado like`}
+                                      ? t("NotificationsButton.likeSingle", {
+                                          name:
+                                            lastLike?.nombre ?? lastLike?.apodo ?? t("NotificationsButton.userFallback"),
+                                        })
+                                      : t("NotificationsButton.likeMultiple", {
+                                          name:
+                                            lastLike?.nombre ?? lastLike?.apodo ?? t("NotificationsButton.userFallback"),
+                                          count: p.likes.length - 1,
+                                        })}
                                   </div>
                                 </div>
                               )}
@@ -735,8 +732,6 @@ const NotificationsButton: React.FC = () => {
                         </div>
 
                         <div>
-                          {/* Renderizamos PostPreview condicionalmente solo cuando haya una imagen. 
-                          Si no hay imagen, renderizamos una tarjeta de texto compacta sin miniatura.. */}
                           {p.postImage ? (
                             <PostPreview
                               postId={p.postId}
@@ -752,7 +747,7 @@ const NotificationsButton: React.FC = () => {
                               onClick={() => gotoPost(p.postId)}
                             >
                               <div className="font-semibold text-gray-900">
-                                {p.postAuthorName ?? "Publicación"}
+                                {p.postAuthorName ?? t("NotificationsButton.postFallback")}
                               </div>
                               {p.snippet && (
                                 <div className="text-sm text-gray-600 mt-1 truncate">

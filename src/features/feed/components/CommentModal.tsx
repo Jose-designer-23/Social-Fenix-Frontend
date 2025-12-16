@@ -26,6 +26,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useTranslation } from "react-i18next";
 
 interface CommentModalProps {
   children: React.ReactNode;
@@ -52,6 +53,8 @@ const CommentModal: React.FC<CommentModalProps> = ({
   onConfirmDelete,
   isProcessingDelete = false,
 }) => {
+  const { t } = useTranslation();
+
   // Avatar del autor del post (usar post.apodo)
   const postAuthor = (post.apodo ?? null) as unknown;
   const postAuthorAvatar = getAvatarUrlFromAuthor(postAuthor);
@@ -115,7 +118,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
                 className="w-full h-auto rounded-xl border border-gray-100 object-contain max-h-60 bg-black"
               >
                 <source src={url} type="video/mp4" />
-                Tu navegador no soporta la reproducción de vídeo.
+                {t("CommentModal.videoNotSupported")}
               </video>
             </div>
           </div>
@@ -127,7 +130,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
           <div className="w-full max-w-3xl mx-auto">
             <img
               src={url}
-              alt="Contenido del post"
+              alt={t("CommentModal.imageAlt")}
               className="w-full h-auto rounded-xl border border-gray-100 object-cover max-h-60"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src =
@@ -146,7 +149,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
             <Avatar
               src={postAuthorAvatar ?? undefined}
               alt={
-                (post.apodo && (post.apodo.nombre || post.apodo.apodo)) || "avatar"
+                (post.apodo && (post.apodo.nombre || post.apodo.apodo)) || t("CommentModal.userFallback")
               }
               size={40}
               className="shrink-0 rounded-full"
@@ -174,7 +177,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
             </div>
 
             <div className="mt-3 text-sm Dark-respondiendo-a text-gray-500">
-              Respondiendo a{" "}
+              {t("CommentModal.respondingTo")}{" "}
               <span className="text-indigo-600 Dark-Enlace hover:underline cursor-pointer">
                 @{post.apodo.apodo}
               </span>
@@ -192,11 +195,11 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
         <DialogContent className="sm:max-w-[600px] [&>button]:hidden p-0 overflow-hidden rounded-xl">
           <DialogHeader className="p-4 border-b border-gray-100 flex flex-row items-center justify-between">
-            <DialogTitle className="text-xl font-bold">Comentar</DialogTitle>
+            <DialogTitle className="text-xl font-bold">{t("CommentModal.title")}</DialogTitle>
             <button
               onClick={() => onOpenChange(false)}
               className="p-1 rounded-full hover:bg-gray-100 transition-colors active:scale-95 active:shadow-inner active:opacity-90 transform duration-300"
-              aria-label="Cerrar"
+              aria-label={t("CommentModal.closeAria")}
             >
               <X className="h-5 w-5 text-gray-600 cursor-pointer" />
             </button>
@@ -220,15 +223,15 @@ const CommentModal: React.FC<CommentModalProps> = ({
           <AlertDialogContent onClick={(e) => e.stopPropagation()}>
             <AlertDialogHeader>
               <AlertDialogTitle className="text-red-600">
-                Confirmar Eliminación
+                {t("CommentModal.confirmDeleteTitle")}
               </AlertDialogTitle>
               <AlertDialogDescription>
-                ¿Estás seguro de querer borrar este recuerdo?
+                {t("CommentModal.confirmDeleteDescription")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel disabled={isProcessingDelete}>
-                Cancelar
+                {t("CommentModal.cancel")}
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={async () => {
@@ -267,7 +270,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
                 disabled={isProcessingDelete}
                 className="bg-red-600 hover:bg-red-700 text-white"
               >
-                {isProcessingDelete ? "Eliminando..." : "Eliminar"}
+                {isProcessingDelete ? t("CommentModal.deleting") : t("CommentModal.delete")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

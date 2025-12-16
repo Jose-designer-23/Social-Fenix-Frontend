@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/features/auth/services/AuthContext";
 import toast from "react-hot-toast";
 import { Mail } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Tipos
 import { FeedItem } from "../../feed/types/feed";
@@ -74,7 +75,6 @@ function normalizeFeedItem(
   raw: any,
   activeTab: ActiveTab = "posts"
 ): FeedItem | CommentFromApi {
-  // Encontramos el autor en varias formas que puede venir del backend
   const findAuthorObj = (obj: any) => {
     if (!obj) return null;
     const candidates = [
@@ -95,7 +95,6 @@ function normalizeFeedItem(
     return candidates.find(Boolean) ?? null;
   };
 
-  // Normalizamos el alias de avatar
   const extractAvatar = (o: any): string | null => {
     if (!o || typeof o !== "object") return null;
     return (
@@ -109,13 +108,11 @@ function normalizeFeedItem(
     );
   };
 
-  // --------------- Comentario envuelto ---------------
   if (raw && raw.type === "comment" && raw.recurso) {
     const c: any = raw.recurso;
     const originalPostId =
       c.postOriginal?.id ?? c.post?.id ?? c.post_id ?? null;
 
-    // Intentamos encontrar al autor en las muchas formas posibles
     const rawAuthor = findAuthorObj(c) ?? null;
 
     const authorId =
@@ -142,7 +139,6 @@ function normalizeFeedItem(
       (typeof rawAuthor === "string" ? rawAuthor : "") ??
       "desconocido";
 
-    // Normalizamos avatar del autor del comentario
     const authorAvatar =
       extractAvatar(rawAuthor) ?? extractAvatar(c.autor) ?? null;
 
@@ -181,7 +177,6 @@ function normalizeFeedItem(
     return normalizedComment;
   }
 
-  // --------------- Post / Repost / Wrapper ---------------
   let post = raw;
   if (raw?.recurso) post = raw.recurso;
   else if (raw?.post) post = raw.post;
@@ -212,7 +207,6 @@ function normalizeFeedItem(
     authorObj?.handle ??
     "";
 
-  // Normalizamos avatar del autor del post usando varios posibles lugares
   const fallbackAvatar =
     extractAvatar(authorObj) ??
     extractAvatar(post?.apodo) ??
@@ -297,6 +291,7 @@ const ProfilePage: React.FC = () => {
 
   const navigate = useNavigate();
   const params = useParams<{ apodo?: string }>();
+  const { t } = useTranslation();
 
   const profileApodo = params.apodo ?? currentUser?.apodo;
 
@@ -336,7 +331,6 @@ const ProfilePage: React.FC = () => {
     const mq = window.matchMedia("(max-width:600px)");
     const onChange = (e: MediaQueryListEvent) => {
       setIsSmallScreen(e.matches);
-      // debounce corto para permitir reflow
       setTimeout(updateScrollButtons, 50);
     };
     if (mq.addEventListener) mq.addEventListener("change", onChange);
@@ -345,7 +339,6 @@ const ProfilePage: React.FC = () => {
       if (mq.removeEventListener) mq.removeEventListener("change", onChange);
       else mq.removeListener(onChange as any);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateScrollButtons = () => {
@@ -367,7 +360,6 @@ const ProfilePage: React.FC = () => {
     const onResize = () => updateScrollButtons();
     el.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
-    // Check inicial
     setTimeout(updateScrollButtons, 0);
     return () => {
       el.removeEventListener("scroll", onScroll);
@@ -379,7 +371,6 @@ const ProfilePage: React.FC = () => {
     const el = tabsContainerRef.current;
     if (!el) return;
     el.scrollBy({ left: distance, behavior: "smooth" });
-    // Actualizamos los botones después de un pequeño retraso (luego de un progreso de desplazamiento suave)
     setTimeout(updateScrollButtons, 300);
   };
 
@@ -396,11 +387,10 @@ const ProfilePage: React.FC = () => {
       await refetchProfile();
     } catch (err) {
       console.error("Error follow:", err);
-      alert("No se pudo completar la acción de seguimiento.");
+      toast.error(t("ProfilePage.followToggleFailed"));
     }
   };
 
-  // Abrimos el modal de mensaje con este usuario ---
   const handleOpenMessage = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (!ProfileData) return;
@@ -409,7 +399,6 @@ const ProfilePage: React.FC = () => {
       return;
     }
     if (currentUser.apodo === ProfileData.apodo) {
-      // No enviar mensajes a uno mismo
       return;
     }
 
@@ -422,7 +411,6 @@ const ProfilePage: React.FC = () => {
     setIsChatOpen(true);
   };
 
-  // Funciones para abrir el file picker (avatar/cover)
   const openAvatarPicker = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     avatarInputRef.current?.click();
@@ -432,23 +420,20 @@ const ProfilePage: React.FC = () => {
     coverInputRef.current?.click();
   };
 
-  // Manejo del upload -> subimos a /uploads/server-upload y luego actualizamos el perfil con PATCH /user/profile/:id
   const handleFileSelected = async (
     e: React.ChangeEvent<HTMLInputElement>,
     kind: "avatar" | "cover"
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // validaciones básicas (tipo/tamaño)
     const allowed = ["image/jpeg", "image/png", "image/webp"];
     if (!allowed.includes(file.type)) {
-      toast.error("Formato no soportado. Usa JPG/PNG/WEBP.");
+      toast.error(t("ProfilePage.unsupportedFormat"));
       e.currentTarget.value = "";
       return;
     }
     if (file.size > 8 * 1024 * 1024) {
-      // límite 8MB para avatar/portada por defecto
-      toast.error("Archivo demasiado grande (máx 8MB).");
+      toast.error(t("ProfilePage.fileTooLarge"));
       e.currentTarget.value = "";
       return;
     }
@@ -457,7 +442,6 @@ const ProfilePage: React.FC = () => {
     const token = localStorage.getItem("authToken") ?? "";
 
     try {
-      // Subimos archivo al endpoint de uploads (server-upload) y obtenemos la publicUrl
       const fm = new FormData();
       fm.append("file", file);
       fm.append("folder", kind === "avatar" ? "avatars" : "covers");
@@ -468,10 +452,6 @@ const ProfilePage: React.FC = () => {
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
-            // axios establecerá Content-Type multipart/form-data
-          },
-          onUploadProgress: (evt) => {
-            //Aqui podríamos ver la barra de progueso si queremos
           },
         }
       );
@@ -481,8 +461,6 @@ const ProfilePage: React.FC = () => {
         throw new Error("No se obtuvo publicUrl del servidor de uploads.");
       }
 
-      // Llamamos al endpoint de actualización de perfil del usuario autenticado
-      // Usamos el id del usuario autenticado desde currentUser si está disponible
       const userIdToPatch = currentUser?.id ?? ProfileData?.id;
       if (!userIdToPatch) {
         throw new Error("Usuario no identificado para actualizar perfil.");
@@ -499,19 +477,17 @@ const ProfilePage: React.FC = () => {
       });
 
       toast.success(
-        kind === "avatar" ? "Avatar actualizado" : "Portada actualizada"
+        kind === "avatar" ? t("ProfilePage.avatarUpdated") : t("ProfilePage.coverUpdated")
       );
 
-      // Refrescamos datos del perfil para que UI recoja la nueva URL
       await refetchProfile();
     } catch (err: any) {
       console.error("Error al subir/actualizar imagen de perfil:", err);
       toast.error(
-        err?.response?.data?.message ?? err.message ?? "Error subiendo imagen"
+        err?.response?.data?.message ?? err.message ?? t("ProfilePage.imageUploadError")
       );
     } finally {
       setUploading(null);
-      // Restablecemos la entrada para que al seleccionar nuevamente el mismo archivo se active el cambio
       try {
         if (kind === "avatar") {
           if (avatarInputRef.current) avatarInputRef.current.value = "";
@@ -522,7 +498,6 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  // Función para manejar el cierre del modal después de guardar
   const handleEditSuccess = async () => {
     setIsEditModalOpen(false);
     await refetchProfile();
@@ -643,14 +618,14 @@ const ProfilePage: React.FC = () => {
 
   if (isAuthLoading) {
     return (
-      <div className="loading-state p-8 text-center">Cargando sesión...</div>
+      <div className="loading-state p-8 text-center">{t("ProfilePage.loadingSession")}</div>
     );
   }
 
   if (isProfileLoading) {
     return (
       <div className="loading-state p-8 text-center">
-        Cargando perfil de @{profileApodo}...
+        {t("ProfilePage.loadingProfile", { apodo: profileApodo })}
       </div>
     );
   }
@@ -658,7 +633,7 @@ const ProfilePage: React.FC = () => {
   if (!ProfileData) {
     return (
       <div className="not-found-state p-8 text-center text-red-600">
-        No se pudo cargar el perfil de @{profileApodo}.
+        {t("ProfilePage.profileLoadError", { apodo: profileApodo })}
       </div>
     );
   }
@@ -669,31 +644,29 @@ const ProfilePage: React.FC = () => {
     if (isFeedLoading)
       return (
         <div className="p-4 text-center text-gray-500">
-          Cargando {activeTab}...
+          {t("ProfilePage.loadingContent", { tab: t(`ProfilePage.tabs.${activeTab}`) })}
         </div>
       );
     if (feedContent.length === 0) {
-      let msg = "";
+      let msgKey = "";
       switch (activeTab) {
         case "posts":
-          msg = isOwner
-            ? "Aún no has hecho publicaciones."
-            : "Aún no hay publicaciones.";
+          msgKey = isOwner ? "ProfilePage.empty.postsOwner" : "ProfilePage.empty.postsOther";
           break;
         case "replies":
-          msg = "Aún no hay comentarios.";
+          msgKey = "ProfilePage.empty.replies";
           break;
         case "reposts":
-          msg = "Aún no hay reposteos.";
+          msgKey = "ProfilePage.empty.reposts";
           break;
         case "likes":
-          msg = "Aún no hay likes.";
+          msgKey = "ProfilePage.empty.likes";
           break;
         case "media":
-          msg = "Aún no hay multimedia.";
+          msgKey = "ProfilePage.empty.media";
           break;
       }
-      return <div className="p-4 text-center text-gray-500 italic">{msg}</div>;
+      return <div className="p-4 text-center text-gray-500 italic">{t(msgKey)}</div>;
     }
 
     return (
@@ -712,7 +685,6 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="profile-container Dark-Card bg-white min-h-screen rounded-2xl">
       <header className="profile-header relative mb-16">
-        {/* COVER: Overlay hover + click */}
         <div
           className={`cover-photo h-48 bg-gray-300 bg-cover bg-center group relative rounded-t-2xl`}
           style={{
@@ -721,43 +693,40 @@ const ProfilePage: React.FC = () => {
             })`,
           }}
         >
-          {/*La superposición solo se muestra al propietario */}
           {isOwner && (
             <div
               className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center cursor-pointer"
               onClick={openCoverPicker}
-              title="Editar portada"
+              title={t("ProfilePage.editCover")}
             >
               <span className="text-white font-semibold bg-black/40 px-3 py-1 rounded">
-                {uploading === "cover" ? "Subiendo..." : "Editar portada"}
+                {uploading === "cover" ? t("ProfilePage.uploading") : t("ProfilePage.editCover")}
               </span>
             </div>
           )}
         </div>
 
-        {/* AVATAR: Posicionado y con overlay */}
         <div className="absolute top-36 left-4">
           <div className="relative group inline-block">
             <img
               src={ProfileData.avatar || "placeholder-avatar.png"}
-              alt={`Foto de ${ProfileData.apodo}`}
+              alt={t("ProfilePage.avatarAlt", { apodo: ProfileData.apodo })}
               className="profile-avatar w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
             />
             {isOwner && (
               <div
                 className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center cursor-pointer"
                 onClick={openAvatarPicker}
-                title="Editar avatar"
+                title={t("ProfilePage.editAvatar")}
               >
                 <span className="text-white font-semibold bg-black/40 px-2 py-1 rounded">
-                  {uploading === "avatar" ? "Subiendo..." : "Editar avatar"}
+                  {uploading === "avatar" ? t("ProfilePage.uploading") : t("ProfilePage.editAvatar")}
                 </span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Entradas de archivos invisibles */}
         <input
           ref={avatarInputRef}
           type="file"
@@ -781,7 +750,7 @@ const ProfilePage: React.FC = () => {
               rounded-full font-bold active:scale-95 active:shadow-inner active:opacity-90 transition transform duration-150
               hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] cursor-pointer"
             >
-              Editar perfil
+              {t("ProfilePage.editProfile")}
             </button>
           ) : (
             <>
@@ -793,19 +762,16 @@ const ProfilePage: React.FC = () => {
                     : "border-2 border-orange-500 cursor-pointer text-orange-500 font-bold active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
                 }`}
               >
-                {ProfileData.isFollowing ? "Siguiendo" : "Seguir"}
+                {ProfileData.isFollowing ? t("ProfilePage.following") : t("ProfilePage.follow")}
               </button>
 
-              {/* Botón para enviar un mensaje directo al usuario */}
               <button
                 onClick={handleOpenMessage}
                 className="px-4 py-2 cursor-pointer rounded-full  font-bold bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] text-white hover:opacity-95 active:opacity-90 active:shadow-inner active:scale-95 transition transform duration-150"
               >
                 <span className="inline-flex items-center gap-2">
                   <Mail className="w-4 h-4 sm:hidden" />{" "}
-                  {/* icono solo en móvil */}
-                  <span className="hidden sm:inline">Enviar mensaje</span>{" "}
-                  {/* texto solo en >= sm */}
+                  <span className="hidden sm:inline">{t("ProfilePage.sendMessage")}</span>
                 </span>
               </button>
             </>
@@ -834,11 +800,10 @@ const ProfilePage: React.FC = () => {
             </span>
           )}
           <span className="meta-item joined Dark-fecha-union">
-            📅 Se unió en{" "}
-            {new Date(ProfileData.fecha_creacion).toLocaleDateString("es-ES", {
+            📅 {t("ProfilePage.joined", { date: new Date(ProfileData.fecha_creacion).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "long",
-            })}
+            }) })}
           </span>
         </div>
         <div className="follow-stats flex space-x-4 mb-6">
@@ -850,7 +815,7 @@ const ProfilePage: React.FC = () => {
               {ProfileData.followingsCount}
             </span>{" "}
             <span className="label Dark-Seguidores text-gray-500 cursor-pointer">
-              Siguiendo
+              {t("ProfilePage.followingLabel")}
             </span>
           </button>
           <button
@@ -861,19 +826,16 @@ const ProfilePage: React.FC = () => {
               {ProfileData.followersCount}
             </span>{" "}
             <span className="label Dark-Seguidores text-gray-500 cursor-pointer">
-              Seguidores
+              {t("ProfilePage.followersLabel")}
             </span>
           </button>
         </div>
       </section>
 
-      {/* NAV: pestañas. En pantallas pequeñas se hace deslizable horizontalmente */}
       <nav className="profile-tabs Dark-Card border-b border-gray-200 sticky top-0 bg-white z-10">
-        {/* Wrapper relative para poder posicionar flechas */}
         <div className="relative group">
           {isSmallScreen ? (
             <>
-              {/* Contenedor scrollable */}
               <div
                 ref={tabsContainerRef}
                 className="overflow-x-auto overflow-y-hidden whitespace-nowrap px-2 "
@@ -892,19 +854,18 @@ const ProfilePage: React.FC = () => {
                     }`}
                   >
                     {tab === "posts"
-                      ? `Publicaciones (${ProfileData.postsCount})`
+                      ? `${t("ProfilePage.tabs.posts")} (${ProfileData.postsCount})`
                       : tab === "replies"
-                      ? "Comentarios"
+                      ? t("ProfilePage.tabs.replies")
                       : tab === "reposts"
-                      ? "Re-publicaciones"
+                      ? t("ProfilePage.tabs.reposts")
                       : tab === "likes"
-                      ? "Likes"
-                      : "Multimedia"}
+                      ? t("ProfilePage.tabs.likes")
+                      : t("ProfilePage.tabs.media")}
                   </button>
                 ))}
               </div>
 
-              {/* Flecha izquierda */}
               <button
                 aria-hidden={!canScrollLeft}
                 onClick={() => scrollTabsBy(-150)}
@@ -913,7 +874,7 @@ const ProfilePage: React.FC = () => {
                     ? "opacity-100"
                     : "opacity-0 pointer-events-none"
                 } group-hover:opacity-100`}
-                title="Desplazar a la izquierda"
+                title={t("ProfilePage.scrollLeft")}
                 style={{ transform: "translateY(-50%)", marginLeft: 6 }}
               >
                 <svg
@@ -930,7 +891,6 @@ const ProfilePage: React.FC = () => {
                 </svg>
               </button>
 
-              {/* Flecha derecha */}
               <button
                 aria-hidden={!canScrollRight}
                 onClick={() => scrollTabsBy(150)}
@@ -939,7 +899,7 @@ const ProfilePage: React.FC = () => {
                     ? "opacity-100"
                     : "opacity-0 pointer-events-none"
                 } group-hover:opacity-100`}
-                title="Desplazar a la derecha"
+                title={t("ProfilePage.scrollRight")}
                 style={{ transform: "translateY(-50%)", marginRight: 6 }}
               >
                 <svg
@@ -957,7 +917,6 @@ const ProfilePage: React.FC = () => {
               </button>
             </>
           ) : (
-            // Pantallas grandes: Render normal no scrollable
             <div className="flex">
               {tabs.map((tab) => (
                 <button
@@ -970,14 +929,14 @@ const ProfilePage: React.FC = () => {
                   }`}
                 >
                   {tab === "posts"
-                    ? `Publicaciones (${ProfileData.postsCount})`
+                    ? `${t("ProfilePage.tabs.posts")} (${ProfileData.postsCount})`
                     : tab === "replies"
-                    ? "Comentarios"
+                    ? t("ProfilePage.tabs.replies")
                     : tab === "reposts"
-                    ? "Re-publicaciones"
+                    ? t("ProfilePage.tabs.reposts")
                     : tab === "likes"
-                    ? "Likes"
-                    : "Multimedia"}
+                    ? t("ProfilePage.tabs.likes")
+                    : t("ProfilePage.tabs.media")}
                 </button>
               ))}
             </div>
@@ -1007,7 +966,6 @@ const ProfilePage: React.FC = () => {
         type="followers"
       />
 
-      {/* Chat modal: se abre al pulsar "Enviar mensaje" */}
       {chatOtherUser && (
         <ChatModal
           otherUser={chatOtherUser}
@@ -1015,7 +973,6 @@ const ProfilePage: React.FC = () => {
           onOpenChange={(v) => {
             setIsChatOpen(v);
             if (!v) {
-              // limpiar selección al cerrar
               setChatOtherUser(null);
             }
           }}

@@ -45,14 +45,14 @@ export default function LanguageSwitcher() {
     <div>
       <Select value={current} onValueChange={onChange}>
         {/* 1. Aplicamos text-white aquí para cuando el selector esté cerrado */}
-        <SelectTrigger className="w-full Dark-texto-blanco  Dark-boton cursor-pointer text-black shadow-sm border-white/20 bg-gray-50">
+        <SelectTrigger className="w-44 text-white shadow-sm border-white/20 bg-transparent">
           <SelectValue placeholder={t("lang.select.aria")} />
         </SelectTrigger>
 
         {/* 2. Aplicamos text-black (o el color que prefieras) al contenido desplegado */}
-        <SelectContent className="text-black Dark-texto-blanco Dark-boton cursor-pointer bg-white">
+        <SelectContent className="text-black bg-white">
           {LANGS.map((l) => (
-            <SelectItem className="Dark-hover-configuracion Dark-texto-blanco cursor-pointer" key={l.code} value={l.code}>
+            <SelectItem key={l.code} value={l.code}>
               <div className="flex items-center">
                 <img 
                   src={l.flagUrl} 

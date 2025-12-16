@@ -8,6 +8,7 @@ import { getChatSocket } from "./ChatSocket";
 import { useAuth } from "@/features/auth/services/AuthContext";
 import { X } from "lucide-react";
 import type { Socket } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -42,6 +43,7 @@ export default function ChatModal({
   open,
   onOpenChange,
 }: ChatModalProps) {
+  const { t } = useTranslation();
   const { user, getToken } = useAuth();
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [loading, setLoading] = useState(false);
@@ -183,9 +185,6 @@ export default function ChatModal({
           return [...prev, inc];
         });
 
-        // Se envia la conversación. Se actualiza SOLO si el modal NO está abierto.
-        // Cuando el modal está abierto, no queremos la insignia/notificación (ya estás dentro).
-        // El valor 'abierto' proviene de las propiedades y se captura correctamente aquí porque el efecto se vuelve a ejecutar cuando cambia la apertura.
         if (!open) {
           const incomingSenderId = Number(
             inc.sender_id ?? inc.senderId ?? inc.sender?.id ?? NaN
@@ -326,7 +325,7 @@ export default function ChatModal({
           <div className="flex items-center gap-3">
             <Avatar
               src={otherUser?.avatar ?? undefined}
-              alt={safeAlt(otherUser)}
+              alt={safeAlt(otherUser) ?? t("ChatModal.userFallback")}
               size={40}
               initials={safeInitial(otherUser)}
             />
@@ -339,7 +338,7 @@ export default function ChatModal({
           </div>
           <button
             onClick={() => onOpenChange(false)}
-            aria-label="Cerrar"
+            aria-label={t("ChatModal.closeAria")}
             className="p-1 rounded-full Dark-boton-mensajes cursor-pointer hover:bg-gray-100"
           >
             <X className="h-5 w-5" />
@@ -348,10 +347,10 @@ export default function ChatModal({
 
         <div className="p-4 h-80 overflow-y-auto" ref={scrollRef}>
           {loading ? (
-            <div className="text-center text-sm text-gray-500">Cargando...</div>
+            <div className="text-center text-sm text-gray-500">{t("ChatModal.loading")}</div>
           ) : messages.length === 0 ? (
             <div className="text-center text-sm text-gray-500">
-              No hay mensajes todavía
+              {t("ChatModal.noMessagesYet")}
             </div>
           ) : (
             <div className="space-y-3">
@@ -374,7 +373,7 @@ export default function ChatModal({
                       <div className="mr-2">
                         <Avatar
                           src={senderObj?.avatar ?? undefined}
-                          alt={safeAlt(senderObj ?? null)}
+                          alt={safeAlt(senderObj ?? null) ?? t("ChatModal.userFallback")}
                           size={28}
                           initials={safeInitial(senderObj ?? null)}
                         />
@@ -402,7 +401,7 @@ export default function ChatModal({
                       <div className="ml-2">
                         <Avatar
                           src={senderObj?.avatar ?? undefined}
-                          alt={safeAlt(senderObj ?? null)}
+                          alt={safeAlt(senderObj ?? null) ?? t("ChatModal.userFallback")}
                           size={28}
                           initials={safeInitial(senderObj ?? null)}
                         />
@@ -419,7 +418,7 @@ export default function ChatModal({
           <Input
             value={text}
             onChange={(e) => setText((e.target as HTMLInputElement).value)}
-            placeholder="Escribe un mensaje..."
+            placeholder={t("ChatModal.placeholder")}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -432,7 +431,7 @@ export default function ChatModal({
             className="whitespace-nowrap cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300 font-bold bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] text-white"
             disabled={!text.trim()}
           >
-            Enviar
+            {t("ChatModal.send")}
           </Button>
         </div>
       </DialogContent>

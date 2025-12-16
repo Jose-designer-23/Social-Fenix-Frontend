@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 // Importamos el tipo User desde el contexto de autenticación
 import axios from "axios";
 import { useAuth, User } from "../../auth/services/AuthContext.tsx";
+import { useTranslation } from "react-i18next";
 
 // URL base de tu backend NestJS
 const API_BASE_URL = "https://social-fenix-backend.onrender.com";
@@ -25,36 +26,8 @@ const ALLOWED_TYPES = [
 
 // Lista simple de emojis, se puede ampliar con los que quieras
 const EMOJIS = [
-  "😀",
-  "😁",
-  "😂",
-  "🤣",
-  "😅",
-  "😊",
-  "😍",
-  "🤩",
-  "😘",
-  "😎",
-  "🤔",
-  "😐",
-  "😴",
-  "😢",
-  "😭",
-  "😡",
-  "👍",
-  "👎",
-  "🙏",
-  "👏",
-  "🔥",
-  "✨",
-  "🎉",
-  "💯",
-  "❤️",
-  "💔",
-  "🤝",
-  "🙌",
-  "😉",
-  "🤗",
+  "😀","😁","😂","🤣","😅","😊","😍","🤩","😘","😎","🤔","😐","😴","😢","😭","😡",
+  "👍","👎","🙏","👏","🔥","✨","🎉","💯","❤️","💔","🤝","🙌","😉","🤗",
 ];
 
 interface CreatePostAreaProps {
@@ -66,6 +39,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
   user: userProp,
   onPostSuccess,
 }) => {
+  const { t } = useTranslation();
   const [postContent, setPostContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,11 +66,11 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
       return;
     }
     if (!ALLOWED_TYPES.includes(f.type)) {
-      toast.error("Tipo de archivo no permitido.");
+      toast.error(t("createPostArea.fileTypeNotAllowed"));
       return;
     }
     if (f.size > MAX_FILE_SIZE) {
-      toast.error("Archivo demasiado grande (máx 20MB).");
+      toast.error(t("createPostArea.fileTooLarge"));
       return;
     }
     setFile(f);
@@ -184,12 +158,12 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
       setPostContent("");
       setFile(null);
       setPreviewUrl(null);
-      toast.success("¡Publicación creada!");
+      toast.success(t("createPostArea.postCreated"));
       handlePostSuccess(resp.data.post?.id ?? resp.data?.id);
     } catch (err: any) {
       console.error(err);
       toast.error(
-        err?.response?.data?.message || err.message || "Error al crear post"
+        err?.response?.data?.message || err.message || t("createPostArea.createPostError")
       );
     } finally {
       setLoading(false);
@@ -254,7 +228,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
       <div className="flex space-x-3 items-start">
         <Avatar
           src={avatarUrl}
-          alt={effectiveUser?.nombre || effectiveUser?.apodo || "Usuario"}
+          alt={effectiveUser?.nombre || effectiveUser?.apodo || t("createPostArea.defaultUserAlt")}
           size={40}
           className="shrink-0 rounded-full"
           initials={fallbackInitial}
@@ -267,7 +241,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
               textareaRef.current =
                 instance as unknown as HTMLTextAreaElement | null;
             }}
-            placeholder={`¿Qué recuerdo vas a renacer hoy?`}
+            placeholder={t("createPostArea.placeholder")}
             minRows={3}
             maxRows={10}
             className="flex w-full resize-none rounded-md Dark-text-area bg-gray-50/70 px-3 py-2 text-lg placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-none p-2 focus-visible:ring-0"
@@ -291,7 +265,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
                 variant="ghost"
                 size="icon"
                 className="text-indigo-600 Dark-emotifotos-hover cursor-pointer hover:text-indigo-700 hover:bg-indigo-50"
-                aria-label="Añadir emoji"
+                aria-label={t("createPostArea.addEmojiAria")}
                 disabled={loading}
                 onClick={() => setEmojiOpen((v) => !v)}
               >
@@ -302,7 +276,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
                 variant="ghost"
                 size="icon"
                 className="text-indigo-600 Dark-emotifotos-hover hover:text-indigo-700 hover:bg-indigo-50"
-                aria-label="Añadir foto o video"
+                aria-label={t("createPostArea.addMediaAria")}
                 disabled={loading}
                 onClick={openFilePicker}
               >
@@ -315,7 +289,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
                 {file?.type.startsWith("image") ? (
                   <img
                     src={previewUrl}
-                    alt="preview"
+                    alt={t("createPostArea.previewAlt")}
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -342,7 +316,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
               {loading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
-                "Publicar"
+                t("createPostArea.publish")
               )}
             </Button>
           </div>
@@ -364,7 +338,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
                       setEmojiOpen(false);
                     }}
                     className="text-lg p-1 rounded hover:bg-gray-100"
-                    aria-label={`Insertar emoji ${e}`}
+                    aria-label={`${t("createPostArea.insertEmoji")} ${e}`}
                   >
                     {e}
                   </button>

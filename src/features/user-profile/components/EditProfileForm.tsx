@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/services/AuthContext";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 interface UpdateFormData {
   nombre: string;
@@ -21,6 +22,7 @@ const API_BASE = (
 ).replace(/\/+$/, "");
 
 const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
+  const { t } = useTranslation();
   const { user: currentUser, refetchUser } = useAuth();
   const navigate = useNavigate();
 
@@ -45,9 +47,9 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
     setFormData({
       nombre: currentUser.nombre || "",
       apodo: currentUser.apodo || "",
-      correo_electronico: currentUser.correo_electronico || "",
-      biografia: currentUser.biografia || "",
-      url: currentUser.url || "",
+      correo_electronico: (currentUser as any).correo_electronico || "",
+      biografia: (currentUser as any).biografia || "",
+      url: (currentUser as any).url || "",
     });
     // resetear 'touched' porque acabamos de cargar valores frescos
     setTouched({});
@@ -87,7 +89,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
       // Enviamos PATCH parcial con solo los campos cambiados
       await axios.patch(`${API_BASE}/user/profile/${currentUser.id}`, payload);
 
-      toast.success("¡Perfil actualizado con éxito!");
+      toast.success(t("EditProfileForm.success"));
 
       // Refrescamos usuario en el contexto
       await refetchUser();
@@ -98,7 +100,8 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
       navigate(`/profile/${newApodo}`, { replace: true });
     } catch (error: any) {
       toast.error(
-        error.response?.data?.message ||
+        error?.response?.data?.message ??
+          t("EditProfileForm.error") ??
           "Error al actualizar el perfil. Inténtalo de nuevo."
       );
     } finally {
@@ -109,7 +112,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
   return (
     <div className="max-w-xl mx-auto p-4">
       <h1 className="text-3xl font-extrabold mb-6 Dark-texto-blanco text-gray-900">
-        🐦‍🔥 Editar Perfil
+        {t("EditProfileForm.title")}
       </h1>
       <form
         onSubmit={handleSubmit}
@@ -120,7 +123,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
             htmlFor="nombre"
             className="block text-sm font-semibold Dark-texto-blanco text-gray-700 mb-1"
           >
-            Nombre
+            {t("EditProfileForm.nameLabel")}
           </label>
           <input
             id="nombre"
@@ -139,7 +142,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
             htmlFor="biografia"
             className="block Dark-texto-blanco text-sm font-semibold text-gray-700 mb-1"
           >
-            Biografía
+            {t("EditProfileForm.bioLabel")}
           </label>
           <textarea
             id="biografia"
@@ -156,7 +159,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
             htmlFor="url"
             className="block Dark-texto-blanco text-sm font-semibold text-gray-700 mb-1"
           >
-            URL (Enlace)
+            {t("EditProfileForm.urlLabel")}
           </label>
           <input
             id="url"
@@ -166,7 +169,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
             onChange={handleChange}
             maxLength={255}
             className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="https://suenlace.com"
+            placeholder={t("EditProfileForm.urlPlaceholder")}
           />
         </div>
 
@@ -176,7 +179,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onSave }) => {
           className="w-full Dark-Editar-Perfil bg-indigo-600 cursor-pointer text-white py-3 rounded-full text-lg font-bold disabled:bg-gray-400 active:scale-95 active:shadow-inner active:opacity-90 transition transform duration-150
               hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]"
         >
-          {isSaving ? "Guardando cambios..." : "Guardar Perfil"}
+          {isSaving ? t("EditProfileForm.saving") : t("EditProfileForm.save")}
         </button>
       </form>
     </div>

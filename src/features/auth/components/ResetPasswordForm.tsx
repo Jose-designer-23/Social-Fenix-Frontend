@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -14,6 +15,7 @@ const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
 
 export default function ResetPasswordForm() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const initialToken = searchParams.get("token") ?? "";
   const [token, setToken] = useState(initialToken);
@@ -29,21 +31,21 @@ export default function ResetPasswordForm() {
   }, [initialToken]);
 
   const validateClient = (): string | null => {
-    if (!token || !token.trim()) return "El token es obligatorio.";
+    if (!token || !token.trim()) return t("ResetPasswordForm.errors.tokenRequired");
 
-    if (!newPassword) return "La contraseña es obligatoria.";
+    if (!newPassword) return t("ResetPasswordForm.errors.passwordRequired");
 
     if (newPassword.length < 8)
-      return "La contraseña debe tener al menos 8 caracteres.";
+      return t("ResetPasswordForm.errors.passwordTooShort", { min: 8 });
 
     if (newPassword.length > 100)
-      return "La contraseña no puede exceder los 100 caracteres.";
+      return t("ResetPasswordForm.errors.passwordTooLong", { max: 100 });
 
     if (!PASSWORD_REGEX.test(newPassword)) {
-      return "La contraseña debe contener al menos una minúscula, una mayúscula, un número y un carácter especial.";
+      return t("ResetPasswordForm.errors.passwordRequirements");
     }
 
-    if (newPassword !== confirmPassword) return "Las contraseñas no coinciden.";
+    if (newPassword !== confirmPassword) return t("ResetPasswordForm.errors.passwordsMismatch");
 
     return null;
   };
@@ -66,18 +68,18 @@ export default function ResetPasswordForm() {
         newPassword,
       });
 
-      toast.success("Contraseña cambiada con éxito");
+      toast.success(t("ResetPasswordForm.success"));
       navigate("/login");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const msg =
           (err.response?.data as any)?.message ??
-          "Error desconocido. Inténtalo de nuevo.";
+          t("ResetPasswordForm.errors.unknownError");
         setError(String(msg));
         toast.error(String(msg));
       } else {
-        setError("Error desconocido. Inténtalo de nuevo.");
-        toast.error("Error desconocido. Inténtalo de nuevo.");
+        setError(t("ResetPasswordForm.errors.unknownError"));
+        toast.error(t("ResetPasswordForm.errors.unknownError"));
       }
     } finally {
       setIsLoading(false);
@@ -89,10 +91,8 @@ export default function ResetPasswordForm() {
       <form className="margenes_estructura_formulario" onSubmit={handleSubmit}>
         <FieldGroup>
           <div className="estructura_titulo_fromulario">
-            <h1 className="diseño_titulo_formulario">Restablecer contraseña</h1>
-            <p className="diseño_subtitulo_formulario">
-              Introduce tu nueva contraseña. Si accediste desde el enlace del correo, el token ya estará prellenado.
-            </p>
+            <h1 className="diseño_titulo_formulario">{t("ResetPasswordForm.title")}</h1>
+            <p className="diseño_subtitulo_formulario">{t("ResetPasswordForm.subtitle")}</p>
           </div>
 
           {error && (
@@ -103,7 +103,7 @@ export default function ResetPasswordForm() {
 
           <Field>
             <FieldLabel htmlFor="token" className="estilo_etiqueta_contraseña_olvidada">
-              Token (desde el enlace)
+              {t("ResetPasswordForm.tokenLabel")}
             </FieldLabel>
             <Input
               id="token"
@@ -112,15 +112,16 @@ export default function ResetPasswordForm() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setToken(e.target.value)}
               disabled={isLoading}
               className="relleno_input_formulario"
+              placeholder={t("ResetPasswordForm.tokenPlaceholder")}
             />
             <p className="text-sm text-slate-600 mt-2">
-              Si llegaste desde el correo de recuperación, no necesitas cambiar este valor.
+              {t("ResetPasswordForm.tokenHelper")}
             </p>
           </Field>
 
           <Field>
             <FieldLabel htmlFor="newPassword" className="estilo_etiqueta_contraseña_olvidada">
-              Nueva contraseña
+              {t("ResetPasswordForm.newPasswordLabel")}
             </FieldLabel>
             <Input
               id="newPassword"
@@ -130,16 +131,16 @@ export default function ResetPasswordForm() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
               disabled={isLoading}
               className="relleno_input_formulario"
-              placeholder="8+ letras, mayús, minús, num, c.esp"
+              placeholder={t("ResetPasswordForm.newPasswordPlaceholder")}
             />
             <p className="text-sm text-slate-600 mt-2">
-              La contraseña debe tener al menos 8 caracteres e incluir mayúsculas, minúsculas, un número y un carácter especial.
+              {t("ResetPasswordForm.newPasswordHelp")}
             </p>
           </Field>
 
           <Field>
             <FieldLabel htmlFor="confirmPassword" className="estilo_etiqueta_contraseña_olvidada">
-              Confirma la nueva contraseña
+              {t("ResetPasswordForm.confirmPasswordLabel")}
             </FieldLabel>
             <Input
               id="confirmPassword"
@@ -149,7 +150,7 @@ export default function ResetPasswordForm() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
               disabled={isLoading}
               className="relleno_input_formulario"
-              placeholder="Repite tu nueva contraseña"
+              placeholder={t("ResetPasswordForm.confirmPasswordPlaceholder")}
             />
           </Field>
 
@@ -159,15 +160,15 @@ export default function ResetPasswordForm() {
               disabled={isLoading}
               className="estilo_boton_inicio_sesion"
             >
-              {isLoading ? "Restableciendo..." : "Restablecer contraseña"}
+              {isLoading ? t("ResetPasswordForm.submitting") : t("ResetPasswordForm.submitButton")}
             </Button>
           </Field>
 
           <Field>
             <div className="diseño_pregunta_registro">
-              ¿Recordaste tu contraseña?{" "}
+              {t("ResetPasswordForm.rememberedQuestion")}{" "}
               <a href="/login" className="diseño_enlace_registro">
-                Inicia sesión
+                {t("ResetPasswordForm.loginLink")}
               </a>
             </div>
           </Field>

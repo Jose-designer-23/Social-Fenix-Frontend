@@ -19,18 +19,20 @@ import DmDropdown from "../feed/chat/components/DmDropdown.tsx";
 import { getChatSocket } from "../feed/chat/components/ChatSocket.ts";
 import DeleteAccountModal from "./components/DeleteAccountModal.tsx";
 import NightToggle from "@/components/NightToggle.tsx";
+import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
+import { useTranslation } from "react-i18next";
 
 const FeedLayout: React.FC = () => {
+  const { t } = useTranslation();
   const { user, isLoading, logout, getToken } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownActive, setDropdownActive] = useState(false); // <- nuevo
+  const [dropdownActive, setDropdownActive] = useState(false);
   const navigate = useNavigate();
 
   // Estado para el modal de "Datos de la cuenta"
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // ... (socket useEffect igual que antes) ...
   useEffect(() => {
     if (!user) return;
 
@@ -78,7 +80,7 @@ const FeedLayout: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center text-xl font-bold text-indigo-600">
-        Cargando sesión...
+        {t("feedLayout.loadingSession")}
       </div>
     );
   }
@@ -112,7 +114,7 @@ const FeedLayout: React.FC = () => {
           <header className="col-span-full  Dark-gradient sticky top-0 h-16 bg-white border-b border-gray-200 p-4 z-10 flex justify-between items-center bg-linear-to-br from-[#faea3d]/80 to-[#d0522f]/80">
             <div className="flex items-center ">
               <button
-                aria-label="Abrir menú"
+                aria-label={t("feedLayout.openMenuAria")}
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="lg:hidden mr-3 p-2 rounded-md Dark-hover-hamburguesa  hover:bg-black/10 cursor-pointer"
               >
@@ -125,7 +127,7 @@ const FeedLayout: React.FC = () => {
               <div className="flex items-center p-0 m-0">
                 <img
                   src="/img/Logo_fenix_5.png"
-                  alt="Imagen del feed"
+                  alt={t("feedLayout.logoAlt")}
                   className="w-10 h-10 ml-2 mr-2 min-[375px]:ml-0 min-[375px]:mr-0 "
                 />
               </div>
@@ -150,7 +152,6 @@ const FeedLayout: React.FC = () => {
             }`}
             aria-hidden={!mobileOpen}
             onClick={() => {
-              // Si hay un dropdown activo, no cerramos el menú aún
               if (dropdownActive) return;
               setMobileOpen(false);
             }}
@@ -166,9 +167,9 @@ const FeedLayout: React.FC = () => {
             aria-hidden={!mobileOpen}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="text-lg font-bold">Menú</div>
+              <div className="text-lg font-bold">{t("feedLayout.menuTitle")}</div>
               <button
-                aria-label="Cerrar"
+                aria-label={t("feedLayout.closeAria")}
                 onClick={() => setMobileOpen(false)}
                 className="p-2 rounded Dark-Hover cursor-pointer hover:bg-gray-100"
               >
@@ -197,7 +198,7 @@ const FeedLayout: React.FC = () => {
                 onClick={handleViewProfile}
                 className="mt-2 p-0 h-auto font-medium  text-indigo-600 hover:text-indigo-700 cursor-pointer"
               >
-                <span className="Dark-Enlace">Ver Perfil</span>
+                <span className="Dark-Enlace">{t("feedLayout.viewProfile")}</span>
               </Button>
             </Card>
 
@@ -207,39 +208,30 @@ const FeedLayout: React.FC = () => {
               onClick={handleHome}
             >
               <Home className="mr-2 h-4 w-4" />
-              Inicio
+              {t("feedLayout.home")}
             </Button>
 
             <div className="w-full mt-4">
-              {/*
-                Pasamos onOpenChange y onSelectConversation a DmDropdown
-                para que notifique al layout si el dropdown está abierto o
-                si el usuario ha elegido una conversación.
-              */}
               <DmDropdown
                 onOpenChange={(open: boolean) => setDropdownActive(open)}
                 onSelectConversation={() => {
-                  // Cuando selecciona una conversación, cerramos el menú móvil
                   setMobileOpen(false);
                 }}
               />
             </div>
 
             <div className="mt-4">
-              {/* Mobile settings dropdown: controlamos su estado con onOpenChange y evitamos
-                  que los clicks en trigger/content lleguen al overlay con stopPropagation */}
               <DropdownMenu onOpenChange={(open) => setDropdownActive(open)}>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
                     className=" Dark-boton Dark-outline w-full justify-start  bg-gray-50 hover:bg-gray-100 cursor-pointer"
                     onClick={(e) => {
-                      // Evitamos que el click del trigger burbuje al overlay que cierra el menú
                       e.stopPropagation();
                     }}
                   >
                     <Settings className="mr-2 h-4 w-4" />
-                    Configuración
+                    {t("feedLayout.settings")}
                   </Button>
                 </DropdownMenuTrigger>
 
@@ -247,16 +239,16 @@ const FeedLayout: React.FC = () => {
                   className="w-64"
                   onPointerEnter={() => setDropdownActive(true)}
                   onPointerLeave={() => setDropdownActive(false)}
-                  onClick={(e) => e.stopPropagation()} // que los clicks dentro del content no cierren el overlay
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <DropdownMenuItem
                     className="cursor-pointer Dark-hover-configuracion dark:hover:text-white"
                     onClick={() => {
                       setIsAccountModalOpen(true);
-                      setMobileOpen(false); // cerramos menú solo cuando el usuario elige la opción
+                      setMobileOpen(false);
                     }}
                   >
-                    <Contact className="mr-2 h-4 w-4" /> Datos de la cuenta
+                    <Contact className="mr-2 h-4 w-4" /> {t("feedLayout.accountData")}
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator />
@@ -268,7 +260,7 @@ const FeedLayout: React.FC = () => {
                     }}
                   >
                     <Trash className="mr-2 h-4 w-4" />
-                    Eliminar cuenta
+                    {t("feedLayout.deleteAccount")}
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator className="bg-slate-400/50" />
@@ -280,19 +272,20 @@ const FeedLayout: React.FC = () => {
                     className="text-red-600 Dark-peligro Dark-hover-configuracion cursor-pointer"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Cerrar Sesión
+                    {t("feedLayout.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+            </div>
+            <div className="mt-4 text-black w-full justify-start">
+              <LanguageSwitcher />
             </div>
             <div className="header-actions mt-4">
                 <NightToggle />
             </div>
           </aside>
 
-
           <aside className="hidden lg:block Dark-BG bg-white border-r border-gray-200 p-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
-            {/* ... (contenido de sidebar grande) */}
             <Card className="mb-6 p-4 shadow-sm border-gray-100">
               <div className="flex items-center space-x-3">
                 <Avatar
@@ -314,7 +307,7 @@ const FeedLayout: React.FC = () => {
                 onClick={handleViewProfile}
                 className="mt-2 p-0 h-auto font-medium text-indigo-600 hover:text-indigo-700 cursor-pointer"
               >
-                <span className="Dark-Enlace">Ver Perfil</span>
+                <span className="Dark-Enlace">{t("feedLayout.viewProfile")}</span>
               </Button>
             </Card>
 
@@ -324,7 +317,7 @@ const FeedLayout: React.FC = () => {
               onClick={handleHome}
             >
               <Home className="mr-2 h-4 w-4" />
-              Inicio
+              {t("feedLayout.home")}
             </Button>
 
             <div className="xl:hidden lg:block min-[1280px]:hidden w-full mt-4">
@@ -338,7 +331,7 @@ const FeedLayout: React.FC = () => {
                   className="w-full Dark-boton Dark-outline dark:hover:bg-none justify-start mt-4 bg-gray-50 hover:bg-gray-100 cursor-pointer"
                 >
                   <Settings className="mr-2 h-4 w-4" />
-                  Configuración
+                  {t("feedLayout.settings")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-59 ">
@@ -346,8 +339,7 @@ const FeedLayout: React.FC = () => {
                   className="cursor-pointer Dark-hover-configuracion dark:hover:text-white"
                   onClick={() => setIsAccountModalOpen(true)}
                 >
-                  {" "}
-                  <Contact className="mr-2 h-4 w-4" /> Datos de la cuenta
+                  <Contact className="mr-2 h-4 w-4" /> {t("feedLayout.accountData")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -355,7 +347,7 @@ const FeedLayout: React.FC = () => {
                   onClick={() => setIsDeleteModalOpen(true)}
                 >
                   <Trash className="mr-2 h-4 w-4" />
-                  Eliminar cuenta
+                  {t("feedLayout.deleteAccount")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-slate-400/50" />
                 <DropdownMenuItem
@@ -363,10 +355,14 @@ const FeedLayout: React.FC = () => {
                   className="text-red-600 Dark-peligro Dark-hover-configuracion cursor-pointer"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  Cerrar Sesión
+                  {t("feedLayout.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <div className="mt-4 text-black w-full justify-start">
+              <LanguageSwitcher />
+            </div>
+            
           </aside>
 
           <main className="flex flex-col Dark-gradient bg-linear-to-tr from-[#faea3d]/80 to-[#d0522f]/80 border-x border-gray-200 col-span-1 lg:col-span-1 lg:col-start-2 xl:col-span-1">
@@ -384,7 +380,7 @@ const FeedLayout: React.FC = () => {
           </main>
 
           <aside className="hidden Dark-BG min-[1247px]:block bg-white border-l border-gray-200 p-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
-            <h3 className="text-lg font-bold mb-4">Mensajes Directos</h3>
+            <h3 className="text-lg font-bold mb-4">{t("feedLayout.directMessages")}</h3>
 
             <DmDropdown />
           </aside>

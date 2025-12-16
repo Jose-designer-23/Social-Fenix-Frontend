@@ -14,6 +14,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 
 interface AuthorItem {
   id?: number;
@@ -132,6 +133,7 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
   ownerApodo = null,
   ownerId = null,
 }) => {
+  const { t } = useTranslation();
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -305,13 +307,13 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
       }
     } catch (err) {
       console.error("Error toggle follow:", err);
-      alert("No se pudo completar la acción. Inténtalo de nuevo.");
+      alert(t("ReactionListModal.followToggleFailed"));
     } finally {
       setSavingApodo(null);
     }
   };
 
-  const title = type === "likes" ? "Le gustó a" : "Re-publicado por";
+  const title = type === "likes" ? t("ReactionListModal.likes") : t("ReactionListModal.reposts");
   const listWrapperClass = items.length > scrollThreshold ? "overflow-auto max-h-[50vh] px-4" : "px-4";
 
   return (
@@ -329,18 +331,20 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
             <button
               onClick={() => onClose()}
               className="p-1 rounded-full hover:bg-gray-100 active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300"
-              aria-label="Cerrar"
+              aria-label={t("ReactionListModal.closeAria")}
             >
               <X className="h-5 w-5 text-gray-600 cursor-pointer" />
             </button>
           </div>
         </DialogHeader>
 
-        <div className={listWrapperClass} role="list" aria-label={title}>
+        <div className={listWrapperClass} role="list" aria-label={t("ReactionListModal.ariaLabel", { type: title })}>
           {loading ? (
-            <div className="text-center text-gray-500 py-8">Cargando {title.toLowerCase()}...</div>
+            <div className="text-center text-gray-500 py-8">
+              {type === "likes" ? t("ReactionListModal.loading.likes") : t("ReactionListModal.loading.reposts")}
+            </div>
           ) : items.length === 0 ? (
-            <div className="text-center text-gray-500 py-6">Aún no hay usuarios.</div>
+            <div className="text-center text-gray-500 py-6">{t("ReactionListModal.noUsersYet")}</div>
           ) : (
             <ul className="space-y-2 py-3">
               {items.map((u, idx) => {
@@ -406,7 +410,7 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
                           }}
                           disabled={savingApodo === apodoReal || !apodoReal || currentUser?.apodo === apodoReal}
                         >
-                          {savingApodo === apodoReal ? "..." : imFollowing ? "Siguiendo" : "Seguir"}
+                          {savingApodo === apodoReal ? "..." : imFollowing ? t("ReactionListModal.following") : t("ReactionListModal.follow")}
                         </Button>
                       ) : null}
                     </div>
@@ -420,7 +424,7 @@ const ReactionListModal: React.FC<ReactionListModalProps> = ({
         <DialogFooter className="sticky Dark-BG-reacciones bottom-0 z-20 bg-white border-t p-4">
           <div className="w-full flex justify-end">
             <DialogClose asChild>
-              <Button className="cursor-pointer Dark-Hover" variant="ghost">Cerrar</Button>
+              <Button className="cursor-pointer Dark-Hover" variant="ghost">{t("ReactionListModal.close")}</Button>
             </DialogClose>
           </div>
         </DialogFooter>

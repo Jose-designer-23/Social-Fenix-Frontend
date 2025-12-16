@@ -3,7 +3,7 @@ import { LoginForm } from "@/components/login-form.tsx";
 import LandingFeatures, {
   LandingFeaturesHandle,
 } from "@/features/landing/LandingFeatures.tsx";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import LanguageSwitcherLogin from "@/components/LanguageSwitcherLogin.tsx";
 import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
@@ -111,7 +111,7 @@ export default function LoginPage() {
         <div className="estructura_columna_formulario relative">
           {/* Selector de idioma en esquina (posición absoluta para NO alterar el flujo) */}
           <div className="absolute top-4 right-4 z-10">
-            <LanguageSwitcher />
+            <LanguageSwitcherLogin />
           </div>
 
           <div className="estructura_slogan">

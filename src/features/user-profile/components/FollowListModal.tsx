@@ -15,6 +15,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 
 interface UserItem {
   id: number;
@@ -80,6 +81,7 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
   type,
   scrollThreshold = 8,
 }) => {
+  const { t } = useTranslation();
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -131,14 +133,10 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
     let cancelled = false;
     const fetchMyFollowings = async () => {
       try {
-        // Pedimos como UserItem[] (o el tipo correspondiente en tu proyecto)
         const res = await axios.get<UserItem[]>(
           `${API_BASE}/follows/following/${currentUser.id}`
         );
-
-        // Si res.data es array lo usamos, si no usamos vacío
         const array: UserItem[] = Array.isArray(res.data) ? res.data : [];
-
         const apodos = new Set<string>(
           array
             .map((u) => u?.apodo)
@@ -146,7 +144,6 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
               (v): v is string => typeof v === "string" && v.trim().length > 0
             )
         );
-
         if (!cancelled) setMyFollowingsSet(apodos);
       } catch (err) {
         console.error("Error cargando mis followings:", err);
@@ -188,13 +185,16 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
       }
     } catch (err) {
       console.error("Error toggle follow:", err);
-      alert("No se pudo completar la acción. Inténtalo de nuevo.");
+      alert(t("FollowListModal.toggleFailed"));
     } finally {
       setSavingApodo(null);
     }
   };
 
-  const title = type === "following" ? "Siguiendo" : "Seguidores";
+  const title =
+    type === "following"
+      ? t("FollowListModal.following")
+      : t("FollowListModal.followers");
 
   const listWrapperClass =
     items.length > scrollThreshold ? "overflow-auto max-h-[50vh] px-4" : "px-4";
@@ -224,7 +224,7 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
             <button
               onClick={() => onClose()}
               className="p-1 rounded-full hover:bg-gray-100 transition-colors"
-              aria-label="Cerrar"
+              aria-label={t("FollowListModal.closeAria")}
             >
               <X className="h-5 w-5 text-gray-600 cursor-pointer" />
             </button>
@@ -235,13 +235,15 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
         <div className={listWrapperClass} role="list" aria-label={title}>
           {loading ? (
             <div className="text-center text-gray-500 py-8">
-              Cargando {title.toLowerCase()}...
+              {type === "following"
+                ? t("FollowListModal.loading.following")
+                : t("FollowListModal.loading.followers")}
             </div>
           ) : items.length === 0 ? (
             <div className="text-center text-gray-500 py-6">
               {type === "following"
-                ? "No sigues a nadie todavía."
-                : "Aún no tienes seguidores."}
+                ? t("FollowListModal.empty.following")
+                : t("FollowListModal.empty.followers")}
             </div>
           ) : (
             <ul className="space-y-2  py-3">
@@ -261,7 +263,7 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                       <div className="w-12 h-12 shrink-0">
                         <Avatar
                           src={avatarUrl}
-                          alt={`Avatar ${u.apodo}`}
+                          alt={`${u.apodo}`}
                           size={48}
                           className="rounded-full"
                           initials={initialFromAuthor(u)}
@@ -285,14 +287,17 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                             ? "bg-linear-to-br from-[#fa8f3d] to-[#f13e0d] text-white font-bold cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]"
                             : "border-2 bg-transparent border-orange-500 cursor-pointer text-orange-500 font-bold active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
                         }
-                        onClick={(e) => handleToggleFollow(e, u.apodo)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleFollow(e, u.apodo);
+                        }}
                         disabled={savingApodo === u.apodo}
                       >
                         {savingApodo === u.apodo
-                          ? "..."
+                          ? t("FollowListModal.saving")
                           : imFollowing
-                          ? "Siguiendo"
-                          : "Seguir"}
+                          ? t("FollowListModal.following")
+                          : t("FollowListModal.follow")}
                       </Button>
                     </div>
                   </li>
@@ -306,7 +311,7 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
           <div className="w-full flex justify-end">
             <DialogClose asChild>
               <Button className="cursor-pointer Dark-Hover-seguidores" variant="ghost">
-                Cerrar
+                {t("FollowListModal.close")}
               </Button>
             </DialogClose>
           </div>

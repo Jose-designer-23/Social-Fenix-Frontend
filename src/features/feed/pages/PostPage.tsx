@@ -7,6 +7,7 @@ import type { CommentFromApi } from "../types/comment";
 import CommentItem from "../components/CommentItem";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // El tipo que se espera en la publicación
 type ApiPostResponse = {
@@ -90,6 +91,7 @@ function insertCommentIntoTree(tree: CommentFromApi[], parentId: number, newComm
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 const PostPage: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<ApiPostResponse | null>(null);
@@ -122,20 +124,15 @@ const PostPage: React.FC = () => {
       setCommentsTree(tree);
     } catch (err: any) {
       console.error(err);
-      setError(err?.response?.data?.message || err.message || "Error al cargar el post");
+      setError(err?.response?.data?.message || err.message || t("PostPage.errorLoading"));
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
 
   // Handler que recarga y/o inserta localmente y scrollea
-  // Funciones:
-  // - newCommentOrId: objeto comentario nuevo (devuelto por API) -> si tiene parentComment lo inserta como respuesta,
-  //   Si parentComment es null lo inserta en la raíz (más reciente arriba).
-  // - Si recibe sólo un número (id) hará fetch completo y scrolleará al id.
   const handleReplyAndScroll = useCallback(
     async (newCommentOrId?: any) => {
-      // Si recibimos un objeto nuevo con fields suficientes, insertamos optimistamente local
       if (newCommentOrId && typeof newCommentOrId === "object" && newCommentOrId.id) {
         const newComment = newCommentOrId as CommentFromApi;
         const parentId = (newComment.parentComment && (newComment.parentComment as any).id) ?? null;
@@ -145,12 +142,10 @@ const PostPage: React.FC = () => {
           setCommentsTree((prev) => {
             const copy = JSON.parse(JSON.stringify(prev)) as CommentFromApi[];
             const inserted = insertCommentIntoTree(copy, parentId, newComment);
-            // si no se insertó (por ejemplo parent no está en el árbol actual), fallback fetch
             if (!inserted) {
               fetchData();
               return prev;
             }
-            // Nos desplazamos hasta el elemento insertado después de la actualización del DOM
             setTimeout(() => {
               const el = document.getElementById(`comment-${newComment.id}`);
               if (el) {
@@ -166,9 +161,7 @@ const PostPage: React.FC = () => {
           // Nuevo comentario raíz -> insertar al principio (más reciente primero)
           setCommentsTree((prev) => {
             const copy = JSON.parse(JSON.stringify(prev)) as CommentFromApi[];
-            // Añadimos el nuevo comentario al inicio
             copy.unshift(newComment);
-            // Scroll y destacar
             setTimeout(() => {
               const el = document.getElementById(`comment-${newComment.id}`);
               if (el) {
@@ -183,7 +176,6 @@ const PostPage: React.FC = () => {
         }
       }
 
-      // Si nos pasan sólo un id o no nos pasan objeto, recargamos y scrolleamos por id si hay
       if (typeof newCommentOrId === "number") {
         await fetchData();
         const newId = newCommentOrId as number;
@@ -198,7 +190,6 @@ const PostPage: React.FC = () => {
         return;
       }
 
-      // Si no hay info, simplemente recargamos
       await fetchData();
     },
     [fetchData]
@@ -208,10 +199,9 @@ const PostPage: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
-    useEffect(() => {
+  useEffect(() => {
     const onCommentCreated = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      // Llamamos al handler para insertar/recargar+scrollear
       handleReplyAndScroll(detail);
     };
 
@@ -219,15 +209,14 @@ const PostPage: React.FC = () => {
     return () => window.removeEventListener("comment:created", onCommentCreated);
   }, [handleReplyAndScroll]);
 
-  if (loading) return <div className="p-8 text-center">Cargando publicación...</div>;
+  if (loading) return <div className="p-8 text-center">{t("PostPage.loading")}</div>;
   if (error) return <div className="p-8 text-center text-red-600">{error}</div>;
-  if (!post) return <div className="p-8 text-center">Publicación no encontrada.</div>;
+  if (!post) return <div className="p-8 text-center">{t("PostPage.postNotFound")}</div>;
 
   const author = {
     id: post.apodo?.id ?? -1,
     apodo: post.apodo?.apodo ?? "desconocido",
     nombre: post.apodo?.nombre ?? "",
-    // Añadimos avatar si viene del backend (nullable)
     avatar: post.apodo?.avatar ?? null,
   };
 
@@ -247,13 +236,12 @@ const PostPage: React.FC = () => {
     reposted: Boolean((post as any).reposted ?? false),
   };
 
-
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 ">
       <div className="mb-4">
         <Button variant="outline" className="bg-white Dark-boton cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 font-bold" size="sm" onClick={() => navigate(-1)}>
           <ArrowLeft className="mr-2" />
-          <p className="font-bold">Volver</p>
+          <p className="font-bold">{t("PostPage.back")}</p>
         </Button>
       </div>
 
@@ -263,7 +251,7 @@ const PostPage: React.FC = () => {
 
       <div className="space-y-4">
         {commentsTree.length === 0 ? (
-          <div className="text-gray-500 p-4 bg-white rounded-lg">Sé el primero en responder.</div>
+          <div className="text-gray-500 p-4 bg-white rounded-lg">{t("PostPage.beFirstToReply")}</div>
         ) : (
           commentsTree.map((c) => (
             <CommentItem

@@ -10,7 +10,8 @@ import { emitPostInteraction } from "./EmitNotification";
 import {
   getAvatarUrlFromAuthor,
   getInitialFromAuthor,
-} from "../../../utils/avatar.ts";
+} from "../../../utils/avatar";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
@@ -52,6 +53,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
   postAuthorName = null,
   postAuthorApodo = null,
 }) => {
+  const { t } = useTranslation();
   const { getToken } = useAuth();
   const [commentContent, setCommentContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -90,11 +92,11 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
     }
 
     if (!ALLOWED_TYPES.includes(f.type)) {
-      toast.error("Tipo de archivo no permitido.");
+      toast.error(t("CommentPostArea.fileTypeNotAllowed"));
       return;
     }
     if (f.size > MAX_FILE_SIZE) {
-      toast.error("Archivo demasiado grande (máx 20MB).");
+      toast.error(t("CommentPostArea.fileTooLarge"));
       return;
     }
 
@@ -160,10 +162,8 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
 
     const token = getToken();
     if (!token) {
-      setError(
-        "No se encontró el token de autenticación. Por favor, inicia sesión de nuevo."
-      );
-      toast.error("No autorizado.");
+      setError(t("CommentPostArea.noAuthToken"));
+      toast.error(t("CommentPostArea.unauthorizedToast"));
       return;
     }
 
@@ -204,9 +204,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
       setPreviewUrl(null);
       setUploadProgress(null);
 
-      toast.success(
-        parentCommentId ? "¡Respuesta publicada!" : "¡Comentario publicado!"
-      );
+      toast.success(parentCommentId ? t("CommentPostArea.replyPosted") : t("CommentPostArea.commentPosted"));
       onCommentSuccess(savedComment ?? savedComment?.id);
 
       // Emitimos evento local para que el Notifications system y componentes reaccionen.
@@ -236,7 +234,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
       const msg =
         err?.response?.data?.message ??
         err?.message ??
-        "Ocurrió un error al publicar el comentario.";
+        t("CommentPostArea.commentCreateError");
       setError(msg);
       toast.error(msg);
     } finally {
@@ -302,7 +300,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
       <div className="flex space-x-3 items-start">
         <Avatar
           src={avatarUrl ?? undefined}
-          alt={user.nombre || user.apodo}
+          alt={user.nombre || user.apodo || t("CommentPostArea.userFallback")}
           size={40}
           className="shrink-0 rounded-full"
           initials={fallbackInitial}
@@ -313,9 +311,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
             ref={(instance) => {
               textareaRef.current = instance as unknown as HTMLTextAreaElement | null;
             }}
-            placeholder={
-              parentCommentId ? "Responder..." : "Escribe un comentario..."
-            }
+            placeholder={parentCommentId ? t("CommentPostArea.replyPlaceholder") : t("CommentPostArea.placeholder")}
             minRows={2}
             maxRows={10}
             className="w-full resize-none rounded-md bg-transparent px-0 py-2 text-lg placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-none p-2 focus-visible:ring-0"
@@ -339,7 +335,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
                 {file?.type.startsWith("image") ? (
                   <img
                     src={previewUrl}
-                    alt="preview"
+                    alt={t("CommentPostArea.previewAlt")}
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -359,7 +355,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
                 variant="ghost"
                 size="icon"
                 className="text-indigo-600 Dark-emotifotos-hover hover:text-indigo-700 hover:bg-indigo-50"
-                aria-label="Añadir emoji"
+                aria-label={t("CommentPostArea.addEmojiAria")}
                 disabled={loading}
                 onClick={() => setEmojiOpen((v) => !v)}
               >
@@ -370,7 +366,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
                 variant="ghost"
                 size="icon"
                 className="text-indigo-600 Dark-emotifotos-hover hover:text-indigo-700 hover:bg-indigo-50"
-                aria-label="Añadir foto o video"
+                aria-label={t("CommentPostArea.addMediaAria")}
                 disabled={loading}
                 onClick={openFilePicker}
               >
@@ -392,9 +388,9 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
               {loading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : parentCommentId ? (
-                "Responder"
+                t("CommentPostArea.replyButton")
               ) : (
-                "Comentar"
+                t("CommentPostArea.commentButton")
               )}
             </Button>
           </div>
@@ -416,7 +412,7 @@ const CommentPostArea: React.FC<CommentPostAreaProps> = ({
                       setEmojiOpen(false);
                     }}
                     className="text-lg p-1 rounded hover:bg-gray-100"
-                    aria-label={`Insertar emoji ${e}`}
+                    aria-label={`${t("CommentPostArea.insertEmoji")} ${e}`}
                   >
                     {e}
                   </button>

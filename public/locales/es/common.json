@@ -41,7 +41,6 @@
       "backToLogin": "Volver al login"
     },
     "slides": {
-
       "feed": {
         "title": "FEED DINÁMICO",
         "desc": "Resumen corto del feed.",
@@ -114,7 +113,7 @@
       "password": "8+ letras, mayús, minús, num, c.esp",
       "confirmPassword": "Repite tu contraseña"
     },
-    
+
     "fields": {
       "name": { "label": "Nombre completo" },
       "username": { "label": "Nombre de usuario" },
@@ -154,5 +153,383 @@
       "connection": "Error de conexión con el servidor. Inténtalo más tarde.",
       "unknown": "Error desconocido. Inténtalo de nuevo."
     }
+  },
+
+  "feedLayout": {
+    "openMenuAria": "Abrir menú",
+    "closeAria": "Cerrar",
+    "logoAlt": "Imagen del feed",
+    "loadingSession": "Cargando sesión...",
+    "menuTitle": "Menú",
+    "viewProfile": "Ver Perfil",
+    "home": "Inicio",
+    "settings": "Configuración",
+    "accountData": "Datos de la cuenta",
+    "deleteAccount": "Eliminar cuenta",
+    "logout": "Cerrar Sesión",
+    "directMessages": "Mensajes Directos"
+  },
+
+  "createPostArea": {
+    "placeholder": "¿Qué recuerdo vas a renacer hoy?",
+    "fileTypeNotAllowed": "Tipo de archivo no permitido.",
+    "fileTooLarge": "Archivo demasiado grande (máx 20MB).",
+    "postCreated": "¡Publicación creada!",
+    "createPostError": "Error al crear post",
+    "addEmojiAria": "Añadir emoji",
+    "addMediaAria": "Añadir foto o video",
+    "insertEmoji": "Insertar emoji",
+    "previewAlt": "Vista previa",
+    "publish": "Publicar",
+    "defaultUserAlt": "Usuario"
+  },
+
+  "PostCard": {
+    "now": "Ahora mismo",
+    "invalidDate": "Fecha inválida",
+    "nowShort": "Ahora",
+    "reposted": "Reposteó",
+    "repostedByName": "{{name}} reposteó",
+    "userNumber": "Usuario #{{id}}",
+    "moreOptionsAria": "Más opciones",
+    "updatePost": "Actualizar publicación",
+    "deletePost": "Borrar publicación",
+    "cannotUpdate": "No se pudo actualizar la publicación.",
+    "updateError": "Error al intentar actualizar la publicación.",
+    "mustContainTextOrImage": "La publicación debe contener texto o una imagen.",
+    "contentTooLong": "El contenido no puede superar {{count}} caracteres.",
+    "unauthorized": "No autorizado. Por favor, inicia sesión de nuevo.",
+    "noPermissionDelete": "No tienes permiso para eliminar esta publicación.",
+    "postNotFound": "Publicación no encontrada.",
+    "deleteFailed": "No se pudo eliminar la publicación.",
+    "deleteError": "Error al intentar eliminar la publicación.",
+    "avatarAlt": "Avatar de {{name}}",
+    "postImageAlt": "Imagen del post de {{apodo}}",
+    "videoNotSupported": "Tu navegador no soporta la reproducción de vídeo.",
+    "videoNotAvailableAlt": "Video no disponible",
+    "imageNotAvailableAlt": "Imagen no disponible",
+    "editPostTitle": "Editar publicación",
+    "contentLabel": "Contenido",
+    "contentPlaceholder": "Escribe algo...",
+    "imageUrlLabel": "URL de imagen (opcional)",
+    "imageUrlPlaceholder": "https://ejemplo.com/imagen.jpg",
+    "cancel": "Cancelar",
+    "saving": "Guardando...",
+    "save": "Guardar"
+  },
+
+  "NotificationsButton": {
+    "ariaLabel": "Notificaciones",
+    "title": "Notificaciones",
+    "clear": "Limpiar",
+    "close": "Cerrar",
+    "noNotifications": "No hay notificaciones aún.",
+    "userFallback": "Usuario",
+    "postFallback": "Publicación",
+    "commentSingle": "{{name}} ha comentado esta publicación",
+    "commentMultiple": "{{name}}, y {{count}} más han comentado esta publicación",
+    "repostSingle": "{{name}} ha republicado",
+    "repostMultiple": "{{name}}, y {{count}} más han republicado",
+    "likeSingle": "{{name}} ha dado like",
+    "likeMultiple": "{{name}}, y {{count}} más han dado like"
+  },
+
+  "SearchUsers": {
+    "ariaLabel": "Buscar usuarios",
+    "placeholder": "Usuarios...",
+    "searchError": "Error buscando usuarios",
+    "noResults": "No hay resultados",
+    "showingResults": "Mostrando {{count}} resultados",
+    "userAvatarAlt": "Avatar de {{name}}",
+    "userFallback": "Usuario"
+  },
+
+  "DmDropdown": {
+    "ariaLabel": "Abrir mensajes",
+    "openButton": "Mensajes",
+    "title": "Mensajes",
+    "recentConversations": "Conversaciones recientes",
+    "loading": "Cargando...",
+    "noConversations": "No hay conversaciones",
+    "oneNewMessage": "1 mensaje nuevo",
+    "xNewMessages": "{{count}} mensajes nuevos"
+  },
+
+  "ChatModal": {
+    "closeAria": "Cerrar",
+    "loading": "Cargando...",
+    "noMessagesYet": "No hay mensajes todavía",
+    "placeholder": "Escribe un mensaje...",
+    "send": "Enviar",
+    "userFallback": "Usuario"
+  },
+
+  "CommentModal": {
+    "title": "Comentar",
+    "closeAria": "Cerrar",
+    "videoNotSupported": "Tu navegador no soporta la reproducción de vídeo.",
+    "imageAlt": "Contenido del post",
+    "respondingTo": "Respondiendo a",
+    "confirmDeleteTitle": "Confirmar eliminación",
+    "confirmDeleteDescription": "¿Estás seguro de querer borrar este recuerdo?",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "delete": "Eliminar",
+    "userFallback": "Usuario"
+  },
+
+  "CommentPostArea": {
+    "placeholder": "Escribe un comentario...",
+    "replyPlaceholder": "Responder...",
+    "fileTypeNotAllowed": "Tipo de archivo no permitido.",
+    "fileTooLarge": "Archivo demasiado grande (máx 20MB).",
+    "noAuthToken": "No se encontró el token de autenticación. Por favor, inicia sesión de nuevo.",
+    "unauthorizedToast": "No autorizado.",
+    "commentPosted": "¡Comentario publicado!",
+    "replyPosted": "¡Respuesta publicada!",
+    "commentCreateError": "Ocurrió un error al publicar el comentario.",
+    "addEmojiAria": "Añadir emoji",
+    "addMediaAria": "Añadir foto o video",
+    "insertEmoji": "Insertar emoji",
+    "previewAlt": "Vista previa",
+    "commentButton": "Comentar",
+    "replyButton": "Responder",
+    "userFallback": "Usuario"
+  },
+
+  "PostPage": {
+    "loading": "Cargando publicación...",
+    "errorLoading": "Error al cargar la publicación.",
+    "postNotFound": "Publicación no encontrada.",
+    "back": "Volver",
+    "beFirstToReply": "Sé el primero en responder."
+  },
+
+  "CommentItem": {
+    "now": "Ahora mismo",
+    "nowShort": "Ahora",
+    "aboutReplace": "hace",
+    "videoNotSupported": "Tu navegador no soporta la reproducción de vídeo.",
+    "moreOptionsAria": "Más opciones",
+    "deleteComment": "Borrar comentario",
+    "cancel": "Cancelar",
+    "reply": "Responder",
+    "openThread": "Abrir hilo",
+    "attachmentAlt": "Adjunto del comentario",
+    "imageUnavailable": "Imagen no disponible",
+    "unauthorized": "No autorizado. Por favor inicia sesión de nuevo.",
+    "deleteFailed": "No se pudo borrar el comentario.",
+    "userFallback": "Usuario"
+  },
+
+  "CommentThreadPage": {
+    "loading": "Cargando hilo...",
+    "errorLoading": "Error al cargar el hilo.",
+    "threadNotFound": "Hilo no encontrado.",
+    "back": "Volver",
+    "deletedAndReturning": "Comentario eliminado. Volviendo a la publicación...",
+    "deletedOk": "Comentario eliminado correctamente."
+  },
+
+  "ReactionListModal": {
+    "likes": "Le gustó a",
+    "reposts": "Re-publicado por",
+    "ariaLabel": "Lista de {{type}}",
+    "loading": {
+      "likes": "Cargando likes...",
+      "reposts": "Cargando republicaciones..."
+    },
+
+    "noUsersYet": "Aún no hay usuarios.",
+    "follow": "Seguir",
+    "following": "Siguiendo",
+    "followToggleFailed": "No se pudo completar la acción. Inténtalo de nuevo.",
+    "closeAria": "Cerrar",
+    "close": "Cerrar"
+  },
+
+  "CommentDeleteModal": {
+    "title": "Confirmar eliminación",
+    "description": "¿Estás seguro de que deseas eliminar este comentario?",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "delete": "Eliminar"
+  },
+
+  "ProfilePage": {
+    "loadingSession": "Cargando sesión...",
+    "loadingProfile": "Cargando perfil de @{apodo}...",
+    "profileLoadError": "No se pudo cargar el perfil de @{apodo}.",
+    "editProfile": "Editar perfil",
+    "follow": "Seguir",
+    "following": "Siguiendo",
+    "sendMessage": "Enviar mensaje",
+    "uploading": "Subiendo...",
+    "editCover": "Editar portada",
+    "editAvatar": "Editar avatar",
+    "unsupportedFormat": "Formato no soportado. Usa JPG/PNG/WEBP.",
+    "fileTooLarge": "Archivo demasiado grande (máx 8MB).",
+    "avatarUpdated": "Avatar actualizado",
+    "coverUpdated": "Portada actualizada",
+    "imageUploadError": "Error subiendo imagen",
+    "followToggleFailed": "No se pudo completar la acción de seguimiento.",
+    "joined": "Se unió en {{date}}",
+    "followingLabel": "Siguiendo",
+    "followersLabel": "Seguidores",
+    "tabs": {
+      "posts": "Publicaciones",
+      "replies": "Comentarios",
+      "reposts": "Re-publicaciones",
+      "likes": "Likes",
+      "media": "Multimedia"
+    },
+
+    "loadingContent": "Cargando {{tab}}...",
+    "empty": {
+      "postsOwner": "Aún no has hecho publicaciones.",
+      "postsOther": "Aún no hay publicaciones.",
+      "replies": "Aún no hay comentarios.",
+      "reposts": "Aún no hay reposteos.",
+      "likes": "Aún no hay likes.",
+      "media": "Aún no hay multimedia."
+    },
+
+    "scrollLeft": "Desplazar a la izquierda",
+    "scrollRight": "Desplazar a la derecha",
+    "back": "Volver",
+    "avatarAlt": "Foto de perfil de {{apodo}}"
+  },
+
+  "EditProfileModal": {
+    "title": "Editar perfil",
+    "closeAria": "Cerrar diálogo de edición"
+  },
+
+  "EditProfileForm": {
+    "title": "🐦‍🔥 Editar Perfil",
+    "nameLabel": "Nombre",
+    "bioLabel": "Biografía",
+    "urlLabel": "URL (Enlace)",
+    "urlPlaceholder": "https://suenlace.com",
+    "saving": "Guardando cambios...",
+    "save": "Guardar Perfil",
+    "success": "¡Perfil actualizado con éxito!",
+    "error": "Error al actualizar el perfil. Inténtalo de nuevo."
+  },
+
+  "FollowListModal": {
+    "following": "Siguiendo",
+    "followers": "Seguidores",
+    "closeAria": "Cerrar",
+    "loading": {
+      "following": "Cargando siguiendo...",
+      "followers": "Cargando seguidores..."
+    },
+    "empty": {
+      "following": "No sigues a nadie todavía.",
+      "followers": "Aún no tienes seguidores."
+    },
+    "follow": "Seguir",
+    "saving": "...",
+    "toggleFailed": "No se pudo completar la acción. Inténtalo de nuevo.",
+    "close": "Cerrar"
+  },
+
+  "AccountSettingsModal": {
+    "title": "Datos de la cuenta",
+    "subtitle": "Actualiza tu apodo, correo o contraseña.",
+    "closeAria": "Cerrar ajustes de la cuenta",
+    "userFallback": "Usuario",
+    "labels": {
+      "apodo": "Apodo",
+      "email": "Correo electrónico",
+      "password": "Contraseña"
+    },
+
+    "placeholders": {
+      "newApodo": "Nuevo apodo",
+      "newEmail": "Nuevo correo electrónico",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña"
+    },
+
+    "actions": {
+      "cancel": "Cancelar",
+      "changeApodo": "Cambiar nombre de usuario",
+      "changeEmail": "Cambiar correo electrónico",
+      "changePassword": "Cambiar contraseña",
+      "saveChanges": "Guardar cambios"
+    },
+
+    "saving": "Guardando...",
+    "messages": {
+      "passwordHelp": "La nueva contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula, número y carácter especial.",
+      "passwordUpdated": "Contraseña actualizada correctamente.",
+      "profileUpdated": "Datos de perfil actualizados."
+    },
+
+    "errors": {
+      "apodoInvalid": "El apodo debe tener entre {{min}}-{{max}} caracteres y sólo letras, números y _.",
+      "invalidEmail": "Introduce un correo válido.",
+      "fillBothPasswords": "Rellena ambas contraseñas.",
+      "passwordRequirements": "La nueva contraseña debe cumplir los requisitos.",
+      "changePasswordFailed": "Error al cambiar la contraseña.",
+      "updateProfileFailed": "Error al actualizar perfil.",
+      "unknown": "Error desconocido al guardar cambios."
+    }
+  },
+
+  "ForgotPasswordForm": {
+    "title": "Recuperar contraseña",
+    "subtitle": "Introduce el correo asociado a tu cuenta y te enviaremos un enlace para restablecerla.",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "nombre@ejemplo.com",
+    "checkSpam": "Revisa tu carpeta de spam, posiblemente el correo esté en spam.",
+    "sendButton": "Enviar correo de recuperación",
+    "sending": "Enviando...",
+    "sentSuccess": "Correo enviado con éxito. Revisa tu bandeja de entrada.",
+    "emailNotFound": "Ese correo electrónico no está asociado a ninguna cuenta.",
+    "unknownError": "Error desconocido. Inténtalo de nuevo.",
+    "rememberedQuestion": "¿Recuerdas tu contraseña?",
+    "loginLink": "Inicia sesión"
+  },
+
+  "ResetPasswordForm": {
+    "title": "Restablecer contraseña",
+    "subtitle": "Introduce tu nueva contraseña. Si accediste desde el enlace del correo, el token ya estará prellenado.",
+    "tokenLabel": "Token (desde el enlace)",
+    "tokenPlaceholder": "Token de restablecimiento",
+    "tokenHelper": "Si llegaste desde el correo de recuperación, no necesitas cambiar este valor.",
+    "newPasswordLabel": "Nueva contraseña",
+    "newPasswordPlaceholder": "8+ letras, mayús, minús, num, c.esp",
+    "newPasswordHelp": "La contraseña debe tener al menos 8 caracteres e incluir mayúsculas, minúsculas, un número y un carácter especial.",
+    "confirmPasswordLabel": "Confirma la nueva contraseña",
+    "confirmPasswordPlaceholder": "Repite tu nueva contraseña",
+    "submitButton": "Restablecer contraseña",
+    "submitting": "Restableciendo...",
+    "success": "Contraseña cambiada con éxito",
+
+    "errors": {
+      "tokenRequired": "El token es obligatorio.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordTooShort": "La contraseña debe tener al menos {{min}} caracteres.",
+      "passwordTooLong": "La contraseña no puede exceder los {{max}} caracteres.",
+      "passwordRequirements": "La contraseña debe contener al menos una minúscula, una mayúscula, un número y un carácter especial.",
+      "passwordsMismatch": "Las contraseñas no coinciden.",
+      "unknownError": "Error desconocido. Inténtalo de nuevo."
+    },
+
+    "rememberedQuestion": "¿Recordaste tu contraseña?",
+    "loginLink": "Inicia sesión"
+  },
+
+  "DeleteAccountModal": {
+    "title": "¿De verdad quieres borrar la cuenta?",
+    "description": "Esta acción es irreversible. Se eliminarán tus publicaciones, tu perfil y todos los datos asociados. Si estás seguro, confirma para proceder.",
+    "cancel": "Cancelar",
+    "delete": "Borrar cuenta",
+    "deleting": "Eliminando...",
+    "success": "Cuenta eliminada. Hasta pronto.",
+    "error": "Error al eliminar la cuenta. Intenta de nuevo."
   }
 }

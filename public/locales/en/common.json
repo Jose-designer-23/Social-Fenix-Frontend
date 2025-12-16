@@ -47,7 +47,6 @@
     },
 
     "slides": {
-
       "feed": {
         "title": "DYNAMIC FEED",
         "desc": "Brief overview of the feed.",
@@ -111,7 +110,6 @@
   },
 
   "signup": {
-
     "title": "Create your account on SocialFénix",
     "subtitle": "Sign up by filling these fields.",
     "placeholders": {
@@ -161,5 +159,383 @@
       "connection": "Server connection error. Try again later.",
       "unknown": "Unknown error. Try again."
     }
+  },
+
+  "feedLayout": {
+    "openMenuAria": "Open menu",
+    "closeAria": "Close",
+    "logoAlt": "Feed image",
+    "loadingSession": "Loading session...",
+    "menuTitle": "Menu",
+    "viewProfile": "View Profile",
+    "home": "Home",
+    "settings": "Settings",
+    "accountData": "Account details",
+    "deleteAccount": "Delete account",
+    "logout": "Log out",
+    "directMessages": "Direct Messages"
+  },
+
+  "createPostArea": {
+    "placeholder": "What memory will you revive today?",
+    "fileTypeNotAllowed": "File type not allowed.",
+    "fileTooLarge": "File too large (max 20MB).",
+    "postCreated": "Post created!",
+    "createPostError": "Error creating post",
+    "addEmojiAria": "Add emoji",
+    "addMediaAria": "Add photo or video",
+    "insertEmoji": "Insert emoji",
+    "previewAlt": "Preview",
+    "publish": "Publish",
+    "defaultUserAlt": "User"
+  },
+
+  "PostCard": {
+    "now": "Just now",
+    "invalidDate": "Invalid date",
+    "nowShort": "Now",
+    "reposted": "Reposted",
+    "repostedByName": "{{name}} reposted",
+    "userNumber": "User #{{id}}",
+    "moreOptionsAria": "More options",
+    "updatePost": "Update post",
+    "deletePost": "Delete post",
+    "cannotUpdate": "Could not update the post.",
+    "updateError": "Error trying to update the post.",
+    "mustContainTextOrImage": "The post must contain text or an image.",
+    "contentTooLong": "Content must not exceed {{count}} characters.",
+    "unauthorized": "Unauthorized. Please sign in again.",
+    "noPermissionDelete": "You don't have permission to delete this post.",
+    "postNotFound": "Post not found.",
+    "deleteFailed": "Could not delete the post.",
+    "deleteError": "Error trying to delete the post.",
+    "avatarAlt": "{{name}}'s avatar",
+    "postImageAlt": "Post image by {{apodo}}",
+    "videoNotSupported": "Your browser does not support video playback.",
+    "videoNotAvailableAlt": "Video not available",
+    "imageNotAvailableAlt": "Image not available",
+    "editPostTitle": "Edit post",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Write something...",
+    "imageUrlLabel": "Image URL (optional)",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save"
+  },
+
+  "NotificationsButton": {
+    "ariaLabel": "Notifications",
+    "title": "Notifications",
+    "clear": "Clear",
+    "close": "Close",
+    "noNotifications": "No notifications yet.",
+    "userFallback": "User",
+    "postFallback": "Post",
+    "commentSingle": "{{name}} commented on this post",
+    "commentMultiple": "{{name}}, and {{count}} others commented on this post",
+    "repostSingle": "{{name}} reposted",
+    "repostMultiple": "{{name}}, and {{count}} others reposted",
+    "likeSingle": "{{name}} liked this",
+    "likeMultiple": "{{name}}, and {{count}} others liked this"
+  },
+
+  "SearchUsers": {
+    "ariaLabel": "Search users",
+    "placeholder": "Users...",
+    "searchError": "Error searching users",
+    "noResults": "No results",
+    "showingResults": "Showing {{count}} results",
+    "userAvatarAlt": "{{name}}'s avatar",
+    "userFallback": "User"
+  },
+
+  "DmDropdown": {
+    "ariaLabel": "Open messages",
+    "openButton": "Messages",
+    "title": "Messages",
+    "recentConversations": "Recent conversations",
+    "loading": "Loading...",
+    "noConversations": "No conversations",
+    "oneNewMessage": "1 new message",
+    "xNewMessages": "{{count}} new messages"
+  },
+
+  "ChatModal": {
+    "closeAria": "Close",
+    "loading": "Loading...",
+    "noMessagesYet": "No messages yet",
+    "placeholder": "Write a message...",
+    "send": "Send",
+    "userFallback": "User"
+  },
+
+  "CommentModal": {
+    "title": "Comment",
+    "closeAria": "Close",
+    "videoNotSupported": "Your browser does not support video playback.",
+    "imageAlt": "Post content",
+    "respondingTo": "Replying to",
+    "confirmDeleteTitle": "Confirm deletion",
+    "confirmDeleteDescription": "Are you sure you want to delete this memory?",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "delete": "Delete",
+    "userFallback": "User"
+  },
+
+  "CommentPostArea": {
+    "placeholder": "Write a comment...",
+    "replyPlaceholder": "Reply...",
+    "fileTypeNotAllowed": "File type not allowed.",
+    "fileTooLarge": "File too large (max 20MB).",
+    "noAuthToken": "Authentication token not found. Please sign in again.",
+    "unauthorizedToast": "Unauthorized.",
+    "commentPosted": "Comment posted!",
+    "replyPosted": "Reply posted!",
+    "commentCreateError": "An error occurred while posting the comment.",
+    "addEmojiAria": "Add emoji",
+    "addMediaAria": "Add photo or video",
+    "insertEmoji": "Insert emoji",
+    "previewAlt": "Preview",
+    "commentButton": "Comment",
+    "replyButton": "Reply",
+    "userFallback": "User"
+  },
+
+  "PostPage": {
+    "loading": "Loading post...",
+    "errorLoading": "Error loading the post.",
+    "postNotFound": "Post not found.",
+    "back": "Back",
+    "beFirstToReply": "Be the first to reply."
+  },
+
+  "CommentItem": {
+    "now": "Just now",
+    "nowShort": "Now",
+    "aboutReplace": "ago",
+    "videoNotSupported": "Your browser does not support video playback.",
+    "moreOptionsAria": "More options",
+    "deleteComment": "Delete comment",
+    "cancel": "Cancel",
+    "reply": "Reply",
+    "openThread": "Open thread",
+    "attachmentAlt": "Comment attachment",
+    "imageUnavailable": "Image not available",
+    "unauthorized": "Unauthorized. Please sign in again.",
+    "deleteFailed": "Could not delete the comment.",
+    "userFallback": "User"
+  },
+
+  "CommentThreadPage": {
+    "loading": "Loading thread...",
+    "errorLoading": "Error loading the thread.",
+    "threadNotFound": "Thread not found.",
+    "back": "Back",
+    "deletedAndReturning": "Comment deleted. Returning to the post...",
+    "deletedOk": "Comment deleted successfully."
+  },
+
+  "ReactionListModal": {
+    "likes": "Liked by",
+    "reposts": "Reposted by",
+    "ariaLabel": "List of {{type}}",
+    "loading": {
+      "likes": "Loading likes...",
+      "reposts": "Loading reposts..."
+    },
+
+    "noUsersYet": "No users yet.",
+    "follow": "Follow",
+    "following": "Following",
+    "followToggleFailed": "Could not complete the action. Try again.",
+    "closeAria": "Close",
+    "close": "Close"
+  },
+
+  "CommentDeleteModal": {
+    "title": "Confirm deletion",
+    "description": "Are you sure you want to delete this comment?",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "delete": "Delete"
+  },
+
+  "ProfilePage": {
+    "loadingSession": "Loading session...",
+    "loadingProfile": "Loading profile @{apodo}...",
+    "profileLoadError": "Could not load profile @{apodo}.",
+    "editProfile": "Edit profile",
+    "follow": "Follow",
+    "following": "Following",
+    "sendMessage": "Send message",
+    "uploading": "Uploading...",
+    "editCover": "Edit cover",
+    "editAvatar": "Edit avatar",
+    "unsupportedFormat": "Unsupported format. Use JPG/PNG/WEBP.",
+    "fileTooLarge": "File too large (max 8MB).",
+    "avatarUpdated": "Avatar updated",
+    "coverUpdated": "Cover updated",
+    "imageUploadError": "Error uploading image",
+    "followToggleFailed": "Could not complete follow action.",
+    "joined": "Joined {{date}}",
+    "followingLabel": "Following",
+    "followersLabel": "Followers",
+    "tabs": {
+      "posts": "Posts",
+      "replies": "Replies",
+      "reposts": "Reposts",
+      "likes": "Likes",
+      "media": "Media"
+    },
+
+    "loadingContent": "Loading {{tab}}...",
+    "empty": {
+      "postsOwner": "You haven't posted yet.",
+      "postsOther": "No posts yet.",
+      "replies": "No replies yet.",
+      "reposts": "No reposts yet.",
+      "likes": "No likes yet.",
+      "media": "No media yet."
+    },
+
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
+    "back": "Back",
+    "avatarAlt": "{{apodo}}'s profile photo"
+  },
+
+  "EditProfileModal": {
+    "title": "Edit profile",
+    "closeAria": "Close edit dialog"
+  },
+
+  "EditProfileForm": {
+    "title": "🐦‍🔥 Edit profile",
+    "nameLabel": "Name",
+    "bioLabel": "Biography",
+    "urlLabel": "URL (Link)",
+    "urlPlaceholder": "https://yourlink.com",
+    "saving": "Saving changes...",
+    "save": "Save profile",
+    "success": "Profile updated successfully!",
+    "error": "Error updating profile. Try again."
+  },
+
+  "FollowListModal": {
+    "following": "Following",
+    "followers": "Followers",
+    "closeAria": "Close",
+    "loading": {
+      "following": "Loading following...",
+      "followers": "Loading followers..."
+    },
+    "empty": {
+      "following": "You are not following anyone yet.",
+      "followers": "You have no followers yet."
+    },
+    "follow": "Follow",
+    "saving": "...",
+    "toggleFailed": "Could not complete the action. Try again.",
+    "close": "Close"
+  },
+
+  "AccountSettingsModal": {
+    "title": "Account settings",
+    "subtitle": "Update your handle, email or password.",
+    "closeAria": "Close account settings",
+    "userFallback": "User",
+    "labels": {
+      "apodo": "Handle",
+      "email": "Email",
+      "password": "Password"
+    },
+
+    "placeholders": {
+      "newApodo": "New handle",
+      "newEmail": "New email",
+      "currentPassword": "Current password",
+      "newPassword": "New password"
+    },
+
+    "actions": {
+      "cancel": "Cancel",
+      "changeApodo": "Change handle",
+      "changeEmail": "Change email",
+      "changePassword": "Change password",
+      "saveChanges": "Save changes"
+    },
+
+    "saving": "Saving...",
+    "messages": {
+      "passwordHelp": "New password must be at least 8 characters and include uppercase, lowercase, a number and a special character.",
+      "passwordUpdated": "Password updated successfully.",
+      "profileUpdated": "Profile data updated."
+    },
+
+    "errors": {
+      "apodoInvalid": "Handle must be between {{min}}-{{max}} characters and contain only letters, numbers and _.",
+      "invalidEmail": "Please enter a valid email.",
+      "fillBothPasswords": "Fill both passwords.",
+      "passwordRequirements": "New password does not meet requirements.",
+      "changePasswordFailed": "Failed to change password.",
+      "updateProfileFailed": "Failed to update profile.",
+      "unknown": "Unknown error saving changes."
+    }
+  },
+
+  "ForgotPasswordForm": {
+    "title": "Reset password",
+    "subtitle": "Enter the email associated with your account and we'll send a reset link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "checkSpam": "Check your spam folder — the email may end up there.",
+    "sendButton": "Send reset email",
+    "sending": "Sending...",
+    "sentSuccess": "Email sent successfully. Check your inbox.",
+    "emailNotFound": "That email is not associated with any account.",
+    "unknownError": "Unknown error. Please try again.",
+    "rememberedQuestion": "Remembered your password?",
+    "loginLink": "Log in"
+  },
+
+  "ResetPasswordForm": {
+    "title": "Reset password",
+    "subtitle": "Enter your new password. If you accessed from the email link, the token will already be prefilled.",
+    "tokenLabel": "Token (from the link)",
+    "tokenPlaceholder": "Reset token",
+    "tokenHelper": "If you opened the link from the recovery email you don't need to change this value.",
+    "newPasswordLabel": "New password",
+    "newPasswordPlaceholder": "8+ chars, upper, lower, number, special",
+    "newPasswordHelp": "Password must be at least 8 characters and include uppercase, lowercase, a number and a special character.",
+    "confirmPasswordLabel": "Confirm new password",
+    "confirmPasswordPlaceholder": "Repeat your new password",
+    "submitButton": "Reset password",
+    "submitting": "Resetting...",
+    "success": "Password changed successfully",
+
+    "errors": {
+      "tokenRequired": "Token is required.",
+      "passwordRequired": "Password is required.",
+      "passwordTooShort": "Password must be at least {{min}} characters.",
+      "passwordTooLong": "Password must not exceed {{max}} characters.",
+      "passwordRequirements": "Password must include lowercase, uppercase, a number and a special character.",
+      "passwordsMismatch": "Passwords do not match.",
+      "unknownError": "Unknown error. Please try again."
+    },
+
+    "rememberedQuestion": "Remembered your password?",
+    "loginLink": "Log in"
+  },
+
+  "DeleteAccountModal": {
+    "title": "Are you sure you want to delete your account?",
+    "description": "This action is irreversible. Your posts, profile and all associated data will be removed. If you're sure, confirm to proceed.",
+    "cancel": "Cancel",
+    "delete": "Delete account",
+    "deleting": "Deleting...",
+    "success": "Account deleted. Goodbye.",
+    "error": "Error deleting account. Please try again."
   }
 }

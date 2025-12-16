@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { getChatSocket } from "./ChatSocket";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -36,6 +37,7 @@ type Props = {
 };
 
 export default function DmDropdown({ onOpenChange, onSelectConversation }: Props) {
+  const { t } = useTranslation();
   const { user, getToken } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -63,12 +65,10 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
 
   useEffect(() => {
     fetchConversations();
-    // Configuramos el socket para escuchar actualizaciones de conversación
     const token = getToken?.();
     const s = getChatSocket(token);
 
     const onConversationUpdated = (payload: any) => {
-      // Simplemente refrescamos la lista
       fetchConversations();
     };
 
@@ -99,9 +99,7 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
   const unreadSenders = conversations.filter((c) => c.unreadCount > 0).length;
 
   const handleOpenChat = (c: Conversation) => {
-    // notify parent that a conversation was selected so it can close the mobile menu
     onSelectConversation?.();
-    // ensure dropdown is considered closed by parent
     onOpenChange?.(false);
 
     setSelected(c);
@@ -124,9 +122,10 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
         <DropdownMenuTrigger asChild>
           <Button
             variant="default"
+            aria-label={t("DmDropdown.ariaLabel")}
             className="relative w-full cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300 justify-start inline-flex items-center font-bold bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] text-white"
           >
-            Mensajes
+            {t("DmDropdown.openButton")}
             {unreadSenders > 0 && (
               <Badge className="absolute top-0 right-0 h-5 w-5 rounded-full p-0 flex items-center justify-center translate-x-1 -translate-y-1 bg-green-700">
                 {unreadSenders}
@@ -137,21 +136,20 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
 
         <DropdownMenuContent
           className="w-75"
-          
           onPointerEnter={() => onOpenChange?.(true)}
           onPointerLeave={() => onOpenChange?.(false)}
         >
           <div className="p-3 border-b">
-            <div className="font-semibold">Mensajes</div>
-            <div className="text-xs Dark-titulos-dm text-gray-500">Conversaciones recientes</div>
+            <div className="font-semibold">{t("DmDropdown.title")}</div>
+            <div className="text-xs Dark-titulos-dm text-gray-500">{t("DmDropdown.recentConversations")}</div>
           </div>
 
           <div className="max-h-64 overflow-y-auto">
             {loading ? (
-              <div className="p-3 text-sm text-gray-500">Cargando...</div>
+              <div className="p-3 text-sm text-gray-500">{t("DmDropdown.loading")}</div>
             ) : conversations.length === 0 ? (
               <DropdownMenuItem className="text-sm text-gray-500" asChild>
-                <div>No hay conversaciones</div>
+                <div>{t("DmDropdown.noConversations")}</div>
               </DropdownMenuItem>
             ) : (
               conversations.map((c) => (
@@ -171,7 +169,9 @@ export default function DmDropdown({ onOpenChange, onSelectConversation }: Props
                   <div className="flex-1 min-w-0">
                     <div className="font-medium Dark-texto-blanco truncate">{c.user.nombre ?? c.user.apodo}</div>
                     <div className="text-xs Dark-titulos-dm text-gray-500">
-                      {c.unreadCount} {c.unreadCount === 1 ? "mensaje nuevo" : "mensajes nuevos"}
+                      {c.unreadCount === 1
+                        ? t("DmDropdown.oneNewMessage")
+                        : t("DmDropdown.xNewMessages", { count: c.unreadCount })}
                     </div>
                   </div>
                 </DropdownMenuItem>

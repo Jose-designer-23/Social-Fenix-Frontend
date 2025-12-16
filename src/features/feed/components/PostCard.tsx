@@ -3,7 +3,7 @@ import { useAuth, User } from "../../auth/services/AuthContext.tsx";
 import { FeedItem } from "../types/feed";
 import type { UserDetails } from "../types/feed";
 import Avatar from "../../user-profile/components/Avatar.tsx";
-import ReactionListModal from "@/features/feed/components/ReactionListModal"; 
+import ReactionListModal from "@/features/feed/components/ReactionListModal";
 
 import {
   Card,
@@ -44,6 +44,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
+import { useTranslation } from "react-i18next";
+
 interface PostCardProps {
   post: FeedItem;
   clickable?: boolean;
@@ -55,7 +57,6 @@ function parseServerDate(dateInput: string | Date): Date {
   if (dateInput instanceof Date) return dateInput;
   if (typeof dateInput !== "string") return new Date(dateInput);
 
-  // Si ya incluye zona (Z o +HH:mm) la dejamos tal cual; si no, asumimos UTC y añadimos 'Z'.
   const hasZone = /[zZ]$|[+\-]\d{2}:\d{2}$/.test(dateInput);
   const toParse = hasZone ? dateInput : dateInput + "Z";
 
@@ -66,13 +67,13 @@ function parseServerDate(dateInput: string | Date): Date {
   return date;
 }
 
-const formatTimeAgo = (dateInput: string | Date): string => {
+const formatTimeAgo = (dateInput: string | Date, t: any): string => {
   try {
     const date = parseServerDate(dateInput);
     const now = new Date();
 
     const secondsDifference = differenceInSeconds(now, date);
-    if (secondsDifference < 60) return "Ahora mismo";
+    if (secondsDifference < 60) return t("PostCard.now");
 
     const minutesDifference = differenceInMinutes(now, date);
     if (minutesDifference < 60) {
@@ -89,11 +90,12 @@ const formatTimeAgo = (dateInput: string | Date): string => {
 
     return formatDistanceToNow(date, { addSuffix: true, locale: es });
   } catch {
-    return "Fecha inválida";
+    return t("PostCard.invalidDate");
   }
 };
 
 const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
+  const { t } = useTranslation();
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const { user: currentUser } = useAuth();
@@ -107,24 +109,23 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       ? post.repostDate
       : post.fecha_creacion;
 
-  const formattedDate = formatTimeAgo(displayDate);
+  const formattedDate = formatTimeAgo(displayDate, t);
   function formatExactSpain(dateInput: string | Date): string {
     try {
       const date = parseServerDate(dateInput);
-      // "XXX" añade el offset (+01:00 / +02:00) según DST
       return formatInTimeZone(date, "Europe/Madrid", "dd/MM/yyyy, HH:mm:ss");
     } catch {
       return "";
     }
   }
 
-  const formatShortTime = (dateInput: string | Date): string => {
+  const formatShortTime = (dateInput: string | Date, t: any): string => {
     try {
       const date = parseServerDate(dateInput);
       const days = differenceInDays(new Date(), date);
       const hours = differenceInHours(new Date(), date);
 
-      if (hours < 1) return "Ahora";
+      if (hours < 1) return t("PostCard.nowShort");
       if (days >= 7) return formatDate(date, "dd MMM", { locale: es });
       if (days >= 1) return `${days} d`;
       return `${hours} h`;
@@ -133,29 +134,24 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
     }
   };
 
-  const shortFormatted = formatShortTime(displayDate);
+  const shortFormatted = formatShortTime(displayDate, t);
   const author: UserDetails = post.apodo;
   const isRepost = post.type === "repost";
   const repostedById = post.repostedBy?.id;
 
-  // Nuevo: estado para mostrar el nombre/apodo del usuario que reposteó (si aplica).
   const [reposterDisplayName, setReposterDisplayName] = useState<
     string | undefined
   >(() => {
-    // inicializamos preferiendo apodo, luego nombre, luego fallback a Usuario #id si hay id
     if (post.repostedBy?.apodo) return post.repostedBy.apodo;
     if (post.repostedBy?.nombre) return post.repostedBy.nombre;
-    if (repostedById) return `Usuario #${repostedById}`;
+    if (repostedById) return t("PostCard.userNumber", { id: repostedById });
     return undefined;
   });
 
-  // Si tenemos solo id (y no apodo/nombre), intentamos pedir al backend el apodo del usuario.
   useEffect(() => {
     let mounted = true;
 
-    // Si ya tenemos un apodo o nombre no intentamos fetch.
     if (post.repostedBy?.apodo || post.repostedBy?.nombre) {
-      // Aseguramos mostrar lo conocido
       if (post.repostedBy.apodo && mounted) {
         setReposterDisplayName(post.repostedBy.apodo);
       } else if (post.repostedBy.nombre && mounted) {
@@ -166,7 +162,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       };
     }
 
-    // Si no hay id, nada que hacer.
     if (!repostedById) {
       return () => {
         mounted = false;
@@ -187,14 +182,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
         });
 
         if (!res.ok) {
-          // No forzamos fallo; mantenemos fallback
           return;
         }
 
         const json = await res.json().catch(() => null);
         if (!json) return;
 
-        // Algunos endpoints devuelven { user: {...} }, otros devuelven el objeto directamente.
         const payload = (json && (json.user ?? json)) as any;
 
         const apodoFromServer =
@@ -207,12 +200,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
           } else if (nombreFromServer) {
             setReposterDisplayName(nombreFromServer);
           } else {
-            // Mantenemos el fallback con id
-            setReposterDisplayName(`Usuario #${repostedById}`);
+            setReposterDisplayName(t("PostCard.userNumber", { id: repostedById }));
           }
         }
       } catch {
-        // ignoramos errores y dejamos el fallback
+        // ignore
       }
     };
 
@@ -222,9 +214,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       mounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repostedById, post.repostedBy?.apodo, post.repostedBy?.nombre]);
+  }, [repostedById, post.repostedBy?.apodo, post.repostedBy?.nombre, t]);
 
-  // Estado del contenido local para que podamos actualizar la interfaz de usuario cuando la edición sea exitosa
   const [localContent, setLocalContent] = useState<string | undefined>(
     (post.contenido as string) ?? ""
   );
@@ -243,11 +234,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
     Number(currentUser.id) === Number(post.apodo.id);
 
   const getAuthToken = (): string | null => {
-    // Buscamos la clave principal que usa AuthContext
     const tokenFromAuthContextKey = localStorage.getItem("authToken");
     if (tokenFromAuthContextKey) return tokenFromAuthContextKey;
 
-    // Fallbacks 
     const tokenFromAltKeys =
       localStorage.getItem("token") ||
       localStorage.getItem("accessToken") ||
@@ -256,7 +245,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
     return tokenFromAltKeys ?? null;
   };
 
-  // Estados para el modal de editar una publicación
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editContent, setEditContent] = useState(localContent ?? "");
   const [editImageUrl, setEditImageUrl] = useState(localImageUrl ?? "");
@@ -265,7 +253,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
   const [reactionModalOpen, setReactionModalOpen] = useState(false);
   const [reactionModalType, setReactionModalType] = useState<"likes" | "reposts">("likes");
 
-   const openReactions = (type: "likes" | "reposts") => {
+  const openReactions = (type: "likes" | "reposts") => {
     setReactionModalType(type);
     setReactionModalOpen(true);
   };
@@ -286,13 +274,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
 
   const validateEdit = (): boolean => {
     if (!editContent && !editImageUrl) {
-      setEditError("La publicación debe contener texto o una imagen.");
+      setEditError(t("PostCard.mustContainTextOrImage"));
       return false;
     }
     if (editContent && editContent.length > MAX_CONTENT_LENGTH) {
-      setEditError(
-        `El contenido no puede superar ${MAX_CONTENT_LENGTH} caracteres.`
-      );
+      setEditError(t("PostCard.contentTooLong", { count: MAX_CONTENT_LENGTH }));
       return false;
     }
     setEditError(null);
@@ -309,7 +295,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
 
       const token = getAuthToken();
 
-      // Preferir VITE_API_URL, pero si no está definida usar http://localhost:3000
       const rawBase = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
       const baseUrl = rawBase.replace(/\/+$/, "");
       const url = `${baseUrl}/posts/${post.id}`;
@@ -329,7 +314,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       if (!res.ok) {
         const text = await res.text().catch(() => "");
         console.warn("Error actualizando post:", res.status, text);
-        setEditError("No se pudo actualizar la publicación.");
+        setEditError(t("PostCard.cannotUpdate"));
         return;
       }
 
@@ -338,24 +323,23 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       setIsEditOpen(false);
     } catch (err) {
       console.warn("Error al actualizar:", err);
-      setEditError("Error al intentar actualizar la publicación.");
+      setEditError(t("PostCard.updateError"));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const executeDelete = async () => {
-    if (!isAuthor) return; // Chequeo de seguridad
+    if (!isAuthor) return;
 
     try {
       setIsProcessing(true);
-      setIsDeleteOpen(false); // Cerramos el diálogo de confirmación
+      setIsDeleteOpen(false);
 
       const token = getAuthToken();
 
-      // Verificamos obligatoriamente el token
       if (!token) {
-        alert("No autorizado. Por favor, inicia sesión de nuevo.");
+        alert(t("PostCard.unauthorized"));
         setIsProcessing(false);
         return;
       }
@@ -365,7 +349,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       const url = `${baseUrl}/posts/${post.id}`;
 
       const headers: Record<string, string> = {};
-      headers["Authorization"] = `Bearer ${token}`; // Usamos el token verificado
+      headers["Authorization"] = `Bearer ${token}`;
 
       const fetchOptions: RequestInit = {
         method: "DELETE",
@@ -382,13 +366,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
         console.warn("Error eliminando post:", res.status, text);
 
         if (res.status === 401) {
-          alert("No autorizado. Por favor inicia sesión de nuevo.");
+          alert(t("PostCard.unauthorized"));
         } else if (res.status === 403) {
-          alert("No tienes permiso para eliminar esta publicación.");
+          alert(t("PostCard.noPermissionDelete"));
         } else if (res.status === 404) {
-          alert("Publicación no encontrada.");
+          alert(t("PostCard.postNotFound"));
         } else {
-          alert("No se pudo eliminar la publicación.");
+          alert(t("PostCard.deleteFailed"));
         }
         return;
       }
@@ -399,7 +383,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
       window.dispatchEvent(deleteEvent);
     } catch (err) {
       console.warn("Error al eliminar:", err);
-      alert("Error al intentar eliminar la publicación.");
+      alert(t("PostCard.deleteError"));
     } finally {
       setIsProcessing(false);
     }
@@ -412,9 +396,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
     setIsDeleteOpen(true);
   };
 
-  // Buscamos la url del avatar en propiedades conocidas del tipo User
-
-  // Obtenemos la URL del avatar del autor (ya normalizada por normalizeFeedItem)
   const avatarUrl: string | null = author?.avatar ?? null;
 
   const fallbackInitial = (
@@ -443,26 +424,27 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
         className="rounded-xl md:space-x-3 md:p-3 lg:space-x-3 lg:p-3 xl:space-x-3 xl:p-3 space-x-1 p-1 shadow-md transition-all duration-300 hover:shadow-lg border-gray-200 cursor-pointer Dark-Hover-Card hover:bg-green-50"
         onClick={() => {
           if (clickable) {
-            let url; // Si es un 'comment' Y tiene el post original (uso seguro de originalPostId)
+            let url;
 
             if (post.type === "comment" && post.originalPostId) {
               const originalId = post.originalPostId;
-              url = `/feed/post/${originalId}/comment/${post.id}`; // Ruta correcta: Ejemplo /feed/post/28/comment/33
-            } // Si es un post o repost
-            else {
-              url = `/feed/post/${post.id}`; // Ruta estándar: /feed/post/ID
+              url = `/feed/post/${originalId}/comment/${post.id}`;
+            } else {
+              url = `/feed/post/${post.id}`;
             }
 
             navigate(url);
           }
         }}
-        role={clickable ? "link" : undefined} 
+        role={clickable ? "link" : undefined}
       >
         {isRepost && (
           <div className="flex items-center text-sm Dark-republicacion text-gray-500 p-4 pb-0 pl-12">
             <Repeat2 className="h-4 w-4 mr-2" />
             <span>
-              {reposterDisplayName ? `${reposterDisplayName} reposteó` : "Reposteó"}
+              {reposterDisplayName
+                ? t("PostCard.repostedByName", { name: reposterDisplayName })
+                : t("PostCard.reposted")}
             </span>
           </div>
         )}
@@ -471,7 +453,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
           <div className="h-12 w-12 shrink-0">
             <Avatar
               src={avatarUrl}
-              alt={author?.nombre || author?.apodo || "avatar"}
+              alt={author?.nombre || author?.apodo ? t("PostCard.avatarAlt", { name: author?.nombre ?? author?.apodo }) : t("PostCard.avatarAlt", { name: "User" })}
               size={48}
               className="rounded-full"
               initials={fallbackInitial}
@@ -515,7 +497,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                       size="icon"
                       className="h-8 w-8 text-gray-500 Dark-hover-hamburguesa cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
-                      aria-label="Más opciones"
+                      aria-label={t("PostCard.moreOptionsAria")}
                     >
                       <MoreHorizontal className="h-5 Dark-texto-blanco  w-5" />
                     </Button>
@@ -527,7 +509,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                       disabled={isProcessing || isSubmitting}
                       className="cursor-pointer"
                     >
-                      Actualizar publicación
+                      {t("PostCard.updatePost")}
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
@@ -537,7 +519,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                       disabled={isProcessing || isSubmitting}
                       className="cursor-pointer"
                     >
-                      Borrar publicación
+                      {t("PostCard.deletePost")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -564,7 +546,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                 <div className="mt-3 mr-6 flex justify-start">
                   <div className="w-full max-w-3xl mx-auto">
                     {(() => {
-                      // Detectamos si es vídeo por extensión (añade más extensiones si necesitas)
                       const isVideo = /\.(mp4|webm|ogv|ogg)(\?.*)?$/i.test(
                         localImageUrl
                       );
@@ -576,35 +557,31 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                             playsInline
                             preload="metadata"
                             className="w-full h-auto rounded-xl border border-gray-100 object-contain max-h-96 bg-black"
-                            // onError: Sustituimos por una imagen placeholder
                             onError={(e) => {
-                              // Reemplazamos el <video> por un placeholder sencillo:
                               const parent = (
                                 e.currentTarget as HTMLVideoElement
                               ).parentElement;
                               if (parent) {
                                 parent.innerHTML =
-                                  '<img src="https://placehold.co/600x400/ECEFF1/AD1457?text=Error+al+cargar+video" alt="Video no disponible" class="w-full h-auto rounded-xl border border-gray-100"/>';
+                                  `<img src="https://placehold.co/600x400/ECEFF1/AD1457?text=Error+al+cargar+video" alt="${t("PostCard.videoNotAvailableAlt")}" class="w-full h-auto rounded-xl border border-gray-100"/>`;
                               }
                             }}
                           >
-                            {/* Aqui se pone el mime */}
                             <source src={localImageUrl} type="video/mp4" />
-                            Tu navegador no soporta la reproducción de vídeo.
+                            {t("PostCard.videoNotSupported")}
                           </video>
                         );
                       }
 
-                    
                       return (
                         <img
                           src={localImageUrl}
-                          alt={`Imagen del post de ${author?.apodo}`}
+                          alt={t("PostCard.postImageAlt", { apodo: author?.apodo ?? "" })}
                           className="w-full h-auto rounded-xl border border-gray-100 object-contain max-h-96"
                           onError={(e) => {
                             e.currentTarget.src =
                               "https://placehold.co/600x400/ECEFF1/AD1457?text=Error+al+cargar+imagen";
-                            e.currentTarget.alt = "Imagen no disponible";
+                            e.currentTarget.alt = t("PostCard.imageNotAvailableAlt");
                           }}
                         />
                       );
@@ -678,10 +655,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
               role="dialog"
               aria-modal="true"
             >
-              <h3 className="text-lg font-semibold mb-3">Editar publicación</h3>
+              <h3 className="text-lg font-semibold mb-3">{t("PostCard.editPostTitle")}</h3>
 
               <label className="block text-sm Dark-actualizar-post text-gray-700 mb-1">
-                Contenido
+                {t("PostCard.contentLabel")}
               </label>
               <textarea
                 value={editContent}
@@ -689,7 +666,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                 maxLength={MAX_CONTENT_LENGTH}
                 rows={5}
                 className="w-full rounded-md border px-3 py-2 mb-2 resize-none"
-                placeholder="Escribe algo..."
+                placeholder={t("PostCard.contentPlaceholder")}
               />
 
               <div className="text-xs Dark-actualizar-post text-gray-500 mb-3">
@@ -697,14 +674,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
               </div>
 
               <label className="block text-sm Dark-actualizar-post text-gray-700 mb-1">
-                URL de imagen (opcional)
+                {t("PostCard.imageUrlLabel")}
               </label>
               <input
                 value={editImageUrl}
                 onChange={(e) => setEditImageUrl(e.target.value)}
                 type="url"
                 className="w-full rounded-md border px-3 py-2 mb-3"
-                placeholder="https://ejemplo.com/imagen.jpg"
+                placeholder={t("PostCard.imageUrlPlaceholder")}
               />
 
               {editError && (
@@ -718,14 +695,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, clickable = true }) => {
                   disabled={isSubmitting}
                   className="cursor-pointer hover:border-2 Dark-boton dark:border-none dark:hover:outline-amber-100 dark:hover:outline-1 hover:border-black"
                 >
-                  Cancelar
+                  {t("PostCard.cancel")}
                 </Button>
                 <Button
                   className="hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] cursor-pointer font-bold "
                   onClick={handleSaveEdit}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Guardando..." : "Guardar"}
+                  {isSubmitting ? t("PostCard.saving") : t("PostCard.save")}
                 </Button>
               </div>
             </div>

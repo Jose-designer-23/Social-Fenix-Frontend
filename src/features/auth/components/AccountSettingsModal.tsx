@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Avatar from "../../user-profile/components/Avatar.tsx";
 import { useAuth } from "../../auth/services/AuthContext.tsx";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -31,6 +32,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
   open,
   onOpenChange,
 }) => {
+  const { t } = useTranslation();
   const { user, getToken, refetchUser } = useAuth();
 
   const [apodo, setApodo] = useState<string>("");
@@ -65,9 +67,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
   const avatarUrl = user?.avatar ?? null;
   const fallbackInitial = (
-    user?.apodo?.[0] ??
-    user?.nombre?.[0] ??
-    "U"
+    user?.apodo?.[0] ?? user?.nombre?.[0] ?? "U"
   ).toUpperCase();
 
   const validateEmail = (value?: string) =>
@@ -107,23 +107,24 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
     // Validaciones cliente
     if (editApodo && !apodoIsValid(apodo)) {
       setServerError(
-        `El apodo debe tener entre ${APODO_MIN}-${APODO_MAX} caracteres y sólo letras, números y _.`
+        t("AccountSettingsModal.errors.apodoInvalid", {
+          min: APODO_MIN,
+          max: APODO_MAX,
+        })
       );
       return;
     }
     if (editCorreo && !validateEmail(correo)) {
-      setServerError("Introduce un correo válido.");
+      setServerError(t("AccountSettingsModal.errors.invalidEmail"));
       return;
     }
     if (editPassword) {
       if (!currentPassword || !newPassword) {
-        setServerError("Rellena ambas contraseñas.");
+        setServerError(t("AccountSettingsModal.errors.fillBothPasswords"));
         return;
       }
       if (!newPasswordIsValid(newPassword)) {
-        setServerError(
-          "La nueva contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula, número y carácter especial."
-        );
+        setServerError(t("AccountSettingsModal.errors.passwordRequirements"));
         return;
       }
     }
@@ -148,14 +149,13 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
             },
             { headers }
           );
-          toast.success("Contraseña actualizada correctamente.");
+          toast.success(t("AccountSettingsModal.messages.passwordUpdated"));
         } catch (err: any) {
-          // Si falla el cambio de contraseña, mostramos el error y abortamos (no aplicamos cambios de perfil)
           const msg =
             err?.response?.data?.message ??
             err?.response?.data?.error ??
             err?.message ??
-            "Error al cambiar la contraseña.";
+            t("AccountSettingsModal.errors.changePasswordFailed");
           setServerError(String(msg));
           toast.error(String(msg));
           setLoading(false);
@@ -163,7 +163,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
         }
       }
 
-      // Para actualizar el correo y el nombre de usuario
+      // Para actualizar el correo y el apodo
       if (hasProfileChanges) {
         const payload: Record<string, any> = {};
         if (editApodo && apodo.trim() !== (user.apodo ?? "").trim()) {
@@ -183,13 +183,13 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
               payload,
               { headers }
             );
-            toast.success("Datos de perfil actualizados.");
+            toast.success(t("AccountSettingsModal.messages.profileUpdated"));
           } catch (err: any) {
             const msg =
               err?.response?.data?.message ??
               err?.response?.data?.error ??
               err?.message ??
-              "Error al actualizar perfil.";
+              t("AccountSettingsModal.errors.updateProfileFailed");
             setServerError(String(msg));
             toast.error(String(msg));
             setLoading(false);
@@ -202,15 +202,14 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
       try {
         await refetchUser();
       } catch {
-        // no bloquear si falla el refetch
-        console.warn("refetchUser falló después de actualizar perfil.");
+        console.warn("refetchUser failed after update.");
       }
 
       onOpenChange(false);
     } catch (err) {
-      console.error("Error guardando cambios de cuenta:", err);
-      setServerError("Error desconocido al guardar cambios.");
-      toast.error("Error desconocido al guardar cambios.");
+      console.error("Error saving account settings:", err);
+      setServerError(t("AccountSettingsModal.errors.unknown"));
+      toast.error(t("AccountSettingsModal.errors.unknown"));
     } finally {
       setLoading(false);
     }
@@ -218,7 +217,6 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 
   const closeModal = () => {
     onOpenChange(false);
-    // reset local
     if (user) {
       setApodo(user.apodo ?? "");
       setCorreo(user.correo_electronico ?? "");
@@ -238,22 +236,22 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
           <div className="flex items-center space-x-3">
             <Avatar
               src={avatarUrl ?? undefined}
-              alt={user?.nombre || user?.apodo || "avatar"}
+              alt={user?.nombre || user?.apodo || t("AccountSettingsModal.userFallback")}
               size={40}
               initials={fallbackInitial}
             />
             <div>
               <DialogTitle className="text-lg font-bold">
-                Datos de la cuenta
+                {t("AccountSettingsModal.title")}
               </DialogTitle>
               <p className="text-sm text-gray-500">
-                Actualiza tu apodo, correo o contraseña.
+                {t("AccountSettingsModal.subtitle")}
               </p>
             </div>
             <button
               onClick={closeModal}
               className="p-1 rounded-full hover:bg-gray-100 transition-colors"
-              aria-label="Cerrar"
+              aria-label={t("AccountSettingsModal.closeAria")}
             >
               <X className="h-5 w-5 text-gray-600" />
             </button>
@@ -263,7 +261,9 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
         <div className="p-4 space-y-4 ">
           {/* Apodo */}
           <div>
-            <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">Apodo</label>
+            <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">
+              {t("AccountSettingsModal.labels.apodo")}
+            </label>
             <div className="mt-2 flex items-center justify-between gap-3">
               <div className="flex-1">
                 <div className="text-sm Dark-texto-blanco text-gray-900">{user?.apodo}</div>
@@ -274,7 +274,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                       onChange={(e) =>
                         setApodo((e.target as HTMLInputElement).value)
                       }
-                      placeholder="Nuevo apodo"
+                      placeholder={t("AccountSettingsModal.placeholders.newApodo")}
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       {apodo.length} / {APODO_MAX}
@@ -293,10 +293,9 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                   onClick={() => {
                     setEditApodo((s) => !s);
                     setServerError(null);
-                    // al activar edición, apodo ya está cargado en el value
                   }}
                 >
-                  {editApodo ? "Cancelar" : "Cambiar nombre de usuario"}
+                  {editApodo ? t("AccountSettingsModal.actions.cancel") : t("AccountSettingsModal.actions.changeApodo")}
                 </Button>
               </div>
             </div>
@@ -305,7 +304,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
           {/* Correo */}
           <div>
             <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">
-              Correo electrónico
+              {t("AccountSettingsModal.labels.email")}
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
               <div className="flex-1">
@@ -319,7 +318,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                       onChange={(e) =>
                         setCorreo((e.target as HTMLInputElement).value)
                       }
-                      placeholder="Nuevo correo electrónico"
+                      placeholder={t("AccountSettingsModal.placeholders.newEmail")}
                       type="email"
                     />
                   </div>
@@ -338,7 +337,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                     setServerError(null);
                   }}
                 >
-                  {editCorreo ? "Cancelar" : "Cambiar correo electrónico"}
+                  {editCorreo ? t("AccountSettingsModal.actions.cancel") : t("AccountSettingsModal.actions.changeEmail")}
                 </Button>
               </div>
             </div>
@@ -347,7 +346,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
           {/* Contraseña */}
           <div>
             <label className="text-sm Dark-actualizar-cuenta text-gray-700 font-medium">
-              Contraseña
+              {t("AccountSettingsModal.labels.password")}
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
               <div className="flex-1">
@@ -360,7 +359,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                       onChange={(e) =>
                         setCurrentPassword((e.target as HTMLInputElement).value)
                       }
-                      placeholder="Contraseña actual"
+                      placeholder={t("AccountSettingsModal.placeholders.currentPassword")}
                       className="Dark-input"
                     />
                     <Input
@@ -369,11 +368,10 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                       onChange={(e) =>
                         setNewPassword((e.target as HTMLInputElement).value)
                       }
-                      placeholder="Nueva contraseña"
+                      placeholder={t("AccountSettingsModal.placeholders.newPassword")}
                     />
                     <p className="text-xs Dark-actualizar-cuenta text-gray-500">
-                      La nueva contraseña debe tener al menos 8 caracteres,
-                      incluir mayúscula, minúscula, número y carácter especial.
+                      {t("AccountSettingsModal.messages.passwordHelp")}
                     </p>
                   </div>
                 )}
@@ -393,7 +391,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                     setNewPassword("");
                   }}
                 >
-                  {editPassword ? "Cancelar" : "Cambiar contraseña"}
+                  {editPassword ? t("AccountSettingsModal.actions.cancel") : t("AccountSettingsModal.actions.changePassword")}
                 </Button>
               </div>
             </div>
@@ -413,14 +411,14 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
             onClick={closeModal}
             disabled={loading}
           >
-            Cancelar
+            {t("AccountSettingsModal.actions.cancel")}
           </Button>
           <Button
             onClick={handleSave}
             disabled={!hasChanges || loading}
             className="font-bold cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
           >
-            {loading ? "Guardando..." : "Guardar cambios"}
+            {loading ? t("AccountSettingsModal.saving") : t("AccountSettingsModal.actions.saveChanges")}
           </Button>
         </div>
       </DialogContent>

@@ -13,8 +13,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "../../auth/services/AuthContext";
+import { useTranslation } from "react-i18next";
 
-// Modal de advertencia para que no elimines la cuenta sin querer
+/**
+ * Modal de advertencia para eliminar la cuenta.
+ * Mantiene la API previa: open / onOpenChange opcionales (para integrarlo en menús).
+ */
 interface DeleteAccountModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -24,6 +28,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   open,
   onOpenChange,
 }) => {
+  const { t } = useTranslation();
   const { getToken, logout } = useAuth();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,8 +46,8 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
         }
       );
 
-      toast.success("Cuenta eliminada. Hasta pronto.");
-      // Limpiamos la sesión y nos redirigimos al login 
+      toast.success(t("DeleteAccountModal.success"));
+      // Limpiamos la sesión y redirigimos al login
       try {
         logout();
       } catch {}
@@ -52,7 +57,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
       const msg =
         err?.response?.data?.message ??
         err?.message ??
-        "Error al eliminar la cuenta. Intenta de nuevo.";
+        t("DeleteAccountModal.error");
       toast.error(String(msg));
     } finally {
       setIsDeleting(false);
@@ -63,22 +68,18 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>
-        {/* El trigger normalmente lo dejamos al consumidor del componente
-            (en FeedLayout usaremos un DropdownMenuItem que abre el modal).
-            Aquí ponemos un fragment vacío por compatibilidad si se usa sin trigger. */}
+        {/* El trigger normalmente lo deja el consumidor; dejamos un span por compatibilidad */}
         <span />
       </AlertDialogTrigger>
+
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            ¿De verdad quieres borrar la cuenta?
-          </AlertDialogTitle>
+          <AlertDialogTitle>{t("DeleteAccountModal.title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción es irreversible. Se eliminarán tus publicaciones, tu
-            perfil y todos los datos asociados. Si estás seguro, confirma para
-            proceder.
+            {t("DeleteAccountModal.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
+
         <AlertDialogFooter className="space-x-2">
           <Button
             variant="outline"
@@ -88,15 +89,18 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
             disabled={isDeleting}
             className="cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300"
           >
-            Cancelar
+            {t("DeleteAccountModal.cancel")}
           </Button>
+
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
             className="cursor-pointer active:shadow-inner active:opacity-90 hover:bg-red-700 transition-colors transform duration-300"
           >
-            {isDeleting ? "Eliminando..." : "Borrar cuenta"}
+            {isDeleting
+              ? t("DeleteAccountModal.deleting")
+              : t("DeleteAccountModal.delete")}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface CommentItemProps {
   comment: CommentFromApi;
@@ -57,22 +58,21 @@ function parseServerDate(dateInput: string | Date): Date {
   return date;
 }
 
-function formatTimeAgoSpain(dateInput: string | Date): string {
+function formatTimeAgoSpain(dateInput: string | Date, t: any): string {
   try {
-    
     const date = parseServerDate(dateInput);
     const now = new Date();
 
     const secondsDifference = differenceInSeconds(now, date);
     if (secondsDifference < 60) {
-      return "Ahora mismo";
+      return t("CommentItem.now");
     }
 
     const minutesDifference = differenceInMinutes(now, date);
     if (minutesDifference < 60) {
       return formatDistanceToNow(date, { addSuffix: true, locale: es }).replace(
         "alrededor de",
-        "hace"
+        t("CommentItem.aboutReplace") || "hace"
       );
     }
 
@@ -92,7 +92,7 @@ function formatExactSpain(dateInput: string | Date): string {
 }
 
 /* Copia de PostCard.formatShortTime — la usamos aquí pasando la fecha del comentario */
-const formatShortTime = (dateInput: string | Date): string => {
+const formatShortTime = (dateInput: string | Date, t: any): string => {
   try {
     const date = parseServerDate(dateInput);
 
@@ -100,7 +100,7 @@ const formatShortTime = (dateInput: string | Date): string => {
     const hours = differenceInHours(new Date(), date);
 
     if (hours < 1) {
-      return "Ahora";
+      return t("CommentItem.nowShort");
     }
 
     if (days >= 7) {
@@ -126,6 +126,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   remainingDepth = null,
   onDeleted,
 }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [showReplyBox, setShowReplyBox] = useState(false);
@@ -144,7 +145,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           ? localStorage.getItem("authToken")
           : null;
       if (!token) {
-        alert("No autorizado. Por favor inicia sesión de nuevo.");
+        alert(t("CommentItem.unauthorized"));
         setIsProcessing(false);
         return;
       }
@@ -159,7 +160,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       else if (onReplySuccess) onReplySuccess(comment.id);
     } catch (err: any) {
       console.error("Error borrando comentario:", err);
-      alert(err?.response?.data?.message || "No se pudo borrar el comentario.");
+      alert(err?.response?.data?.message || t("CommentItem.deleteFailed"));
     } finally {
       setIsProcessing(false);
     }
@@ -183,11 +184,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const shouldRenderChildrenInline =
     !!showReplies && (remainingDepth === null || remainingDepth > 0);
 
-  const relative = formatTimeAgoSpain(comment.fecha_creacion);
+  const relative = formatTimeAgoSpain(comment.fecha_creacion, t);
   const exactSpain = formatExactSpain(comment.fecha_creacion);
 
   // ---Pasamos la fecha del comentario a formatShortTime ---
-  const shortFormatted = formatShortTime(comment.fecha_creacion);
+  const shortFormatted = formatShortTime(comment.fecha_creacion, t);
 
   // Avatar: preferir avatar del autor (comment.autor), si no existe usar avatar del usuario de sesión
   const author = comment.autor ?? null;
@@ -203,7 +204,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <div className="flex items-start space-x-3 p-3 Dark-Card bg-white rounded-lg shadow-sm hover:bg-green-50">
         <Avatar
           src={avatarUrl}
-          alt={author?.nombre ?? author?.apodo ?? "avatar"}
+          alt={author?.nombre ?? author?.apodo ?? t("CommentItem.userFallback")}
           size={48}
           className="shrink-0 rounded-full"
           initials={initials}
@@ -237,7 +238,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         size="icon"
                         className="h-8 w-8 cursor-pointer Dark-texto-blanco Dark-boton-comentario  text-gray-500"
                         onClick={(e) => e.stopPropagation()}
-                        aria-label="Más opciones"
+                        aria-label={t("CommentItem.moreOptionsAria")}
                       >
                         <MoreHorizontal className="h-5 w-5 Dark-texto-blanco" />
                       </Button>
@@ -251,7 +252,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                         }}
                         disabled={isProcessing}
                       >
-                        Borrar comentario
+                        {t("CommentItem.deleteComment")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -271,6 +272,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   size="icon"
                   className="h-8 w-8 cursor-pointer Dark-texto-blanco Dark-boton-comentario text-gray-500"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={t("CommentItem.moreOptionsAria")}
                 >
                   <MoreHorizontal className="h-5 w-5" />
                 </Button>
@@ -302,7 +304,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                           className="w-full h-auto rounded-lg border border-gray-100 object-contain max-h-60 bg-black"
                         >
                           <source src={url} type="video/mp4" />
-                          Tu navegador no soporta la reproducción de vídeo.
+                          {t("CommentItem.videoNotSupported")}
                         </video>
                       </div>
                     </div>
@@ -313,11 +315,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
                       <div className="w-full max-w-2xl">
                         <img
                           src={url}
-                          alt="Adjunto del comentario"
+                          alt={t("CommentItem.attachmentAlt")}
                           className="w-full h-auto rounded-lg border border-gray-100 object-cover max-h-60"
                           onError={(e) => {
+                            const txt = encodeURIComponent(t("CommentItem.imageUnavailable"));
                             (e.currentTarget as HTMLImageElement).src =
-                              "https://placehold.co/600x400/ECEFF1/AD1457?text=Imagen+no+disponible";
+                              `https://placehold.co/600x400/ECEFF1/AD1457?text=${txt}`;
                           }}
                         />
                       </div>
@@ -335,14 +338,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 handleReplyToggle();
               }}
             >
-              {showReplyBox ? "Cancelar" : "Responder"}
+              {showReplyBox ? t("CommentItem.cancel") : t("CommentItem.reply")}
             </button>
 
             <Link
               to={`/feed/post/${postId}/comment/${comment.id}`}
               onClick={(e) => e.stopPropagation()}
               className="hover:text-gray-700 text-sm flex items-center gap-2"
-              title="Abrir hilo"
+              title={t("CommentItem.openThread")}
             >
               <span className="text-gray-400 Dark-punto-comentario">·</span>
               <span className="text-sm Dark-texto-blanco text-gray-600">
@@ -350,7 +353,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 {comment.repliesCount ?? childList.length ?? 0}{" "}
               </span>
               <span className="text-gray-500 Dark-respondiendo-comentario ml-1 hover:text-violet-600 font-semibold">
-                Abrir hilo
+                {t("CommentItem.openThread")}
               </span>
             </Link>
 

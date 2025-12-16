@@ -9,6 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   children: React.ReactNode; // trigger (asChild)
@@ -31,21 +32,27 @@ const CommentDeleteModal: React.FC<Props> = ({
   onOpenChange,
   onConfirm,
   isProcessing = false,
-  title = "Confirmar eliminación",
-  description = "¿Estás seguro de que deseas eliminar este comentario?",
+  title,
+  description,
 }) => {
+  const { t } = useTranslation();
+
+  const resolvedTitle = title ?? t("CommentDeleteModal.title");
+  const resolvedDescription = description ?? t("CommentDeleteModal.description");
+  const cancelLabel = t("CommentDeleteModal.cancel");
+  const deletingLabel = t("CommentDeleteModal.deleting");
+  const deleteLabel = t("CommentDeleteModal.delete");
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       {/* El trigger lo controlará el padre; aquí solo renderizamos el diálogo */}
-      {/* No clonamos children ni inyectamos props en el elemento trigger */}
-      {/* El padre ya deberá usar su propio trigger (ej. DropdownMenuItem) y controlar isOpen */}
       <AlertDialogContent onClick={(e) => e.stopPropagation()}>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-red-600">{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogTitle className="text-red-600">{resolvedTitle}</AlertDialogTitle>
+          <AlertDialogDescription>{resolvedDescription}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isProcessing}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={isProcessing}>{cancelLabel}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               // Llamamos al handler externo; puede ser async
@@ -55,7 +62,7 @@ const CommentDeleteModal: React.FC<Props> = ({
             disabled={isProcessing}
             className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
           >
-            {isProcessing ? "Eliminando..." : "Eliminar"}
+            {isProcessing ? deletingLabel : deleteLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
