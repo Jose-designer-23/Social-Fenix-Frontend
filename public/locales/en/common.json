@@ -1,0 +1,165 @@
+{
+  "lang": {
+    "select": {
+      "aria": "Select language"
+    },
+    "es": "Spanish",
+    "en": "English"
+  },
+
+  "login": {
+    "title": "Log in to SocialFénix",
+    "subtitle": "Enter your email or username and password.",
+    "emailOrUsername": "Email or Username",
+    "password": "Password",
+    "forgotPassword": "Forgot your password?"
+  },
+
+  "buttons": {
+    "loading": "Loading...",
+    "login": "Log in"
+  },
+
+  "noAccount": {
+    "text": "Don't have an account?",
+    "register": "Sign up"
+  },
+
+  "errors": {
+    "NO_TOKEN": "Invalid server response (no token).",
+    "INVALID_CREDENTIALS": "Invalid credentials.",
+    "CONNECTION": "Unknown connection error. Try again.",
+    "UNKNOWN": "Unknown error. Try again."
+  },
+
+  "landing": {
+    "featuresLabel": "Features",
+    "button": {
+      "show": "View features",
+      "back": "Back to top"
+    },
+
+    "controls": {
+      "prev": "Previous",
+      "next": "Next",
+      "goTo": "Go to slide {{index}}",
+      "backToLogin": "Back to login"
+    },
+
+    "slides": {
+
+      "feed": {
+        "title": "DYNAMIC FEED",
+        "desc": "Brief overview of the feed.",
+        "features": [
+          "Real-time Feed - Content always fresh and instant.",
+          "Only What's Relevant - The most recent memories from your circle.",
+          "Dynamic Interactions - High engagement on every post.",
+          "Smart Notifications - Alerts that adapt to you.",
+          "Integrated Messaging - Instant and fluid communication.",
+          "Social Transparency – See the full list of users who liked or reposted.",
+          "Instant Search – Find friends and new connections quickly and easily.",
+          "Visual Care – Dark Mode to protect your eyes and enjoy maximum comfort."
+        ]
+      },
+
+      "comments": {
+        "title": "COMMENT THREADS",
+        "desc": "Brief explanation of comment threads.",
+        "features": [
+          "Deeply Nested Threads – Conversations organized up to 4 reply levels.",
+          "Quick Reactions - Express your opinion instantly with a like."
+        ]
+      },
+
+      "notifications": {
+        "title": "REAL-TIME NOTIFICATIONS",
+        "desc": "Explanation of the notifications modal.",
+        "features": [
+          "Instant Notifications – Stay informed of interactions at the exact moment.",
+          "At-a-Glance Design – Clear interface easy to scan visually.",
+          "Smart Grouping – We compact events to remove noise and notification spam."
+        ]
+      },
+
+      "profile": {
+        "title": "VIBRANT USER PROFILE",
+        "desc": "Brief explanation of the user profile.",
+        "features": [
+          "Personal Brand Control – Full personalization (avatar, cover, bio and links).",
+          "Your Social Portfolio – Highlight all your activity: media, likes and interactions.",
+          "Clear Network Management – View and manage your connections (followers and following) easily."
+        ]
+      },
+
+      "chat": {
+        "title": "PRIVATE CONVERSATIONS",
+        "desc": "Brief explanation of private chat.",
+        "features": [
+          "Live Chat – Fluid, instant communication with all your contacts.",
+          "Reliable Alerts – Instant notifications so you never miss the thread.",
+          "Full History – Access and resume past conversations instantly.",
+          "Time Context – Each message includes the exact time for greater clarity"
+        ]
+      }
+    }
+  },
+
+  "images": {
+    "sloganAlt": "Slogan image",
+    "welcomeAlt": "Welcome image"
+  },
+
+  "signup": {
+
+    "title": "Create your account on SocialFénix",
+    "subtitle": "Sign up by filling these fields.",
+    "placeholders": {
+      "name": "Ex. John Doe",
+      "username": "Ex. john_doe",
+      "email": "example@email.com",
+      "password": "8+ chars, upper, lower, num, special",
+      "confirmPassword": "Repeat your password"
+    },
+
+    "fields": {
+      "name": { "label": "Full name" },
+      "username": { "label": "Username" },
+      "email": { "label": "Email address" },
+      "password": { "label": "Password" },
+      "confirmPassword": { "label": "Confirm password" }
+    },
+
+    "buttons": {
+      "create": "Create account",
+      "creating": "Creating..."
+    },
+
+    "already": {
+      "text": "Already have an account?",
+      "login": "Log in"
+    },
+
+    "successRedirect": "Registration successful. Redirecting to login...",
+    "errors": {
+      "nameRequired": "Name is required.",
+      "nameTooLong": "Name must not exceed 100 characters.",
+      "usernameRequired": "Username is required.",
+      "usernameTooShort": "Username must be at least 3 characters.",
+      "usernameTooLong": "Username must not exceed 50 characters.",
+      "usernamePattern": "Username can only contain letters, numbers and underscores (_).",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Invalid email format.",
+      "passwordRequired": "Password is required.",
+      "passwordTooShort": "Password must be at least 8 characters.",
+      "passwordTooLong": "Password must not exceed 100 characters.",
+      "passwordPattern": "Password must contain at least one lowercase, one uppercase, one number and one special character.",
+      "passwordsMismatch": "Passwords do not match.",
+      "unexpectedServer": "Unexpected server response.",
+      "invalidData": "Invalid data. Check the fields.",
+      "duplicate": "Username or email already in use.",
+      "connection": "Server connection error. Try again later.",
+      "unknown": "Unknown error. Try again."
+    }
+  }
+}

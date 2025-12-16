@@ -1,0 +1,158 @@
+{
+  "lang": {
+    "select": {
+      "aria": "Selecciona idioma"
+    },
+    "es": "Español",
+    "en": "Inglés"
+  },
+  "login": {
+    "title": "Inicia Sesión en SocialFénix",
+    "subtitle": "Ingresa tu correo o nombre de usuario y contraseña.",
+    "emailOrUsername": "Correo o Nombre de Usuario",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
+  },
+  "buttons": {
+    "loading": "Cargando...",
+    "login": "Iniciar Sesión"
+  },
+  "noAccount": {
+    "text": "¿No tienes cuenta?",
+    "register": "Regístrate"
+  },
+  "errors": {
+    "NO_TOKEN": "Respuesta inválida del servidor (sin token).",
+    "INVALID_CREDENTIALS": "Credenciales inválidas.",
+    "CONNECTION": "Error desconocido de conexión. Inténtalo de nuevo.",
+    "UNKNOWN": "Error desconocido. Inténtalo de nuevo."
+  },
+  "landing": {
+    "featuresLabel": "Características",
+    "button": {
+      "show": "Ver características",
+      "back": "Volver al inicio"
+    },
+
+    "controls": {
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "goTo": "Ir a la diapositiva {{index}}",
+      "backToLogin": "Volver al login"
+    },
+    "slides": {
+
+      "feed": {
+        "title": "FEED DINÁMICO",
+        "desc": "Resumen corto del feed.",
+        "features": [
+          "Feed en Tiempo Real - Contenido siempre fresco y al instante.",
+          "Solo lo Relevante - Los recuerdos más recientes de tu círculo.",
+          "Interacciones Dinámicas - Alto engagement en cada publicación.",
+          "Notificaciones Inteligentes - Alertas que se adaptan a ti",
+          "Mensajería Integrada - Comunicación instantánea y fluida.",
+          "Transparencia Social – Visualiza la lista completa de usuarios que dieron like o republicaron.",
+          "Búsqueda Instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
+          "Cuidado Visual – Modo Oscuro para proteger tus ojos y disfrutar con el máximo confort."
+        ]
+      },
+
+      "comments": {
+        "title": "HILO DE COMENTARIOS",
+        "desc": "Explicación breve de los hilos de comentarios.",
+        "features": [
+          "Hilos Profundamente Anidados – Conversaciones organizadas hasta 4 niveles de respuesta.",
+          "Reacciones Rápidas - Expresa tu opinión al instante con un like."
+        ]
+      },
+
+      "notifications": {
+        "title": "NOTIFICACIONES EN TIEMPO REAL",
+        "desc": "Explicación del modal de notificaciones.",
+        "features": [
+          "Notificaciones Instantáneas – Infórmate de las interacciones en el momento exacto.",
+          "Diseño de Un Vistazo – Interfaz clara y fácil de escanear visualmente.",
+          "Agrupación Inteligente – Compactamos eventos para eliminar el ruido y el spam de notificaciones."
+        ]
+      },
+
+      "profile": {
+        "title": "PERFIL DE USUARIO LLENO DE VIDA",
+        "desc": "Explicación breve del perfil de usuario.",
+        "features": [
+          "Control de Marca Personal – Personalización completa (avatar, portada, biografía y enlaces).",
+          "Tu Portafolio Social – Resalta toda tu actividad: multimedia, likes e interacciones.",
+          "Gestión de Redes Clara – Visualiza y administra tus conexiones (seguidores y seguidos) de forma sencilla."
+        ]
+      },
+
+      "chat": {
+        "title": "CONVERSACIONES PRIVADAS",
+        "desc": "Explicación breve del chat privado.",
+        "features": [
+          "Chat en Vivo – Comunicación fluida e instantánea con todos tus contactos.",
+          "Alertas Fiables – Notificaciones instantáneas para que nunca pierdas el hilo.",
+          "Historial Completo – Accede y retoma tus conversaciones pasadas al instante.",
+          "Contexto Temporal – Cada mensaje incluye la hora exacta para una mayor claridad"
+        ]
+      }
+    }
+  },
+
+  "images": {
+    "sloganAlt": "Imagen del slogan",
+    "welcomeAlt": "Imagen de bienvenida"
+  },
+
+  "signup": {
+    "title": "Crea tu cuenta en SocialFénix",
+    "subtitle": "Regístrate rellenando estos campos.",
+    "placeholders": {
+      "name": "Ej. Juan Pérez",
+      "username": "Ej. juan_perez",
+      "email": "ejemplo@correo.com",
+      "password": "8+ letras, mayús, minús, num, c.esp",
+      "confirmPassword": "Repite tu contraseña"
+    },
+    
+    "fields": {
+      "name": { "label": "Nombre completo" },
+      "username": { "label": "Nombre de usuario" },
+      "email": { "label": "Correo electrónico" },
+      "password": { "label": "Contraseña" },
+      "confirmPassword": { "label": "Confirma la contraseña" }
+    },
+
+    "buttons": {
+      "create": "Crear cuenta",
+      "creating": "Creando cuenta..."
+    },
+
+    "already": {
+      "text": "¿Ya tienes cuenta?",
+      "login": "Inicia sesión"
+    },
+
+    "successRedirect": "Registro exitoso. Redirigiendo al login...",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio.",
+      "nameTooLong": "El nombre no puede exceder los 100 caracteres.",
+      "usernameRequired": "El apodo es obligatorio.",
+      "usernameTooShort": "El apodo debe tener al menos 3 caracteres.",
+      "usernameTooLong": "El apodo no puede exceder los 50 caracteres.",
+      "usernamePattern": "El apodo solo puede contener letras, números y guiones bajos (_).",
+      "emailRequired": "El correo electrónico es obligatorio.",
+      "emailInvalid": "El formato del correo electrónico no es válido.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordTooLong": "La contraseña no puede exceder los 100 caracteres.",
+      "passwordPattern": "La contraseña debe contener al menos una minúscula, una mayúscula, un número y un carácter especial.",
+      "passwordsMismatch": "Las contraseñas no coinciden.",
+      "unexpectedServer": "Respuesta inesperada del servidor.",
+      "invalidData": "Datos inválidos. Revisa los campos.",
+      "duplicate": "El apodo o correo electrónico ya están en uso.",
+      "connection": "Error de conexión con el servidor. Inténtalo más tarde.",
+      "unknown": "Error desconocido. Inténtalo de nuevo."
+    }
+  }
+}

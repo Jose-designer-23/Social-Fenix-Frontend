@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { isChromeOnly } from "@/lib/isChromeOnly";
+import { useTranslation } from "react-i18next";
 
 export type LandingFeaturesHandle = {
   openAndShowFirst: () => void;
@@ -11,75 +12,25 @@ type Props = {
   onSlideChange?: (index: number) => void;
 };
 
-type Slide = {
-  title: string;
-  desc?: string;
+type SlideMeta = {
+  key: string; // slug key used for translation
   img: string;
-  features?: string[];
 };
 
-const slides: Slide[] = [
-  {
-    title: "FEED DINÁMICO",
-    desc: "Resumen corto del feed.",
-    features: [
-      "Feed en Tiempo Real - Contenido siempre fresco y al instante.",
-      "Solo lo Relevante - Los recuerdos más recientes de tu círculo.",
-      "Interacciones Dinámicas - Alto engagement en cada publicación.",
-      "Notificaciones Inteligentes - Alertas que se adaptan a ti",
-      "Mensajería Integrada - Comunicación instantánea y fluida.",
-      "Transparencia Social – Visualiza la lista completa de usuarios que dieron like o republicaron.",
-      "Búsqueda Instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
-      "Cuidado Visual – Modo Oscuro para proteger tus ojos y disfrutar con el máximo confort.",
-    ],
-    img: "/img/Feed-2.png",
-  },
-  {
-    title: "HILO DE COMENTARIOS",
-    desc: "Explicación breve de los hilos de comentarios.",
-    features: [
-      "Hilos Profundamente Anidados – Conversaciones organizadas hasta 4 niveles de respuesta.",
-      "Reacciones Rápidas - Expresa tu opinión al instante con un like.",
-    ],
-    img: "/img/Comentarios-3.png",
-  },
-  {
-    title: "NOTIFICACIONES EN TIEMPO REAL",
-    desc: "Explicación del modal de notificaciones.",
-    features: [
-      "Notificaciones Instantáneas – Infórmate de las interacciones en el momento exacto.",
-      "Diseño de Un Vistazo – Interfaz clara y fácil de escanear visualmente.",
-      "Agrupación Inteligente – Compactamos eventos para eliminar el ruido y el spam de notificaciones.",
-    ],
-    img: "/img/Notificaciones-2.png",
-  },
-  {
-    title: "PERFIL DE USUARIO LLENO DE VIDA",
-    desc: "Explicación breve del perfil de usuario.",
-    features: [
-      "Control de Marca Personal – Personalización completa (avatar, portada, biografía y enlaces).",
-      "Tu Portafolio Social – Resalta toda tu actividad: multimedia, likes e interacciones.",
-      "Gestión de Redes Clara – Visualiza y administra tus conexiones (seguidores y seguidos) de forma sencilla.",
-    ],
-    img: "/img/Perfil-2.png",
-  },
-  {
-    title: "CONVERSACIONES PRIVADAS",
-    desc: "Explicación breve del chat privado.",
-    features: [
-      "Chat en Vivo – Comunicación fluida e instantánea con todos tus contactos.",
-      "Alertas Fiables – Notificaciones instantáneas para que nunca pierdas el hilo.",
-      "Historial Completo – Accede y retoma tus conversaciones pasadas al instante.",
-      "Contexto Temporal – Cada mensaje incluye la hora exacta para una mayor claridad",
-    ],
-    img: "/img/Chat-2.png",
-  },
+const slidesMeta: SlideMeta[] = [
+  { key: "feed", img: "/img/Feed-2.png" },
+  { key: "comments", img: "/img/Comentarios-3.png" },
+  { key: "notifications", img: "/img/Notificaciones-2.png" },
+  { key: "profile", img: "/img/Perfil-2.png" },
+  { key: "chat", img: "/img/Chat-2.png" },
 ];
 
-const LAST_INDEX = slides.length - 1;
+const LAST_INDEX = slidesMeta.length - 1;
 const MOBILE_BREAKPOINT = 1000; // <=1000px => carousel mode
 
 const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChange }, ref) => {
+  const { t } = useTranslation();
+
   const slideElsRef = useRef<HTMLElement[]>([]);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const currentSlideRef = useRef<number>(0);
@@ -281,7 +232,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
         {/* LEFT: image slider / carousel */}
         <div className="image-slider w-full">
           {isCarousel ? (
-            // CAROUSEL MODE (mobile) - intacto
+            // CAROUSEL MODE (mobile)
             <div
               className="relative w-full md:mt-60 lg:mt-60 flex items-center justify-center"
               onTouchStart={onTouchStart}
@@ -291,15 +242,15 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
               <div className="w-full max-w-3xl mx-auto">
                 <div className="relative overflow-hidden">
                   <img
-                    src={slides[currentSlide].img}
-                    alt={slides[currentSlide].title}
+                    src={slidesMeta[currentSlide].img}
+                    alt={t(`landing.slides.${slidesMeta[currentSlide].key}.title`)}
                     className="landing-img block mx-auto"
                     draggable={false}
                   />
 
                   {/* prev / next overlays (solo visibles si hay slide anterior/siguiente) */}
                   <button
-                    aria-label="Anterior"
+                    aria-label={t("landing.controls.prev")}
                     onClick={prevCarousel}
                     className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 cursor-pointer rounded-full bg-white/90 flex items-center justify-center shadow-md"
                     style={{ display: currentSlide === 0 ? "none" : undefined }}
@@ -310,7 +261,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
                   </button>
 
                   <button
-                    aria-label="Siguiente"
+                    aria-label={t("landing.controls.next")}
                     onClick={nextCarousel}
                     className="absolute right-2 top-1/2 cursor-pointer -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md"
                     style={{ display: currentSlide === LAST_INDEX ? "none" : undefined }}
@@ -322,13 +273,13 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
 
                   {/* dots bajo la imagen (mobile) */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                    {slides.map((_, idx) => (
+                    {slidesMeta.map((_, idx) => (
                       <button
                         key={idx}
                         type="button"
                         onClick={() => setCurrentSlide(idx)}
                         className={`w-2.5 h-2.5 rounded-full ${idx === currentSlide ? "bg-white" : "bg-white/30"}`}
-                        aria-label={`Ir a slide ${idx + 1}`}
+                        aria-label={t("landing.controls.goTo", { index: idx + 1 })}
                       />
                     ))}
                   </div>
@@ -336,9 +287,9 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
               </div>
             </div>
           ) : (
-            // DESKTOP MODE (scroll sections) - intacto
+            // DESKTOP MODE (scroll sections)
             <>
-              {slides.map((s, i) => (
+              {slidesMeta.map((s, i) => (
                 <section
                   id={`landing-slide-${i}`}
                   key={i}
@@ -347,7 +298,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
                 >
                   <img
                     src={s.img}
-                    alt={s.title}
+                    alt={t(`landing.slides.${s.key}.title`)}
                     className="landing-img block mx-auto"
                     draggable={false}
                   />
@@ -355,7 +306,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
                   <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40">
                     <button
                       type="button"
-                      aria-label={i < LAST_INDEX ? "Siguiente" : "Volver al login"}
+                      aria-label={i < LAST_INDEX ? t("landing.controls.next") : t("landing.controls.backToLogin")}
                       onClick={() => {
                         if (i < LAST_INDEX) scrollToSlide(i + 1);
                         else {
@@ -387,29 +338,38 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
         <aside className="flex flex-col justify-center items-center md:items-start text-center md:text-left text-white px-4 md:sticky md:top-0 md:h-screen">
           <div className="mx-auto md:mx-0">
             <h2 className="text-4xl md:text-4xl lg:text-5xl font-extrabold mb-6">
-              {slides[currentSlide].title}
+              {t(`landing.slides.${slidesMeta[currentSlide].key}.title`)}
             </h2>
 
-            {slides[currentSlide].features && slides[currentSlide].features.length > 0 ? (
+            {t(`landing.slides.${slidesMeta[currentSlide].key}.features_count`, { returnObjects: false }) !== "0" &&
+            Array.isArray(((): unknown => {
+              // We will attempt to read features as an array from translations using returnObjects
+              // but as a safe fallback we use desc if no features array exists.
+              return t(`landing.slides.${slidesMeta[currentSlide].key}.features`, { returnObjects: true });
+            })()) ? (
               <ol className="list-decimal text-justify list-inside space-y-3 text-lg leading-relaxed max-w-xl">
-                {slides[currentSlide].features.map((f, idx) => (
+                {(
+                  t(`landing.slides.${slidesMeta[currentSlide].key}.features`, { returnObjects: true }) as string[]
+                ).map((f, idx) => (
                   <li key={idx} className="ml-2">
                     {f}
                   </li>
                 ))}
               </ol>
             ) : (
-              <p className="text-lg leading-relaxed max-w-xl">{slides[currentSlide].desc}</p>
+              <p className="text-lg leading-relaxed max-w-xl">
+                {t(`landing.slides.${slidesMeta[currentSlide].key}.desc`)}
+              </p>
             )}
 
             <div className="mt-8 flex gap-2">
-              {slides.map((_, idx) => (
+              {slidesMeta.map((_, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => scrollToSlide(idx)}
                   className={`w-3 h-3 rounded-full ${idx === currentSlide ? "bg-white" : "bg-white/30"}`}
-                  aria-label={`Ir a slide ${idx + 1}`}
+                  aria-label={t("landing.controls.goTo", { index: idx + 1 })}
                 />
               ))}
             </div>

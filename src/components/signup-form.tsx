@@ -11,7 +11,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-//Usamos expresiones regulares para validar apodo y contraseña
+import { useTranslation } from "react-i18next";
+
+// Usamos expresiones regulares para validar apodo y contraseña
 const APODO_REGEX = /^[a-zA-Z0-9_]+$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
@@ -23,6 +25,7 @@ export function SignupForm({
   className,
   ...props
 }: ComponentPropsWithoutRef<"div">) {
+  const { t } = useTranslation(); // namespace "common" por defecto
   const [nombre, setNombre] = useState("");
   const [apodo, setApodo] = useState("");
   const [correoElectronico, setCorreoElectronico] = useState("");
@@ -37,41 +40,41 @@ export function SignupForm({
 
   // Validamos los campos del formulario antes de enviarlo al servidor
   const validateClient = (): string | null => {
-    if (!nombre.trim()) return "El nombre es obligatorio.";
+    if (!nombre.trim()) return t("signup.errors.nameRequired");
 
     if (nombre.trim().length > 100)
-      return "El nombre no puede exceder los 100 caracteres.";
+      return t("signup.errors.nameTooLong");
 
-    if (!apodo.trim()) return "El apodo es obligatorio.";
+    if (!apodo.trim()) return t("signup.errors.usernameRequired");
 
     if (apodo.trim().length < 3)
-      return "El apodo debe tener al menos 3 caracteres.";
+      return t("signup.errors.usernameTooShort");
 
     if (apodo.trim().length > 50)
-      return "El apodo no puede exceder los 50 caracteres.";
+      return t("signup.errors.usernameTooLong");
 
     if (!APODO_REGEX.test(apodo.trim()))
-      return "El apodo solo puede contener letras, números y guiones bajos (_).";
+      return t("signup.errors.usernamePattern");
 
     if (!correoElectronico.trim())
-      return "El correo electrónico es obligatorio.";
+      return t("signup.errors.emailRequired");
 
     if (!/^\S+@\S+\.\S+$/.test(correoElectronico.trim()))
-      return "El formato del correo electrónico no es válido.";
+      return t("signup.errors.emailInvalid");
 
-    if (!contrasena) return "La contraseña es obligatoria.";
+    if (!contrasena) return t("signup.errors.passwordRequired");
 
     if (contrasena.length < 8)
-      return "La contraseña debe tener al menos 8 caracteres.";
+      return t("signup.errors.passwordTooShort");
 
     if (contrasena.length > 100)
-      return "La contraseña no puede exceder los 100 caracteres.";
+      return t("signup.errors.passwordTooLong");
 
     if (!PASSWORD_REGEX.test(contrasena)) {
-      return "La contraseña debe contener al menos una minúscula, una mayúscula, un número y un carácter especial.";
+      return t("signup.errors.passwordPattern");
     }
     if (contrasena !== confirmContrasena)
-      return "Las contraseñas no coinciden.";
+      return t("signup.errors.passwordsMismatch");
     return null;
   };
 
@@ -104,7 +107,7 @@ export function SignupForm({
       );
 
       if (response?.status >= 200 && response?.status < 300) {
-        setSuccessMessage("Registro exitoso. Redirigiendo al login...");
+        setSuccessMessage(t("signup.successRedirect"));
         setNombre("");
         setApodo("");
         setCorreoElectronico("");
@@ -117,7 +120,7 @@ export function SignupForm({
       } else {
         const msg =
           (response?.data as any)?.message ??
-          "Respuesta inesperada del servidor.";
+          t("signup.errors.unexpectedServer");
         setError(String(msg));
       }
     } catch (err: unknown) {
@@ -126,14 +129,14 @@ export function SignupForm({
         if (serverMessage) {
           setError(String(serverMessage));
         } else if (err.response?.status === 400) {
-          setError("Datos inválidos. Revisa los campos.");
+          setError(t("signup.errors.invalidData"));
         } else if (err.response?.status === 409) {
-          setError("El apodo o correo electrónico ya están en uso.");
+          setError(t("signup.errors.duplicate"));
         } else {
-          setError("Error de conexión con el servidor. Inténtalo más tarde.");
+          setError(t("signup.errors.connection"));
         }
       } else {
-        setError("Error desconocido. Inténtalo de nuevo.");
+        setError(t("signup.errors.unknown"));
       }
     } finally {
       setIsLoading(false);
@@ -145,9 +148,9 @@ export function SignupForm({
       <form onSubmit={handleSubmit} className={cn("espacio_campos_registro")}>
         <FieldGroup>
           <div>
-            <h1 className="diseño_titulo_registro">Crea tu cuenta en SocialFénix</h1>
+            <h1 className="diseño_titulo_registro">{t("signup.title")}</h1>
             <p className="diseño_subtitulo_registro">
-              Regístrate rellenando estos campos.
+              {t("signup.subtitle")}
             </p>
           </div>
 
@@ -164,7 +167,7 @@ export function SignupForm({
           )}
 
           <Field>
-            <FieldLabel htmlFor="nombre">Nombre completo</FieldLabel>
+            <FieldLabel htmlFor="nombre">{t("signup.fields.name.label")}</FieldLabel>
             <Input
               id="nombre"
               type="text"
@@ -174,12 +177,13 @@ export function SignupForm({
                 setNombre(e.target.value)
               }
               disabled={isLoading}
-              placeholder="Ej. Juan Pérez"
+              placeholder={t("signup.placeholders.name") as string}
+              aria-label={t("signup.fields.name.label")}
             />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="apodo">Nombre de usuario</FieldLabel>
+            <FieldLabel htmlFor="apodo">{t("signup.fields.username.label")}</FieldLabel>
             <Input
               id="apodo"
               type="text"
@@ -189,12 +193,13 @@ export function SignupForm({
                 setApodo(e.target.value)
               }
               disabled={isLoading}
-              placeholder="Ej. juan_perez"
+              placeholder={t("signup.placeholders.username") as string}
+              aria-label={t("signup.fields.username.label")}
             />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="correo">Correo electrónico</FieldLabel>
+            <FieldLabel htmlFor="correo">{t("signup.fields.email.label")}</FieldLabel>
             <Input
               id="correo"
               type="email"
@@ -204,12 +209,13 @@ export function SignupForm({
                 setCorreoElectronico(e.target.value)
               }
               disabled={isLoading}
-              placeholder="ejemplo@correo.com"
+              placeholder={t("signup.placeholders.email") as string}
+              aria-label={t("signup.fields.email.label")}
             />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="contrasena">Contraseña</FieldLabel>
+            <FieldLabel htmlFor="contrasena">{t("signup.fields.password.label")}</FieldLabel>
             <Input
               id="contrasena"
               type="password"
@@ -219,13 +225,14 @@ export function SignupForm({
                 setContrasena(e.target.value)
               }
               disabled={isLoading}
-              placeholder="8+ letras, mayús, minús, num, c.esp"
+              placeholder={t("signup.placeholders.password") as string}
+              aria-label={t("signup.fields.password.label")}
             />
           </Field>
 
           <Field>
             <FieldLabel htmlFor="confirmContrasena">
-              Confirma la contraseña
+              {t("signup.fields.confirmPassword.label")}
             </FieldLabel>
             <Input
               id="confirmContrasena"
@@ -236,21 +243,22 @@ export function SignupForm({
                 setConfirmContrasena(e.target.value)
               }
               disabled={isLoading}
-              placeholder="Repite tu contraseña"
+              placeholder={t("signup.placeholders.confirmPassword") as string}
+              aria-label={t("signup.fields.confirmPassword.label")}
             />
           </Field>
 
           <Field>
             <Button type="submit" className=" estilo_boton_registro transition-colors-duration-200" disabled={isLoading}>
-              {isLoading ? "Creando cuenta..." : "Crear cuenta"}
+              {isLoading ? t("signup.buttons.creating") : t("signup.buttons.create")}
             </Button>
           </Field>
 
           <Field>
             <div className="pregunta_tienes_cuenta">
-              ¿Ya tienes cuenta?{" "}
+              {t("signup.already.text")}{" "}
               <a href="/login" className="diseño_enlace_registro transition-colors-duration-200">
-                Inicia sesión
+                {t("signup.already.login")}
               </a>
             </div>
           </Field>
