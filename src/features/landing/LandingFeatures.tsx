@@ -41,7 +41,7 @@ const slides: Slide[] = [
       "Hilos Profundamente Anidados – Conversaciones organizadas hasta 4 niveles de respuesta.",
       "Reacciones Rápidas - Expresa tu opinión al instante con un like.",
     ],
-    img: "/img/Comentarios-2.png",
+    img: "/img/Comentarios-3.png",
   },
   {
     title: "NOTIFICACIONES EN TIEMPO REAL",
@@ -91,6 +91,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
 
   // Ref para ignorar updates por scroll cuando hacemos scroll programático
   const programmaticScrollRef = useRef<boolean>(false);
+  const programmaticTimeoutRef = useRef<number | null>(null);
 
   // touch handling for carousel
   const touchStartX = useRef<number | null>(null);
@@ -98,8 +99,8 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
 
   // Detect Chrome once (cliente)
   const chromeOnly = typeof navigator !== "undefined" && isChromeOnly();
-  // Timeout máximo para waitUntilCentered (un poco mayor en Chrome)
-  const MAX_WAIT_MS = chromeOnly ? 3000 : 2000;
+  // Timeout mayor solo para Chrome
+  const PROGRAMMATIC_TIMEOUT = chromeOnly ? 1000 : 800;
 
   // Añadimos clase en <html> para scoping CSS solo a Chrome
   useEffect(() => {
@@ -187,62 +188,8 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
     };
   }, [isCarousel]);
 
-  // --- waitUntilCentered: espera a que el elemento quede centrado o hasta maxWait ---
-  const waitUntilCentered = (el: HTMLElement, maxWait = MAX_WAIT_MS) => {
-    return new Promise<void>((resolve) => {
-      let rafId = 0;
-      let timeoutId: number | null = null;
-      const EPS = 6; // px de tolerancia
-      const STABLE_MS = 100; // ms que debe mantenerse centrado para considerarlo estable
-      let stableSince = 0;
-      const start = performance.now();
-
-      const cleanup = () => {
-        if (rafId) cancelAnimationFrame(rafId);
-        if (timeoutId) window.clearTimeout(timeoutId);
-      };
-
-      const check = () => {
-        const rect = el.getBoundingClientRect();
-        const elCenter = rect.top + rect.height / 2;
-        const viewportCenter = window.innerHeight / 2;
-        const distance = Math.abs(elCenter - viewportCenter);
-        const now = performance.now();
-
-        if (distance <= EPS) {
-          if (!stableSince) stableSince = now;
-          if (now - stableSince >= STABLE_MS) {
-            cleanup();
-            resolve();
-            return;
-          }
-        } else {
-          stableSince = 0;
-        }
-
-        if (now - start > maxWait) {
-          // fallback: timeout máximo alcanzado
-          cleanup();
-          resolve();
-          return;
-        }
-
-        rafId = requestAnimationFrame(check);
-      };
-
-      // fallback adicional por si rAF no corre (seguro)
-      timeoutId = window.setTimeout(() => {
-        if (rafId) cancelAnimationFrame(rafId);
-        resolve();
-      }, maxWait + 50);
-
-      rafId = requestAnimationFrame(check);
-    });
-  };
-  // ------------------------------------------------------------------------
-
   // scrollToSlide helper (desktop) / carousel change (mobile)
-  const scrollToSlide = async (index: number) => {
+  const scrollToSlide = (index: number) => {
     const clamped = Math.max(0, Math.min(index, LAST_INDEX));
     if (isCarousel) {
       // en carousel solo actualizamos índice (la UI renderará la imagen)
@@ -251,44 +198,46 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
       return;
     }
     const el = document.getElementById(`landing-slide-${clamped}`);
-    if (!el) return;
+    if (el) {
+      // Actualizamos el estado inmediatamente para que el panel derecho se sincronice
+      setCurrentSlide(clamped);
+      currentSlideRef.current = clamped;
 
-    // Actualizamos el estado inmediatamente para que el panel derecho se sincronice
-    setCurrentSlide(clamped);
-    currentSlideRef.current = clamped;
+      // marcamos que vamos a hacer un scroll programático para que el detector ignore cambios momentáneos
+      programmaticScrollRef.current = true;
+      if (programmaticTimeoutRef.current) {
+        window.clearTimeout(programmaticTimeoutRef.current);
+      }
+      // tiempo suficiente para que el scroll smooth termine y el navegador estabilice layout
+      programmaticTimeoutRef.current = window.setTimeout(() => {
+        programmaticScrollRef.current = false;
+        programmaticTimeoutRef.current = null;
+      }, PROGRAMMATIC_TIMEOUT);
 
-    // marcamos scroll programático para que el detector ignore cambios momentáneos
-    programmaticScrollRef.current = true;
-
-    // inicia el scroll suave
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    // esperamos hasta que la slide quede centrada o hasta max wait
-    try {
-      await waitUntilCentered(el, MAX_WAIT_MS);
-    } finally {
-      // siempre limpiamos el flag
-      programmaticScrollRef.current = false;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 
   useImperativeHandle(ref, () => ({
     openAndShowFirst() {
-      void scrollToSlide(0);
+      scrollToSlide(0);
     },
     next() {
       const nextIdx = Math.min(currentSlideRef.current + 1, LAST_INDEX);
-      void scrollToSlide(nextIdx);
+      scrollToSlide(nextIdx);
     },
     show(index: number) {
-      void scrollToSlide(index);
+      scrollToSlide(index);
     },
   }));
 
-  // limpia si se desmonta
+  // limpia timeouts si desmonta el componente
   useEffect(() => {
     return () => {
-      programmaticScrollRef.current = false;
+      if (programmaticTimeoutRef.current) {
+        window.clearTimeout(programmaticTimeoutRef.current);
+        programmaticTimeoutRef.current = null;
+      }
     };
   }, []);
 
@@ -396,14 +345,19 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
                   ref={(el) => setSlideRef(i, el)}
                   className="landing_slide snap-start relative w-full min-h-screen flex items-center justify-center"
                 >
-                  <img src={s.img} alt={s.title} className="landing-img block mx-auto" draggable={false} />
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    className="landing-img block mx-auto"
+                    draggable={false}
+                  />
 
                   <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40">
                     <button
                       type="button"
                       aria-label={i < LAST_INDEX ? "Siguiente" : "Volver al login"}
                       onClick={() => {
-                        if (i < LAST_INDEX) void scrollToSlide(i + 1);
+                        if (i < LAST_INDEX) scrollToSlide(i + 1);
                         else {
                           const loginEl = document.getElementById("login-section");
                           if (loginEl) loginEl.scrollIntoView({ behavior: "smooth" });
@@ -453,7 +407,7 @@ const LandingFeatures = forwardRef<LandingFeaturesHandle, Props>(({ onSlideChang
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => void scrollToSlide(idx)}
+                  onClick={() => scrollToSlide(idx)}
                   className={`w-3 h-3 rounded-full ${idx === currentSlide ? "bg-white" : "bg-white/30"}`}
                   aria-label={`Ir a slide ${idx + 1}`}
                 />
