@@ -167,6 +167,10 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
       navigate("/login");
       return;
     }
+    // Protección extra: no intentar seguirse a uno mismo
+    if (Number(currentUser.id) === Number(items.find((it) => it.apodo === apodo)?.id)) {
+      return;
+    }
     setSavingApodo(apodo);
     try {
       const res = await axios.post(`${API_BASE}/follows/${apodo}`);
@@ -253,6 +257,9 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                 const avatarUrl =
                   extractAvatarFromAuthor(u) ?? u.avatar ?? null;
 
+                const isSelf =
+                  currentUser && Number(currentUser.id) === Number(u.id);
+
                 return (
                   <li
                     key={u.id}
@@ -280,25 +287,31 @@ const FollowListModal: React.FC<FollowListModalProps> = ({
                     </div>
 
                     <div className="flex items-center ml-4">
-                      <Button
-                        size="sm"
-                        className={
-                          imFollowing
-                            ? "bg-linear-to-br from-[#fa8f3d] to-[#f13e0d] text-white font-bold cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]"
-                            : "border-2 bg-transparent border-orange-500 cursor-pointer text-orange-500 font-bold active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
-                        }
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleToggleFollow(e, u.apodo);
-                        }}
-                        disabled={savingApodo === u.apodo}
-                      >
-                        {savingApodo === u.apodo
-                          ? t("FollowListModal.saving")
-                          : imFollowing
-                          ? t("FollowListModal.following")
-                          : t("FollowListModal.follow")}
-                      </Button>
+                      {isSelf ? (
+                        <span className="text-gray-500 text-sm select-none">
+                          {t("FollowListModal.you") ?? "Tú"}
+                        </span>
+                      ) : (
+                        <Button
+                          size="sm"
+                          className={
+                            imFollowing
+                              ? "bg-linear-to-br from-[#fa8f3d] to-[#f13e0d] text-white font-bold cursor-pointer active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01]"
+                              : "border-2 bg-transparent border-orange-500 cursor-pointer text-orange-500 font-bold active:shadow-inner active:opacity-90 transition-colors transform duration-300 hover:bg-linear-to-bl hover:from-[#ce016e] hover:via-[#e63f58] hover:to-[#e37d01] hover:text-white"
+                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleFollow(e, u.apodo);
+                          }}
+                          disabled={savingApodo === u.apodo}
+                        >
+                          {savingApodo === u.apodo
+                            ? t("FollowListModal.saving")
+                            : imFollowing
+                            ? t("FollowListModal.following")
+                            : t("FollowListModal.follow")}
+                        </Button>
+                      )}
                     </div>
                   </li>
                 );

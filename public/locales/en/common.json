@@ -439,7 +439,8 @@
     "follow": "Follow",
     "saving": "...",
     "toggleFailed": "Could not complete the action. Try again.",
-    "close": "Close"
+    "close": "Close",
+    "you": "You"
   },
 
   "AccountSettingsModal": {

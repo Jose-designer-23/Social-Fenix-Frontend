@@ -433,7 +433,8 @@
     "follow": "Seguir",
     "saving": "...",
     "toggleFailed": "No se pudo completar la acción. Inténtalo de nuevo.",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "you": "Tú"
   },
 
   "AccountSettingsModal": {
