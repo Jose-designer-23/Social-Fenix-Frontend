@@ -232,7 +232,10 @@
     "repostSingle": "{{name}} ha republicado",
     "repostMultiple": "{{name}}, y {{count}} más han republicado",
     "likeSingle": "{{name}} ha dado like",
-    "likeMultiple": "{{name}}, y {{count}} más han dado like"
+    "likeMultiple": "{{name}}, y {{count}} más han dado like",
+    "followSingle": "Te ha seguido",
+    "followMultiple": "{{count}} personas te han seguido",
+    "followingSectionTitle": "Nuevos seguidores"
   },
 
   "SearchUsers": {

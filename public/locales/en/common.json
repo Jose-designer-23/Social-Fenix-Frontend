@@ -238,7 +238,10 @@
     "repostSingle": "{{name}} reposted",
     "repostMultiple": "{{name}}, and {{count}} others reposted",
     "likeSingle": "{{name}} liked this",
-    "likeMultiple": "{{name}}, and {{count}} others liked this"
+    "likeMultiple": "{{name}}, and {{count}} others liked this",
+    "followSingle": "Started following you",
+    "followMultiple": "{{count}} people started following you",
+    "followingSectionTitle": "New followers"
   },
 
   "SearchUsers": {

@@ -22,25 +22,53 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
   // handlePayload: Mapeamos y marcamos explícitamente como server/persisted
   const handlePayload = useCallback((payload: unknown) => {
     try {
+      // Primero intentamos mapear a PostInteraction (mapper ya existente)
       const mapped = mapNotificationToPostInteraction(payload as any);
-      if (!mapped) {
-        // DEBUG: por si el mapper devuelve null
-        // console.debug('NotificationsProvider: mapper returned null for payload', payload);
+      if (mapped) {
+        const toDispatch = {
+          ...mapped,
+          source: 'server' as const,
+          persisted: true as const,
+        };
+        window.dispatchEvent(new CustomEvent('post:interaction', { detail: toDispatch }));
         return;
       }
 
-      const toDispatch = {
-        ...mapped,
-        source: 'server' as const,
-        persisted: true as const,
-      };
+      // Si mapper devolvió null, puede tratarse de notificación "follow" u "other" sin post.
+      const raw = payload as any;
+      const type = raw?.type ?? raw?.action ?? '';
+      if (type === 'follow') {
+        // Construimos un objeto similar al shape Interaction que consume NotificationsButton
+        const actorPayload = raw.actor ?? null;
+        const actorId = actorPayload?.id ?? raw?.actor_id ?? null;
 
-      // DEBUG: muestra lo que despachamos para que el cliente lo vea
-      // console.debug('NotificationsProvider: dispatching post:interaction from server', toDispatch);
+        const actor = actorId != null ? {
+          id: Number(actorId),
+          nombre: actorPayload?.nombre ?? raw?.actor_nombre ?? actorPayload?.name ?? null,
+          apodo: actorPayload?.apodo ?? raw?.actor_apodo ?? actorPayload?.username ?? null,
+          avatar: actorPayload?.avatar ?? raw?.actor_avatar ?? null,
+        } : null;
 
-      window.dispatchEvent(new CustomEvent('post:interaction', { detail: toDispatch }));
+        const mappedFollow = {
+          action: 'follow',
+          actor,
+          timestamp: raw?.created_at ?? raw?.createdAt ?? new Date().toISOString(),
+          notificationId: raw?.id ?? null,
+          read: typeof raw?.read === 'boolean' ? raw.read : false,
+          source: 'server' as const,
+          persisted: true as const,
+        };
+
+        window.dispatchEvent(new CustomEvent('post:interaction', { detail: mappedFollow }));
+        return;
+      }
+
+      // Si no es follow ni post-interaction conocido, puedes decidir emitir un evento genérico
+      // o ignorarlo. Por ahora lo ignoramos.
     } catch (err) {
-      // console.warn('NotificationsProvider: failed to map/dispatch payload', err);
+      // Para que un error no rompa la app
+      // eslint-disable-next-line no-console
+      console.warn('NotificationsProvider.handlePayload failed', err);
     }
   }, []);
 
@@ -75,9 +103,8 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
           // console.debug('notifications socket connected', s.id);
         });
 
-        // DEBUG: log raw notification payload received from socket (helps a diagnosticar)
         s.on('notification', (payload: unknown) => {
-          // console.debug('NotificationsProvider: raw socket notification received', payload);
+          // Dispatch raw payload via mapper logic
           handlePayload(payload);
         });
 
