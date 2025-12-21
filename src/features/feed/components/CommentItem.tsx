@@ -195,6 +195,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const avatarUrl = getAvatarUrlFromAuthor(author) ?? getAvatarUrlFromAuthor(user ?? null);
   const initials = getInitialFromAuthor(author ?? user ?? null);
 
+  const handleUserClick = (apodo: string) => {
+    navigate(`/profile/${apodo}`);
+  };
+
   return (
     <div
       id={`comment-${comment.id}`}
@@ -213,7 +217,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 min-w-0">
               <span className="font-semibold Dark-texto-blanco text-gray-900 hover:underline cursor-pointer truncate">
+                <Link
+                  to={`/profile/${comment.autor?.apodo}`}
+                  onClick={(e) => { e.stopPropagation(); handleUserClick(comment.autor?.apodo ?? ""); }}
+                >           
                 {comment.autor?.nombre ?? comment.autor?.apodo}
+                </Link>
               </span>
               <span className="text-gray-500 Dark-apodo-comentario text-xs truncate">
                 @{comment.autor?.apodo}

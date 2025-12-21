@@ -3,6 +3,8 @@ export type ActorShape = {
   nombre?: string | null;
   apodo?: string | null;
   avatar?: string | null;
+  commentId?: number | null;
+  commentSnippet?: string | null;
 };
 
 export type PostInteraction = {
@@ -33,6 +35,8 @@ export type PostInteraction = {
   source?: "server" | "local";
   persisted?: boolean;
   read?: boolean;
+  commentId?: number | null;
+  commentSnippet?: string | null;
 };
 
 function pickAvatarFromPayload(n: any): string | null {
@@ -111,6 +115,8 @@ export function mapNotificationToPostInteraction(n: any): PostInteraction | null
             n?.actor_apodo ??
             null,
           avatar: pickAvatarFromPayload(n) ?? null,
+          commentId: (n?.comment?.id ?? n?.comment_id ?? null) ? Number(n?.comment?.id ?? n?.comment_id ?? null) : null,
+          commentSnippet: n?.comment?.snippet ?? n?.comment_snippet ?? null,
         }
       : null;
 
