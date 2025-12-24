@@ -8,7 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// Usamos el Avatar propio de user-profile en lugar del de shadcn
+import Avatar from "@/features/user-profile/components/Avatar";
 import { Heart, MessageCircle, Repeat2, Bell, User } from "lucide-react";
 import { useAuth } from "@/features/auth/services/AuthContext";
 import PostPreview from "./PostPreview";
@@ -134,6 +135,7 @@ type NotificationEntry = {
     image?: string | null;
     authorName?: string | null;
     authorApodo?: string | null;
+    authorAvatar?: string | null;
   } | null;
   comment?: { id?: number | null; snippet?: string | null } | null;
   read: boolean;
@@ -148,6 +150,7 @@ type PostNotifications = {
   postImage?: string | null;
   postAuthorName?: string | null;
   postAuthorApodo?: string | null;
+  postAuthorAvatar?: string | null;
   likes: Actor[];
   reposts: Actor[];
   comments: Actor[];
@@ -163,6 +166,21 @@ type PostNotifications = {
 const MAX_AVATARS_SHOWN = 4;
 /* -------------------
    End types
+   ------------------- */
+
+/* -------------------
+   Helpers
+   ------------------- */
+// Normaliza rutas relativas de avatar añadiendo API_BASE si hace falta
+function normalizeAvatarUrl(src?: string | null): string | undefined {
+  if (!src) return undefined;
+  const s = String(src).trim();
+  if (!s) return undefined;
+  if (s.startsWith("/")) return `${API_BASE}${s}`;
+  return s;
+}
+/* -------------------
+   End helpers
    ------------------- */
 
 const NotificationsButton: React.FC = () => {
@@ -192,6 +210,14 @@ const NotificationsButton: React.FC = () => {
 
   // helper: normalize server payload (similar to tu mapper)
   function normalizeServerNotification(it: any): NotificationEntry {
+    // try to extract avatar aliases for post author if present
+    const authorAvatar =
+      it.post?.authorAvatar ??
+      it.post_author_avatar ??
+      it.post?.author?.avatar ??
+      it.post?.author_avatar ??
+      null;
+
     return {
       id: Number(it.id),
       type: it.type ?? it.action ?? "other",
@@ -211,6 +237,7 @@ const NotificationsButton: React.FC = () => {
         image: it.post?.image ?? it.post_image ?? null,
         authorName: it.post?.authorName ?? it.post_author_name ?? null,
         authorApodo: it.post?.authorApodo ?? it.post_author_apodo ?? null,
+        authorAvatar: authorAvatar,
       },
       comment: it.comment
         ? { id: it.comment.id, snippet: it.comment.snippet }
@@ -328,6 +355,7 @@ const NotificationsButton: React.FC = () => {
             postImage: detail.postImage ?? null,
             postAuthorName: detail.postAuthorName ?? null,
             postAuthorApodo: detail.postAuthorApodo ?? null,
+            postAuthorAvatar: (detail as any).postAuthorAvatar ?? null,
             likes: [],
             reposts: [],
             comments: [],
@@ -514,6 +542,11 @@ const NotificationsButton: React.FC = () => {
           authorName: detail.postAuthorName ?? detail.post?.authorName ?? null,
           authorApodo:
             detail.postAuthorApodo ?? detail.post?.authorApodo ?? null,
+          authorAvatar:
+            detail.post?.author?.avatar ??
+            detail.postAuthorAvatar ??
+            detail.post?.author_avatar ??
+            null,
         },
         comment: {
           id: detail.commentId ?? detail.comment?.id ?? null,
@@ -695,6 +728,33 @@ const NotificationsButton: React.FC = () => {
       setNotifications((prev) =>
         prev.map((p) => (p.id === id ? { ...p, read: false } : p))
       );
+    }
+  };
+
+  // Helper para navegar al perfil del actor (marca como leído si procede)
+  const goToActorProfile = (actor?: { apodo?: string | null; id?: number | null }, notificationId?: number | null) => {
+    if (!actor) {
+      // fallback - ir a home o al propio perfil
+      setOpen(false);
+      navigate("/");
+      return;
+    }
+
+    if (notificationId && notificationId !== null) {
+      markSingleAsRead(notificationId);
+    }
+
+    const apodo = actor.apodo ?? null;
+    const id = actor.id ?? null;
+
+    setOpen(false);
+    // preferimos apodo (rutas como /profile/:apodo). Si no hay, usar /profile/id/:id
+    if (apodo) {
+      navigate(`/profile/${apodo}`);
+    } else if (id) {
+      navigate(`/profile/id/${id}`);
+    } else {
+      navigate("/");
     }
   };
 
@@ -887,31 +947,37 @@ const NotificationsButton: React.FC = () => {
                   t("NotificationsButton.userFallback");
                 const actionText = actionLabel(n.type);
                 const snippet = n.comment?.snippet ?? n.post?.snippet ?? "";
+
+                // For follow notifications we want the whole notification click to go to the actor profile
+                const isFollow = n.type === "follow";
+
                 return (
                   <div
                     key={`notif-${n.id}`}
-                    className="mb-4 Dark-outline Dark-Card bg-white border-2 rounded-lg p-3 hover:bg-blue-100 cursor-pointer"
+                    // si es follow, hacemos la tarjeta clickable y navegable al perfil del actor
+                    onClick={(e) => {
+                      // si es follow y hay actor, navegar a su perfil
+                      if (isFollow) {
+                        e.stopPropagation();
+                        goToActorProfile(n.actor ?? undefined, n.persisted ? n.id : null);
+                      }
+                    }}
+                    className={`mb-4 Dark-outline Dark-Card bg-white border-2 rounded-lg p-3 hover:bg-blue-100 ${isFollow ? "cursor-pointer" : ""}`}
+                    role={isFollow ? "button" : undefined}
+                    aria-label={isFollow ? t("NotificationsButton.gotoProfile") : undefined}
                   >
                     <div className="flex items-start gap-4">
                       <div className="shrink-0">
                         {n.actor?.avatar ? (
-                          <Avatar className="h-10 w-10 border">
-                            <img
-                              src={n.actor.avatar}
-                              alt={actorName}
-                              className="w-full h-full object-cover rounded-full"
-                              onError={(e) => {
-                                (
-                                  e.currentTarget as HTMLImageElement
-                                ).style.display = "none";
-                              }}
-                            />
-                            <AvatarFallback>
-                              {(n.actor?.apodo ||
-                                n.actor?.nombre ||
-                                "U")[0]?.toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
+                          <Avatar
+                            src={normalizeAvatarUrl(n.actor.avatar)}
+                            alt={actorName}
+                            size={40}
+                            className="border"
+                            initials={(n.actor?.apodo ??
+                              n.actor?.nombre ??
+                              "U")[0]?.toUpperCase()}
+                          />
                         ) : (
                           <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100">
                             <User className="h-5 w-5 text-gray-600" />
@@ -923,7 +989,16 @@ const NotificationsButton: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="min-w-0">
                             <div className="text-sm font-medium truncate">
-                              {actorName}{" "}
+                              {/* Hacemos también el nombre clickable independientemente de si es follow */}
+                              <span
+                                className="font-medium hover:underline cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  goToActorProfile(n.actor ?? undefined, n.persisted ? n.id : null);
+                                }}
+                              >
+                                {actorName}
+                              </span>{" "}
                               <span className=" Dark-apodo-comentario font-normal text-gray-600">
                                 {actionText}
                               </span>
@@ -985,7 +1060,6 @@ const NotificationsButton: React.FC = () => {
                             ) : (
                               <div className="min-w-0">
                                 <div className="font-semibold Dark-texto-blanco  text-gray-900">
-
                                   {n.post?.authorName ??
                                     t("NotificationsButton.postFallback")}
                                 </div>
@@ -1002,23 +1076,15 @@ const NotificationsButton: React.FC = () => {
                                 <div className="mt-3 p-3 Dark-Card Dark-outline rounded-md border-gray-300/60 bg-white hover:bg-gray-50 cursor-pointer flex gap-3 items-start text-sm Dark-apodo-comentario border-2 Dark-border-notificaciones text-gray-700 italic">
                                   <div className="shrink-0">
                                     {n.actor?.avatar ? (
-                                      <Avatar className="h-10 w-10 border">
-                                        <img
-                                          src={n.actor.avatar}
-                                          alt={actorName}
-                                          className="w-full h-full object-cover rounded-full"
-                                          onError={(e) => {
-                                            (
-                                              e.currentTarget as HTMLImageElement
-                                            ).style.display = "none";
-                                          }}
-                                        />
-                                        <AvatarFallback>
-                                          {(n.actor?.apodo ||
-                                            n.actor?.nombre ||
-                                            "U")[0]?.toUpperCase()}
-                                        </AvatarFallback>
-                                      </Avatar>
+                                      <Avatar
+                                        src={normalizeAvatarUrl(n.actor.avatar)}
+                                        alt={actorName}
+                                        size={40}
+                                        className="border"
+                                        initials={(n.actor?.apodo ??
+                                          n.actor?.nombre ??
+                                          "U")[0]?.toUpperCase()}
+                                      />
                                     ) : (
                                       <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100">
                                         <User className="h-5 w-5 text-gray-600" />
