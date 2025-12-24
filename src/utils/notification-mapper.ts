@@ -1,10 +1,12 @@
+// Nota: sustituye la versión actual por esta.
+// Este mapper normaliza payloads del servidor (o locales) a PostInteraction,
+// exponiendo siempre postId, commentId y commentSnippet (cuando existan).
+
 export type ActorShape = {
   id: number;
   nombre?: string | null;
   apodo?: string | null;
   avatar?: string | null;
-  commentId?: number | null;
-  commentSnippet?: string | null;
 };
 
 export type PostInteraction = {
@@ -27,14 +29,11 @@ export type PostInteraction = {
   postAuthorApodo?: string | null;
   timestamp?: string | null;
   notificationId?: number | null;
-
-  // metadata que ayudan a la UI:
-  // - source: "server" | "local" (opcional)
-  // - persisted: true cuando viene del backend
-  // - read: boolean si la notificación ya está marcada
   source?: "server" | "local";
   persisted?: boolean;
   read?: boolean;
+
+  // Metadata para comentarios (expuestas EN PRIMER NIVEL para facilitar el consumo)
   commentId?: number | null;
   commentSnippet?: string | null;
 };
@@ -58,8 +57,7 @@ function pickAvatarFromPayload(n: any): string | null {
   return null;
 }
 
-/** Acciones que consideramos válidas para el mapeo */
-export const VALID_ACTIONS = [
+const VALID_ACTIONS = new Set([
   "like",
   "repost",
   "comment",
@@ -69,71 +67,88 @@ export const VALID_ACTIONS = [
   "remove_like",
   "remove_repost",
   "remove_comment",
-] as const;
+]);
 
-export function isValidAction(a: string): a is PostInteraction["action"] {
-  return (VALID_ACTIONS as readonly string[]).includes(a);
+export function isValidAction(a: string): boolean {
+  return VALID_ACTIONS.has(a);
 }
 
 /**
- * Mappeamos una notificación (server payload) al shape PostInteraction. Incluye `read`.
- * Devuelve null si no hay postId válido o la acción no es una de las esperadas.
+ * Normaliza un payload de notificación del servidor a PostInteraction.
+ * - Asegura que postId exista (si la notificación se refiere a un post).
+ * - Extrae commentId/commentSnippet y los pone en primer nivel.
+ * - Devuelve null solo si no hay postId válido u action no válido.
  */
 export function mapNotificationToPostInteraction(n: any): PostInteraction | null {
   if (!n) return null;
-  const postIdRaw = n?.post?.id ?? n?.post_id ?? n?.postId ?? null;
+
+  // Extraemos postId de varias formas posibles.
+  const postIdRaw = n?.post?.id ?? n?.post_id ?? n?.postId ?? n?.postIdRaw ?? null;
   const postId = postIdRaw == null ? null : Number(postIdRaw);
-  if (!postId || Number.isNaN(postId)) return null;
+  if (postId == null || Number.isNaN(postId) || postId <= 0) {
+    // Si no hay postId no podemos mapear a PostInteraction orientado a post.
+    return null;
+  }
 
-  const type = n.type ?? n.action ?? "";
-  const action =
-    type === "like" ||
-    type === "repost" ||
-    type === "comment" ||
-    type === "unlike" ||
-    type === "unrepost" ||
-    type === "delete_comment"
-      ? (type as PostInteraction["action"])
-      : null;
-  if (!action) return null;
+  // Tipo/acción
+  const type = (n?.type ?? n?.action ?? "").toString();
+  if (!isValidAction(type)) {
+    return null;
+  }
+  const action = type as PostInteraction["action"];
 
-  const actorFromPayload = n.actor ?? null;
-  const actorId = actorFromPayload?.id ?? n?.actor_id ?? n?.actorId ?? null;
-
+  // Actor
+  const actorPayload = n.actor ?? null;
+  const actorId = actorPayload?.id ?? n?.actor_id ?? n?.actorId ?? null;
   const actor: ActorShape | null =
     actorId != null
       ? {
           id: Number(actorId),
           nombre:
-            actorFromPayload?.nombre ??
-            actorFromPayload?.name ??
+            actorPayload?.nombre ??
+            actorPayload?.name ??
             n?.actor_nombre ??
             null,
           apodo:
-            actorFromPayload?.apodo ??
-            actorFromPayload?.username ??
+            actorPayload?.apodo ??
+            actorPayload?.username ??
             n?.actor_apodo ??
             null,
           avatar: pickAvatarFromPayload(n) ?? null,
-          commentId: (n?.comment?.id ?? n?.comment_id ?? null) ? Number(n?.comment?.id ?? n?.comment_id ?? null) : null,
-          commentSnippet: n?.comment?.snippet ?? n?.comment_snippet ?? null,
         }
       : null;
 
-  // read (si viene del server)
+  // comment fields (normalizamos a primer nivel)
+  const commentIdRaw = n?.comment?.id ?? n?.comment_id ?? n?.commentId ?? null;
+  const commentId = commentIdRaw == null ? null : Number(commentIdRaw);
+  const commentSnippet =
+    n?.comment?.snippet ?? n?.comment_snippet ?? n?.commentSnippet ?? null;
+
+  // read flag
   const readFlag = typeof n.read === "boolean" ? n.read : false;
+
+  // timestamp
+  const timestamp = (n?.created_at ?? n?.createdAt ?? n?.timestamp ?? null) as string | null;
 
   return {
     postId,
     action,
     actor,
-    postSnippet: n.post?.snippet ?? n.post_snippet ?? null,
-    postImage: n.post?.image ?? n.post_image ?? null,
-    postAuthorName: n.post?.authorName ?? n.post_author_name ?? null,
-    postAuthorApodo: n.post?.authorApodo ?? n.post_author_apodo ?? null,
-    timestamp: n.created_at ?? n.createdAt ?? null,
-    notificationId: n.id ?? (n.notification?.id ?? null) ?? null,
-    // metadata por defecto: read (server-controlled). `source`/`persisted` se asignan por quien llame.
+    postSnippet: n?.post?.snippet ?? n?.post_snippet ?? n?.postSnippet ?? null,
+    postImage: n?.post?.image ?? n?.post_image ?? n?.postImage ?? null,
+    postAuthorName:
+      n?.post?.authorName ?? n?.post_author_name ?? n?.postAuthorName ?? null,
+    postAuthorApodo:
+      n?.post?.authorApodo ??
+      n?.post_author_apodo ??
+      n?.postAuthorApodo ??
+      null,
+    timestamp,
+    notificationId: n?.id ?? n?.notification?.id ?? null,
+    source: undefined,
+    persisted: undefined,
     read: readFlag,
+    commentId: commentId ?? null,
+    commentSnippet: commentSnippet ?? null,
   };
 }

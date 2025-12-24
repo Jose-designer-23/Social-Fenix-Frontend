@@ -451,7 +451,11 @@
 }
 
 .Dark-boton-comentario{
-   @apply dark:hover:bg-gray-600 dark:hover:shadow dark:hover:transition-colors dark:hover:duration-200;
+   @apply dark:hover:bg-gray-600 cursor-pointer dark:hover:shadow dark:hover:transition-colors dark:hover:duration-200;
+}
+
+.Dark-boton-notificaciones{
+   @apply dark:hover:bg-gray-600 cursor-pointer dark:hover:shadow dark:hover:transition-colors dark:hover:duration-200;
 }
 
 .Dark-boton-cuenta{
@@ -556,6 +560,10 @@
 
 .Dark-outline{
   @apply dark:hover:outline-1  dark:hover:outline-amber-100
+}
+
+.Dark-border-notificaciones{
+  @apply dark:border-slate-500
 }
 
 .Dark-hover-configuracion{

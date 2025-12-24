@@ -77,8 +77,7 @@
         "desc": "Explanation of the notifications modal.",
         "features": [
           "Instant Notifications – Stay informed of interactions at the exact moment.",
-          "At-a-Glance Design – Clear interface easy to scan visually.",
-          "Smart Grouping – We compact events to remove noise and notification spam."
+          "At-a-Glance Design – Clear interface easy to scan visually."
         ]
       },
 
@@ -233,11 +232,11 @@
     "noNotifications": "No notifications yet.",
     "userFallback": "User",
     "postFallback": "Post",
-    "commentSingle": "{{name}} commented on this post",
+    "commentSingle": " commented on this post",
     "commentMultiple": "{{name}}, and {{count}} others commented on this post",
-    "repostSingle": "{{name}} reposted",
+    "repostSingle": " reposted",
     "repostMultiple": "{{name}}, and {{count}} others reposted",
-    "likeSingle": "{{name}} liked this",
+    "likeSingle": " liked this",
     "likeMultiple": "{{name}}, and {{count}} others liked this",
     "followSingle": "Started following you",
     "followMultiple": "{{count}} people started following you",

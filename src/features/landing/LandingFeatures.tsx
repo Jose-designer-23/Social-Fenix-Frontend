@@ -20,7 +20,7 @@ type SlideMeta = {
 const slidesMeta: SlideMeta[] = [
   { key: "feed", img: "/img/Feed-4.png" },
   { key: "comments", img: "/img/Comentarios-4.png" },
-  { key: "notifications", img: "/img/Notificaciones-4.png" },
+  { key: "notifications", img: "/img/Notificaciones-5.png" },
   { key: "profile", img: "/img/Perfil-4.png" },
   { key: "chat", img: "/img/Chat-4.png" },
 ];

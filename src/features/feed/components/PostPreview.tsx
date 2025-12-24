@@ -20,7 +20,7 @@ const PostPreview: React.FC<Props> = ({ postId, snippet, imageUrl, authorName, a
 
   return (
     <div
-      className="mt-3 p-3 Dark-Card rounded-md border-2 border-gray-300/60 bg-white hover:bg-gray-50 cursor-pointer flex gap-3 items-start"
+      className="mt-3 p-3 Dark-Card rounded-md border-2 Dark-outline border-gray-300/60 bg-white hover:bg-gray-50 cursor-pointer flex gap-3 items-start"
       onClick={handleClick}
       role="button"
       aria-label="Ver publicación relacionada"

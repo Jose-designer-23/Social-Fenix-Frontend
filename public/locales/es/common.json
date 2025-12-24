@@ -71,8 +71,7 @@
         "desc": "Explicación del modal de notificaciones.",
         "features": [
           "Notificaciones Instantáneas – Infórmate de las interacciones en el momento exacto.",
-          "Diseño de Un Vistazo – Interfaz clara y fácil de escanear visualmente.",
-          "Agrupación Inteligente – Compactamos eventos para eliminar el ruido y el spam de notificaciones."
+          "Diseño de Un Vistazo – Interfaz clara y fácil de escanear visualmente."
         ]
       },
 
@@ -227,11 +226,11 @@
     "noNotifications": "No hay notificaciones aún.",
     "userFallback": "Usuario",
     "postFallback": "Publicación",
-    "commentSingle": "{{name}} ha comentado esta publicación",
+    "commentSingle": " ha comentado esta publicación",
     "commentMultiple": "{{name}}, y {{count}} más han comentado esta publicación",
-    "repostSingle": "{{name}} ha republicado",
+    "repostSingle": " ha republicado",
     "repostMultiple": "{{name}}, y {{count}} más han republicado",
-    "likeSingle": "{{name}} ha dado like",
+    "likeSingle": " ha dado like",
     "likeMultiple": "{{name}}, y {{count}} más han dado like",
     "followSingle": "Te ha seguido",
     "followMultiple": "{{count}} personas te han seguido",

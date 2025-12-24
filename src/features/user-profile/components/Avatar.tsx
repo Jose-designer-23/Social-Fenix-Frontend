@@ -1,3 +1,5 @@
+///src/features/user-profile/components/Avatar.tsx
+
 import React, { useEffect, useState } from "react";
 
 type AvatarProps = {
