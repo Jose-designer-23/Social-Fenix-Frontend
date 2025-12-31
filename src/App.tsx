@@ -8,6 +8,7 @@ import RegisterPage from './features/auth/pages/RegisterPage.tsx';
 import ForgotPasswordPage from './features/auth/pages/ForgotPasswordPage.tsx';
 import ResetPasswordPage from './features/auth/pages/ResetPasswordPage.tsx';
 import ProfilePage from './features/user-profile/pages/ProfilePage.tsx';
+ import SearchPostPage from './features/feed/pages/SearchPostPage.tsx';
 import { AuthProvider } from './features/auth/services/AuthContext.tsx';
 import { Toaster } from 'react-hot-toast';
 import { NotificationsProvider } from './features/feed/components/NotificationsProvider.tsx';
@@ -39,6 +40,9 @@ function App() {
                     <Route path="feed/post/:id" element={<PostPage />} />
                     {/* Ruta para el hilo/permalink de un comentario */}
                     <Route path="feed/post/:postId/comment/:commentId" element={<CommentThreadPage />} />
+                    {/* Ruta para la búsqueda de posts */}
+                    <Route path="feed/search" element={<SearchPostPage />} />
+                    {/* Ruta para perfiles de usuario */}
                     <Route path="profile/:apodo" element={<ProfilePage />} />
                 </Route>
                 

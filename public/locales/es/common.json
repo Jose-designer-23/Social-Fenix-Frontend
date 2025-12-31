@@ -45,15 +45,16 @@
         "title": "FEED DINÁMICO",
         "desc": "Resumen corto del feed.",
         "features": [
-          "Feed en Tiempo Real - Contenido siempre fresco y al instante.",
-          "Solo lo Relevante - Los recuerdos más recientes de tu círculo.",
-          "Interacciones Dinámicas - Alto engagement en cada publicación.",
-          "Notificaciones Inteligentes - Alertas que se adaptan a ti",
-          "Mensajería Integrada - Comunicación instantánea y fluida.",
-          "Transparencia Social – Visualiza la lista completa de usuarios que dieron like o republicaron.",
-          "Búsqueda Instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
-          "Cuidado Visual – Modo Oscuro para proteger tus ojos y disfrutar con el máximo confort.",
-          "Sin Barreras de Idioma – Soporte completo en Español e Inglés para un alcance global."
+          "Feed en tiempo real - Contenido siempre fresco y al instante.",
+          "Solo lo relevante - Los recuerdos más recientes de tu círculo.",
+          "Interacciones dinámicas - Alto engagement en cada publicación.",
+          "Notificaciones inteligentes - Alertas que se adaptan a ti.",
+          "Mensajería integrada - Comunicación instantánea y fluida.",
+          "Transparencia social – Visualiza la lista completa de usuarios que dieron like o republicaron.",
+          "Búsqueda instantánea – Encuentra amigos y nuevas conexiones de forma rápida y sencilla.",
+          "Cuidado visual – Modo Oscuro para proteger tus ojos y disfrutar con el máximo confort.",
+          "Sin barreras de idioma – Soporte completo en Español e Inglés para un alcance global.",
+          "Conexión de vivencias — Encuentra recuerdos que comparten tu misma esencia con un solo clic."
         ]
       },
 
@@ -61,8 +62,8 @@
         "title": "HILO DE COMENTARIOS",
         "desc": "Explicación breve de los hilos de comentarios.",
         "features": [
-          "Hilos Profundamente Anidados – Conversaciones organizadas hasta 4 niveles de respuesta.",
-          "Reacciones Rápidas - Expresa tu opinión al instante con un like."
+          "Hilos profundamente anidados – Conversaciones organizadas hasta 4 niveles de respuesta.",
+          "Reacciones rápidas - Expresa tu opinión al instante con un like."
         ]
       },
 
@@ -70,8 +71,8 @@
         "title": "NOTIFICACIONES EN TIEMPO REAL",
         "desc": "Explicación del modal de notificaciones.",
         "features": [
-          "Notificaciones Instantáneas – Infórmate de las interacciones en el momento exacto.",
-          "Diseño de Un Vistazo – Interfaz clara y fácil de escanear visualmente."
+          "Notificaciones instantáneas – Infórmate de las interacciones en el momento exacto.",
+          "Diseño de un vistazo – Interfaz clara y fácil de escanear visualmente."
         ]
       },
 
@@ -79,9 +80,9 @@
         "title": "PERFIL DE USUARIO LLENO DE VIDA",
         "desc": "Explicación breve del perfil de usuario.",
         "features": [
-          "Control de Marca Personal – Personalización completa (avatar, portada, biografía y enlaces).",
-          "Tu Portafolio Social – Resalta toda tu actividad: multimedia, likes e interacciones.",
-          "Gestión de Redes Clara – Visualiza y administra tus conexiones (seguidores y seguidos) de forma sencilla."
+          "Control de marca personal – Personalización completa (avatar, portada, biografía y enlaces).",
+          "Tu portafolio social – Resalta toda tu actividad: multimedia, likes e interacciones.",
+          "Gestión de redes clara – Visualiza y administra tus conexiones (seguidores y seguidos) de forma sencilla."
         ]
       },
 
@@ -89,10 +90,10 @@
         "title": "CONVERSACIONES PRIVADAS",
         "desc": "Explicación breve del chat privado.",
         "features": [
-          "Chat en Vivo – Comunicación fluida e instantánea con todos tus contactos.",
-          "Alertas Fiables – Notificaciones instantáneas para que nunca pierdas el hilo.",
-          "Historial Completo – Accede y retoma tus conversaciones pasadas al instante.",
-          "Contexto Temporal – Cada mensaje incluye la hora exacta para una mayor claridad"
+          "Chat en vivo – Comunicación fluida e instantánea con todos tus contactos.",
+          "Alertas fiables – Notificaciones instantáneas para que nunca pierdas el hilo.",
+          "Historial completo – Accede y retoma tus conversaciones pasadas al instante.",
+          "Contexto temporal – Cada mensaje incluye la hora exacta para una mayor claridad."
         ]
       }
     }
@@ -167,7 +168,8 @@
     "accountData": "Datos de la cuenta",
     "deleteAccount": "Eliminar cuenta",
     "logout": "Cerrar Sesión",
-    "directMessages": "Mensajes Directos"
+    "directMessages": "Mensajes Directos",
+    "RelatedMemories": "Recuerdos Afines"
   },
 
   "createPostArea": {
@@ -535,5 +537,22 @@
     "deleting": "Eliminando...",
     "success": "Cuenta eliminada. Hasta pronto.",
     "error": "Error al eliminar la cuenta. Intenta de nuevo."
+  },
+
+  "SearchPost": {
+    "placeholder": "Ej: parque",
+    "aria": "Buscar publicaciones",
+    "button": "Buscar"
+  },
+
+  "SearchPage": {
+    "title": "Buscar publicaciones",
+    "headingPrefix": "Recuerdos afines a",
+    "resultsCount": "{{count}} resultados",
+    "noResultsTitle": "No se han encontrado recuerdos afines",
+    "noResultsDesc": "Prueba con otra palabra o frase.",
+    "backAria": "Volver al feed",
+    "errorTitle": "Error al buscar",
+    "unknownError": "Error desconocido al buscar."
   }
 }

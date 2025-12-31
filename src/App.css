@@ -446,6 +446,10 @@
    @apply dark:bg-gray-700 dark:shadow dark:transition-colors dark:duration-200;
 }
 
+.Dark-boton-buscar{
+   @apply dark:bg-gray-800 dark:shadow dark:transition-colors dark:duration-200;
+}
+
 .Dark-boton-mensajes{
    @apply dark:hover:bg-gray-700/50 dark:hover:shadow dark:hover:transition-colors dark:hover:duration-200;
 }
@@ -547,6 +551,10 @@
 }
 
 .Dark-emoticonos-fotos{
+  @apply dark:text-sky-400
+}
+
+.Dark-texto-buscar{
   @apply dark:text-sky-400
 }
 

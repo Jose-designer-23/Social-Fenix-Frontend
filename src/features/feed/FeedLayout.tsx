@@ -20,6 +20,7 @@ import { getChatSocket } from "../feed/chat/components/ChatSocket.ts";
 import DeleteAccountModal from "./components/DeleteAccountModal.tsx";
 import NightToggle from "@/components/NightToggle.tsx";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
+import SearchPost from "./components/SearchPost.tsx";
 import { useTranslation } from "react-i18next";
 
 const FeedLayout: React.FC = () => {
@@ -280,6 +281,10 @@ const FeedLayout: React.FC = () => {
             <div className="mt-4 text-black w-full justify-start">
               <LanguageSwitcher />
             </div>
+            <div className="mt-4 text-black w-full justify-start">
+              <h3 className="text-lg font-bold mt-4 mb-4 Dark-texto-blanco">{t("feedLayout.RelatedMemories")}</h3>
+                <SearchPost />
+            </div>
             <div className="header-actions mt-4">
                 <NightToggle />
             </div>
@@ -362,6 +367,11 @@ const FeedLayout: React.FC = () => {
             <div className="mt-4 text-black w-full justify-start">
               <LanguageSwitcher />
             </div>
+
+            <div className="mt-4 text-black w-full justify-start xl:hidden lg:block min-[1280px]:hidden">
+              <h3 className="text-lg font-bold mt-4 mb-4 Dark-texto-blanco">{t("feedLayout.RelatedMemories")}</h3>
+                <SearchPost />
+            </div>
             
           </aside>
 
@@ -381,8 +391,10 @@ const FeedLayout: React.FC = () => {
 
           <aside className="hidden Dark-BG min-[1247px]:block bg-white border-l border-gray-200 p-4 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
             <h3 className="text-lg font-bold mb-4">{t("feedLayout.directMessages")}</h3>
-
             <DmDropdown />
+            <h3 className="text-lg font-bold mt-4 mb-4">{t("feedLayout.RelatedMemories")}</h3>
+            <SearchPost />
+
           </aside>
         </div>
       </div>

@@ -311,7 +311,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
             <Button
               onClick={handlePost}
               disabled={!isPostReady || loading}
-              className="font-bold rounded-full px-6 bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] hover:opacity-90 transition-opacity"
+              className="font-bold rounded-full px-6 bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] cursor-pointer hover:opacity-90 transition-opacity"
             >
               {loading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

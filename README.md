@@ -49,6 +49,7 @@ El diseño de Social Fénix se centra en la usabilidad y la respuesta en tiempo 
     * Expansión de *textarea* para respuestas anidadas a comentarios.
 * **Toggles Integrados:** Botones con contadores para *Likes*, *Reposts* y *Comentar* dentro de la tarjeta de publicación.
 * **Buscador en Tiempo Real:** El buscador en el *header* muestra una lista *scrollable* de sugerencias de usuarios mientras escribes.
+* **Recuerdos Afines (Búsqueda Temática):** Buscador especializado para encontrar publicaciones basadas en conceptos o vivencias compartidas. Permite a los usuarios conectar con recuerdos que comparten su misma esencia con un solo clic, facilitando el "renacer" de momentos similares.
 
 ### 🔔 Notificaciones y Mensajería en Vivo
 
@@ -74,11 +75,7 @@ El diseño de Social Fénix se centra en la usabilidad y la respuesta en tiempo 
 
 ## 🎯 Próximas Actualizaciones y Hoja de Ruta
 
-La hoja de ruta de Social Fénix se centra en mejorar la experiencia de usuario, la accesibilidad y la robustez de la aplicación:
-
-### 🔔 Estética y Experiencia
-
-* Mejoras Visuales en Notificaciones: Refinamiento del diseño a la hora de si un usuario te ha enviado un comentario, te lleve a ese comentario, si te ha seguido o le ha dado like a un comentario.
+La hoja de ruta de Social Fénix se centra en mejorar la experiencia de usuario, la accesibilidad y la robustez de la aplicación.
 
 ---
 

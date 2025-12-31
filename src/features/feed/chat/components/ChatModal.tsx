@@ -38,12 +38,13 @@ interface ChatModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// Componente ChatModal que maneja la interfaz de chat entre usuarios
 export default function ChatModal({
   otherUser,
   open,
   onOpenChange,
 }: ChatModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, getToken } = useAuth();
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +66,6 @@ export default function ChatModal({
     return String(s)[0]?.toUpperCase() ?? "U";
   };
 
-  // La conversación se actualiza automáticamente
   const dispatchConversationUpdated = (
     otherId: number | null,
     lastMessage?: string | null,
@@ -88,7 +88,6 @@ export default function ChatModal({
     } catch {}
   };
 
-  // Se Obtiene el historial y configuramos las escuchas de sockets con limpieza adecuada
   useEffect(() => {
     if (!open) return;
 
@@ -113,6 +112,11 @@ export default function ChatModal({
             ? new Date(m.created_at).toISOString()
             : new Date().toISOString(),
         }));
+        // Garantizamos orden ascendente por fecha
+        normalized.sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
         setMessages(normalized);
       } catch (err) {
         console.warn("Error fetching chat history:", err);
@@ -122,7 +126,6 @@ export default function ChatModal({
       }
     };
 
-    // Socket setup
     const setupSocket = () => {
       const token = getToken?.() ?? undefined;
       const s = getChatSocket(token);
@@ -182,7 +185,14 @@ export default function ChatModal({
             return next;
           }
 
-          return [...prev, inc];
+          // Append new message and ensure ascending order by created_at
+          const appended = [...prev, inc];
+          appended.sort(
+            (a, b) =>
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime()
+          );
+          return appended;
         });
 
         if (!open) {
@@ -215,7 +225,6 @@ export default function ChatModal({
 
       s.on("newMessage", handler);
 
-      // Marca de lectura automática al abrir
       const markRead = async () => {
         try {
           if (!user || !otherUser) return;
@@ -226,14 +235,13 @@ export default function ChatModal({
             { otherId: otherUser.id },
             { headers }
           );
-          // Se borra la insignia cuando se abre la conversación
           dispatchConversationUpdated(
             otherUser.id,
             null,
             new Date().toISOString()
           );
         } catch (e) {
-          // no critico
+          // ignore
         }
       };
 
@@ -263,7 +271,7 @@ export default function ChatModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, otherUser?.id, roomId]);
 
-  // Te lleva al último mensaje de la conversación
+  // Scroll al final cuando cambian mensajes
   useEffect(() => {
     try {
       scrollRef.current?.scrollTo({
@@ -301,7 +309,14 @@ export default function ChatModal({
       tempId,
     };
 
-    setMessages((p) => [...p, optimistic]);
+    setMessages((p) => {
+      const next = [...p, optimistic];
+      next.sort(
+        (a, b) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+      return next;
+    });
     setText("");
 
     try {
@@ -315,7 +330,32 @@ export default function ChatModal({
   const renderTime = (iso?: string) => {
     if (!iso) return "";
     const d = new Date(iso);
-    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleTimeString(i18n.language, {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  // HELPERS for date separators
+  const isSameDay = (isoA?: string, isoB?: string) => {
+    if (!isoA || !isoB) return false;
+    const a = new Date(isoA);
+    const b = new Date(isoB);
+    return (
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate()
+    );
+  };
+
+  const formatDateSeparator = (iso?: string) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    // e.g. "31 Dec" or localized variant
+    return new Intl.DateTimeFormat(i18n.language, {
+      day: "2-digit",
+      month: "short",
+    }).format(d);
   };
 
   return (
@@ -347,69 +387,107 @@ export default function ChatModal({
 
         <div className="p-4 h-80 overflow-y-auto" ref={scrollRef}>
           {loading ? (
-            <div className="text-center text-sm text-gray-500">{t("ChatModal.loading")}</div>
+            <div className="text-center text-sm text-gray-500">
+              {t("ChatModal.loading")}
+            </div>
           ) : messages.length === 0 ? (
             <div className="text-center text-sm text-gray-500">
               {t("ChatModal.noMessagesYet")}
             </div>
           ) : (
             <div className="space-y-3">
-              {messages.map((m) => {
-                const senderId = Number(
-                  m.sender_id ?? (m as any).senderId ?? m.sender?.id ?? NaN
-                );
-                const mine = Number(user?.id) === senderId;
-                const senderObj =
-                  m.sender ??
-                  (senderId === Number(user?.id) ? user : otherUser) ??
-                  null;
+              {/*
+                Representa los mensajes en orden ascendente e inserta un separador 
+                de fecha cuando el mensaje actual es el primero del día 
+                (en comparación con el anterior).
+              */}
+              {messages
+                .slice() // copy
+                .sort(
+                  (a, b) =>
+                    new Date(a.created_at).getTime() -
+                    new Date(b.created_at).getTime()
+                )
+                .map((m, idx, arr) => {
+                  const prev = idx > 0 ? arr[idx - 1] : undefined;
+                  const showDateSeparator =
+                    !prev || !isSameDay(prev.created_at, m.created_at);
+                  const senderId = Number(
+                    m.sender_id ?? (m as any).senderId ?? m.sender?.id ?? NaN
+                  );
+                  const mine = Number(user?.id) === senderId;
+                  const senderObj =
+                    m.sender ??
+                    (senderId === Number(user?.id) ? user : otherUser) ??
+                    null;
 
-                return (
-                  <div
-                    key={String(m.id)}
-                    className={`flex ${mine ? "justify-end" : "justify-start"}`}
-                  >
-                    {!mine && (
-                      <div className="mr-2">
-                        <Avatar
-                          src={senderObj?.avatar ?? undefined}
-                          alt={safeAlt(senderObj ?? null) ?? t("ChatModal.userFallback")}
-                          size={28}
-                          initials={safeInitial(senderObj ?? null)}
-                        />
-                      </div>
-                    )}
+                  return (
+                    <div key={String(m.id)}>
+                      {showDateSeparator && (
+                        <div className="flex items-center justify-center my-2">
+                          <div className="flex items-center gap-3 text-sm text-gray-500">
+                            <span className="h-px w-8 bg-gray-300 inline-block" />
+                            <span className="px-2">
+                              {formatDateSeparator(m.created_at)}
+                            </span>
+                            <span className="h-px w-8 bg-gray-300 inline-block" />
+                          </div>
+                        </div>
+                      )}
 
-                    <div
-                      className={`max-w-[70%] px-3 py-2 rounded-lg ${
-                        mine
-                          ? "bg-[#2683ab] text-white"
-                          : "bg-slate-200 text-gray-900"
-                      }`}
-                    >
-                      <div className="text-sm">{m.content}</div>
                       <div
-                        className={`text-xs mt-1 text-right ${
-                          mine ? "text-white" : "text-gray-800"
+                        className={`flex ${
+                          mine ? "justify-end" : "justify-start"
                         }`}
                       >
-                        {renderTime(m.created_at)}
+                        {!mine && (
+                          <div className="mr-2">
+                            <Avatar
+                              src={senderObj?.avatar ?? undefined}
+                              alt={
+                                safeAlt(senderObj ?? null) ??
+                                t("ChatModal.userFallback")
+                              }
+                              size={28}
+                              initials={safeInitial(senderObj ?? null)}
+                            />
+                          </div>
+                        )}
+
+                        <div
+                          className={`max-w-[70%] px-3 py-2 rounded-lg ${
+                            mine
+                              ? "bg-[#2683ab] text-white"
+                              : "bg-slate-200 text-gray-900"
+                          }`}
+                        >
+                          <div className="text-sm">{m.content}</div>
+                          <div
+                            className={`text-xs mt-1 text-right ${
+                              mine ? "text-white" : "text-gray-800"
+                            }`}
+                          >
+                            {renderTime(m.created_at)}
+                          </div>
+                        </div>
+
+                        {mine && (
+                          <div className="ml-2">
+                            <Avatar
+                              src={senderObj?.avatar ?? undefined}
+                              alt={
+                                safeAlt(senderObj ?? null) ??
+                                t("ChatModal.userFallback")
+                              }
+                              size={28}
+                              initials={safeInitial(senderObj ?? null)}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
-
-                    {mine && (
-                      <div className="ml-2">
-                        <Avatar
-                          src={senderObj?.avatar ?? undefined}
-                          alt={safeAlt(senderObj ?? null) ?? t("ChatModal.userFallback")}
-                          size={28}
-                          initials={safeInitial(senderObj ?? null)}
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           )}
         </div>
@@ -428,7 +506,8 @@ export default function ChatModal({
           />
           <Button
             onClick={handleSend}
-            className="whitespace-nowrap cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300 font-bold bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] text-white"
+            className="whitespace-nowrap cursor-pointer active:shadow-inner active:opacity-90 transition-colors transform duration-300 
+            font-bold bg-linear-to-bl from-[#ce016e] via-[#e63f58] to-[#e37d01] text-white"
             disabled={!text.trim()}
           >
             {t("ChatModal.send")}

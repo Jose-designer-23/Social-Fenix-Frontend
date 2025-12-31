@@ -51,15 +51,16 @@
         "title": "DYNAMIC FEED",
         "desc": "Brief overview of the feed.",
         "features": [
-          "Real-time Feed - Content always fresh and instant.",
-          "Only What's Relevant - The most recent memories from your circle.",
-          "Dynamic Interactions - High engagement on every post.",
-          "Smart Notifications - Alerts that adapt to you.",
-          "Integrated Messaging - Instant and fluid communication.",
-          "Social Transparency – See the full list of users who liked or reposted.",
-          "Instant Search – Find friends and new connections quickly and easily.",
-          "Visual Care – Dark Mode to protect your eyes and enjoy maximum comfort.",
-          "No Language Barriers – Full support in Spanish and English for global reach."
+          "Real-time feed - Content always fresh and instant.",
+          "Only what's relevant - The most recent memories from your circle.",
+          "Dynamic interactions - High engagement on every post.",
+          "Smart notifications - Alerts that adapt to you.",
+          "Integrated messaging - Instant and fluid communication.",
+          "Social transparency – See the full list of users who liked or reposted.",
+          "Instant search – Find friends and new connections quickly and easily.",
+          "Visual care – Dark Mode to protect your eyes and enjoy maximum comfort.",
+          "No language barriers – Full support in Spanish and English for global reach.",
+          "Connected experiences — Find memories that share your same essence with a single click."
         ]
       },
 
@@ -67,8 +68,8 @@
         "title": "COMMENT THREADS",
         "desc": "Brief explanation of comment threads.",
         "features": [
-          "Deeply Nested Threads – Conversations organized up to 4 reply levels.",
-          "Quick Reactions - Express your opinion instantly with a like."
+          "Deeply nested threads – Conversations organized up to 4 reply levels.",
+          "Quick reactions - Express your opinion instantly with a like."
         ]
       },
 
@@ -76,8 +77,8 @@
         "title": "REAL-TIME NOTIFICATIONS",
         "desc": "Explanation of the notifications modal.",
         "features": [
-          "Instant Notifications – Stay informed of interactions at the exact moment.",
-          "At-a-Glance Design – Clear interface easy to scan visually."
+          "Instant notifications – Stay informed of interactions at the exact moment.",
+          "At-a-Glance design – Clear interface easy to scan visually."
         ]
       },
 
@@ -85,9 +86,9 @@
         "title": "VIBRANT USER PROFILE",
         "desc": "Brief explanation of the user profile.",
         "features": [
-          "Personal Brand Control – Full personalization (avatar, cover, bio and links).",
-          "Your Social Portfolio – Highlight all your activity: media, likes and interactions.",
-          "Clear Network Management – View and manage your connections (followers and following) easily."
+          "Personal brand control – Full personalization (avatar, cover, bio and links).",
+          "Your social portfolio – Highlight all your activity: media, likes and interactions.",
+          "Clear network management – View and manage your connections (followers and following) easily."
         ]
       },
 
@@ -95,10 +96,10 @@
         "title": "PRIVATE CONVERSATIONS",
         "desc": "Brief explanation of private chat.",
         "features": [
-          "Live Chat – Fluid, instant communication with all your contacts.",
-          "Reliable Alerts – Instant notifications so you never miss the thread.",
-          "Full History – Access and resume past conversations instantly.",
-          "Time Context – Each message includes the exact time for greater clarity"
+          "Live chat – Fluid, instant communication with all your contacts.",
+          "Reliable alerts – Instant notifications so you never miss the thread.",
+          "Full history – Access and resume past conversations instantly.",
+          "Time context – Each message includes the exact time for greater clarity."
         ]
       }
     }
@@ -173,7 +174,8 @@
     "accountData": "Account details",
     "deleteAccount": "Delete account",
     "logout": "Log out",
-    "directMessages": "Direct Messages"
+    "directMessages": "Direct Messages",
+    "RelatedMemories": "Related Memories"
   },
 
   "createPostArea": {
@@ -541,5 +543,22 @@
     "deleting": "Deleting...",
     "success": "Account deleted. Goodbye.",
     "error": "Error deleting account. Please try again."
+  },
+
+  "SearchPost": {
+    "placeholder": "Try \"park\"",
+    "aria": "Search posts",
+    "button": "Search"
+  },
+
+  "SearchPage": {
+    "title": "Search posts",
+    "headingPrefix": "Memories matching",
+    "resultsCount": "{{count}} results",
+    "noResultsTitle": "No matching memories found",
+    "noResultsDesc": "Try another word or phrase.",
+    "backAria": "Back to feed",
+    "errorTitle": "Search error",
+    "unknownError": "Unknown error while searching."
   }
 }
