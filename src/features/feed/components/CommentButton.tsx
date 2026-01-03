@@ -22,8 +22,8 @@ const CommentCountButton: React.FC<CommentCountButtonProps> = ({
       role="button"
       aria-label={`Comentarios: ${count}`}
     >
-      <MessageCircle className="h-5 w-5 mr-2" />
-      <span className="text-sm select-none">{count}</span>
+      <MessageCircle className="h-5 w-5 mr-2 dark:hover:text-sky-400 hover:scale-110 transition-transform" />
+      <span className="text-sm  select-none">{count}</span>
     </div>
   );
 };

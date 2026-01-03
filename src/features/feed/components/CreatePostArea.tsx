@@ -337,7 +337,7 @@ const CreatePostArea: React.FC<CreatePostAreaProps> = ({
                       insertEmoji(e);
                       setEmojiOpen(false);
                     }}
-                    className="text-lg p-1 rounded hover:bg-gray-100"
+                    className="text-lg p-1 rounded hover:bg-gray-200 Dark-emoticonos cursor-pointer"
                     aria-label={`${t("createPostArea.insertEmoji")} ${e}`}
                   >
                     {e}

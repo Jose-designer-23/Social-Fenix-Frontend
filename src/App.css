@@ -498,6 +498,7 @@
   @apply dark:bg-gray-700;
 }
 
+
 .Dark-BG {
   @apply dark:bg-gray-800;
 }
@@ -511,71 +512,83 @@
 }
 
 .Dark-gradient{
-  @apply dark:bg-none dark:bg-gray-800
+  @apply dark:bg-none dark:bg-gray-800;
 }
 
 .Dark-Card{
-  @apply dark:bg-gray-700
+  @apply dark:bg-gray-700;
 }
 
 .Dark-Hover{
-  @apply dark:hover:bg-gray-700 dark:rounded-lg
+  @apply dark:hover:bg-gray-700 dark:rounded-lg;
 }
 
 .Dark-Hover-seguidores{
-  @apply dark:hover:bg-gray-700 dark:rounded-lg active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300
+  @apply dark:hover:bg-gray-700 dark:rounded-lg active:scale-95 active:shadow-inner active:opacity-90 transition-colors transform duration-300;
 }
 
 .Dark-Hover-Interacciones{
-  @apply dark:hover:bg-gray-500 dark:rounded-lg
+  @apply dark:hover:bg-gray-700 dark:rounded-lg;
+}
+
+.Dark-Hover-chat{
+  @apply dark:hover:bg-gray-700;
+}
+
+.Dark-chat-receptor{
+  @apply dark:bg-slate-300;
+}
+
+.Dark-emoticonos{
+  @apply dark:hover:outline-2 dark:hover:outline-amber-100 dark:bg-gray-800/30;
 }
 
 .Dark-lista-seguidores{
-  @apply dark:hover:bg-gray-600 dark:rounded-lg
+  @apply dark:hover:bg-gray-600 dark:rounded-lg;
 }
 
 .Dark-Hover-perfil{
-  @apply dark:hover:bg-gray-500 dark:hover:text-slate-200 dark:rounded-lg
+  @apply dark:hover:bg-gray-500 dark:hover:text-slate-200 dark:rounded-lg;
 }
 
 .Dark-hover-hamburguesa{
-  @apply dark:hover:bg-slate-300/20
+  @apply dark:hover:bg-slate-300/20;
 }
 
 .Dark-Hover-Card{
-  @apply dark:hover:bg-gray-600/20 dark:hover:outline-3  dark:hover:outline-amber-100
+  @apply dark:hover:bg-gray-600/20 dark:hover:outline-3  dark:hover:outline-amber-100;
 }
 
 .Dark-text-area{
-  @apply dark:bg-slate-600 
+  @apply dark:bg-slate-600; 
 }
 
 .Dark-emoticonos-fotos{
-  @apply dark:text-sky-400
+  @apply dark:text-sky-300/90;
 }
 
 .Dark-texto-buscar{
-  @apply dark:text-sky-400
+  @apply dark:text-sky-400;
 }
 
 .Dark-emotifotos-hover{
-  @apply dark:hover:bg-slate-500/50 cursor-pointer
+  @apply dark:hover:bg-slate-500/50 cursor-pointer;
 }
 
 .Dark-boton-notificación{
-  @apply dark:bg-gray-700 dark:text-white
+  @apply dark:bg-gray-700 dark:text-white;
 }
 
 .Dark-outline{
-  @apply dark:hover:outline-1  dark:hover:outline-amber-100
+  @apply dark:hover:outline-1  dark:hover:outline-amber-100;
 }
 
 .Dark-border-notificaciones{
-  @apply dark:border-slate-500
+  @apply dark:border-slate-500;
 }
 
 .Dark-hover-configuracion{
-  @apply  dark:hover:bg-slate-600
+  @apply  dark:hover:bg-slate-600;
 }
 
 /* Estilos básicos para el toggle */
