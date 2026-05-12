@@ -2,12 +2,12 @@
 
 > **Rise. Connect. Ignite.** Social Fénix es una red social moderna que permite a los usuarios **publicar sus recuerdos en el presente y revivirlos en el futuro**.
 
-Este repositorio contiene la aplicación cliente (Frontend) del proyecto Social Fénix, **liberada bajo la Licencia MIT** para fomentar el estudio, la contribución y la innovación en el desarrollo de redes sociales. En versión móvil, funciona en todos los navegadores, menos en google chrome, en el perfil se queda en la pantalla en blanco, pero en navegación privada no.
+Este repositorio contiene la aplicación cliente (Frontend) del proyecto Social Fénix, **liberada bajo la Licencia MIT** para fomentar el estudio, la contribución y la innovación en el desarrollo de redes sociales.
 
 ---
 
 > **⚠️ NOTA IMPORTANTE SOBRE EL BACKEND:**
-> Dado que el backend está alojado en un **servidor gratuito (de desarrollo)**, este se suspende automáticamente tras **15 minutos de inactividad**.
+> Dado que el backend está alojado en un **servidor gratuito (de desarrollo)**, este se suspende automáticamente tras **15 minutos de inactividad**. El backend es privado y con licencia propietaria.
 > 
 > Si la aplicación no carga o ves errores de conexión al principio, por favor, **espera 5 minutos**. Es el tiempo que tarda el servidor en *despertar* y arrancar de nuevo.
 
